@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAN YOU RETIRE?</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #050505;
+    --fg: #f5f5f5;
+    --accent: #ff2d55;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --blue: #3b82f6;
+    --card: #111111;
+    --card-elevated: #181818;
+    --border: #262626;
+    --muted: #888;
+    --muted-dim: #555;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 45, 85, 0.04) 40px,
+      rgba(255, 45, 85, 0.04) 80px
+    );
+    animation: drift 20s linear infinite;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, var(--bg), transparent);
+    z-index: 0;
+  }
+
+  @keyframes drift {
+    to { transform: translate(56px, 56px); }
+  }
+
+  .hero-pre {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.5rem, 12vw, 10rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--accent), #ff6b8a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.8rem, 1.3vw, 0.95rem);
+    color: #aaa;
+    max-width: 600px;
+    margin-top: 2rem;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  .scroll-prompt {
+    position: absolute;
+    bottom: 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    animation: bob 2s ease-in-out infinite;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .scroll-prompt::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: var(--muted);
+    margin: 0.5rem auto 0;
+    animation: grow 2s ease-in-out infinite;
+  }
+
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+  @keyframes grow { 0%, 100% { scaleY: 1; opacity: 0.5; } 50% { scaleY: 1.3; opacity: 1; } }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    background: var(--accent);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0.75rem 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .ticker {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  .ticker-wrap:hover .ticker {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── CALCULATOR SECTION ── */
+  .calc-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  .calc-section h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+
+  .calc-section .lead {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    line-height: 1.6;
+  }
+
+  /* ── INPUT GRID ── */
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .input-group {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .input-group:hover, .input-group:focus-within {
+    border-color: var(--accent);
+  }
+
+  .input-group label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 0.75rem;
+  }
+
+  .input-group .input-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+  }
+
+  .input-group .prefix {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--muted);
+  }
+
+  .input-group input[type="number"],
+  .input-group input[type="range"] {
+    background: transparent;
+    border: none;
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    width: 100%;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+
+  .input-group input[type="number"]::-webkit-inner-spin-button,
+  .input-group input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+
+  .input-group .hint {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+
+  /* slider styling */
+  input[type="range"] {
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 0.75rem;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--bg);
+  }
+
+  .slider-val {
+    font-size: 2rem;
+    font-weight: 900;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .slider-context {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .slider-tick {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    cursor: pointer;
+    padding: 0.4rem 0.15rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .slider-tick:hover {
+    border-color: var(--border);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .slider-tick.active {
+    border-color: var(--accent);
+    background: rgba(255, 45, 85, 0.06);
+  }
+
+  .slider-tick .tick-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  .slider-tick .tick-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.3;
+    margin-top: 0.15rem;
+  }
+
+  /* ── BUTTON ── */
+  .judge-btn {
+    display: block;
+    width: 100%;
+    padding: 1.4rem 2rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 20px rgba(255, 45, 85, 0.25);
+  }
+
+  .judge-btn:hover {
+    background: #ff1744;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(255, 45, 85, 0.4);
+  }
+
+  .judge-btn:active { transform: translateY(0); box-shadow: 0 2px 10px rgba(255, 45, 85, 0.3); }
+
+  /* ── RESULTS ── */
+  .results {
+    display: none;
+    margin-top: 3rem;
+    animation: fadeUp 0.6s ease-out;
+  }
+
+  .results.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .verdict-box {
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    border-radius: 16px;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verdict-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    opacity: 0.5;
+  }
+
+  .verdict-box.absolutely {
+    background: linear-gradient(180deg, rgba(6, 182, 212, 0.18) 0%, rgba(52, 211, 153, 0.03) 100%);
+    border: 2px solid #06b6d4;
+    box-shadow: 0 0 80px rgba(6, 182, 212, 0.15), inset 0 1px 0 rgba(6, 182, 212, 0.25);
+  }
+
+  .verdict-box.yes {
+    background: linear-gradient(180deg, rgba(52, 211, 153, 0.15) 0%, rgba(52, 211, 153, 0.02) 100%);
+    border: 2px solid var(--green);
+    box-shadow: 0 0 60px rgba(52, 211, 153, 0.1), inset 0 1px 0 rgba(52, 211, 153, 0.2);
+  }
+
+  .verdict-box.maybe {
+    background: linear-gradient(180deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.02) 100%);
+    border: 2px solid var(--yellow);
+    box-shadow: 0 0 60px rgba(251, 191, 36, 0.1), inset 0 1px 0 rgba(251, 191, 36, 0.2);
+  }
+
+  .verdict-box.no {
+    background: linear-gradient(180deg, rgba(255, 45, 85, 0.18) 0%, rgba(255, 45, 85, 0.02) 100%);
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 60px rgba(255, 45, 85, 0.15), inset 0 1px 0 rgba(255, 45, 85, 0.2);
+  }
+
+  .verdict-box.hellno {
+    background: linear-gradient(180deg, rgba(220, 38, 38, 0.22) 0%, rgba(255, 45, 85, 0.03) 100%);
+    border: 2px solid #dc2626;
+    box-shadow: 0 0 80px rgba(220, 38, 38, 0.2), 0 0 120px rgba(220, 38, 38, 0.1), inset 0 1px 0 rgba(220, 38, 38, 0.3);
+  }
+
+  .verdict-word {
+    font-size: clamp(4rem, 14vw, 9rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.03em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .verdict-box.absolutely .verdict-word {
+    color: #06b6d4;
+    text-shadow: 0 0 50px rgba(6, 182, 212, 0.5), 0 0 100px rgba(6, 182, 212, 0.2);
+  }
+  .verdict-box.yes .verdict-word {
+    color: var(--green);
+    text-shadow: 0 0 40px rgba(52, 211, 153, 0.4);
+  }
+  .verdict-box.maybe .verdict-word {
+    color: var(--yellow);
+    text-shadow: 0 0 40px rgba(251, 191, 36, 0.4);
+  }
+  .verdict-box.no .verdict-word {
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(255, 45, 85, 0.5);
+  }
+  .verdict-box.hellno .verdict-word {
+    color: #dc2626;
+    text-shadow: 0 0 50px rgba(220, 38, 38, 0.6), 0 0 100px rgba(220, 38, 38, 0.3);
+  }
+
+  .verdict-quip {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.8rem, 1.3vw, 0.95rem);
+    color: #aaa;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── BREAKDOWN CARDS ── */
+  .breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--border);
+    border-radius: 3px 0 0 3px;
+  }
+
+  .stat-card .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .stat-card .value {
+    font-size: 1.75rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-card .sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    line-height: 1.5;
+  }
+
+  .stat-card .value.green { color: var(--green); }
+  .stat-card .value.red { color: var(--accent); }
+  .stat-card .value.yellow { color: var(--yellow); }
+  .stat-card .value.blue { color: var(--blue); }
+
+  /* colored left border based on value class */
+  .stat-card:has(.value.green)::before { background: var(--green); }
+  .stat-card:has(.value.red)::before { background: var(--accent); }
+  .stat-card:has(.value.yellow)::before { background: var(--yellow); }
+  .stat-card:has(.value.blue)::before { background: var(--blue); }
+
+  /* ── CHART ── */
+  .chart-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .chart-wrap h3 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 0.25rem;
+  }
+
+  .chart-wrap .chart-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── ROAST / COMMENTARY ── */
+  .commentary {
+    background: linear-gradient(135deg, var(--card) 0%, var(--card-elevated) 100%);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 2rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .commentary h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .commentary p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #ccc;
+  }
+
+  /* ── SCENARIO TABLE ── */
+  .scenario-table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    overflow-x: auto;
+    margin-bottom: 2.5rem;
+  }
+
+  .scenario-table-wrap h3 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 0.25rem;
+  }
+
+  .scenario-table-wrap .table-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #aaa;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: #ccc;
+  }
+
+  tr:hover { background: rgba(255, 255, 255, 0.03); }
+  tr:last-child td { border-bottom: none; }
+
+  td.pass { color: var(--green); font-weight: 700; }
+  td.fail { color: var(--accent); font-weight: 700; }
+  td.warn { color: var(--yellow); font-weight: 700; }
+  td.legendary { color: #06b6d4; font-weight: 700; }
+  td.doom { color: #dc2626; font-weight: 700; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  .footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ── CANVAS CHART ── */
+  .chart-canvas-wrap {
+    position: relative;
+    height: 320px;
+    cursor: crosshair;
+  }
+
+  .chart-canvas-wrap canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+
+  .chart-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: rgba(10, 10, 10, 0.96);
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: var(--fg);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+
+  .chart-tooltip.visible { opacity: 1; }
+
+  .chart-tooltip .tt-age {
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .chart-tooltip .tt-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .chart-tooltip .tt-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  .chart-legend span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .chart-legend .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-bottom: 0.75rem;
+  }
+
+  .progress-bar {
+    height: 14px;
+    background: var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 7px;
+    transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .progress-fill.green { background: linear-gradient(90deg, #059669, var(--green)); box-shadow: 0 0 12px rgba(52, 211, 153, 0.3); }
+  .progress-fill.red { background: linear-gradient(90deg, #be123c, var(--accent)); box-shadow: 0 0 12px rgba(255, 45, 85, 0.3); }
+  .progress-fill.yellow { background: linear-gradient(90deg, #d97706, var(--yellow)); box-shadow: 0 0 12px rgba(251, 191, 36, 0.3); }
+
+  /* ── AUDIO TOGGLE ── */
+  .audio-toggle {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+
+  .audio-toggle:hover {
+    border-color: var(--accent);
+    color: var(--fg);
+    transform: scale(1.1);
+  }
+
+  .audio-toggle.muted { opacity: 0.4; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    /* ── HERO ── */
+    .hero { min-height: 85vh; padding: 1.5rem; }
+    .hero h1 { font-size: 3rem; }
+    .hero-pre { font-size: 0.65rem; letter-spacing: 0.2em; }
+    .hero-sub { font-size: 0.75rem; margin-top: 1.25rem; line-height: 1.6; }
+    .scroll-prompt { font-size: 0.6rem; bottom: 1rem; }
+
+    /* ── TICKER ── */
+    .ticker-wrap { padding: 0.5rem 0; }
+    .ticker { font-size: 0.7rem; }
+
+    /* ── CALCULATOR ── */
+    .calc-section { padding: 2rem 1rem 3rem; }
+    .calc-section h2 { font-size: 1.75rem; }
+    .calc-section .lead { font-size: 0.75rem; margin-bottom: 2rem; }
+    .input-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .input-group { padding: 1.25rem; }
+    .input-group input[type="number"] { font-size: 1.5rem; }
+    .input-group .prefix { font-size: 1.2rem; }
+    .input-group label { font-size: 0.55rem; margin-bottom: 0.5rem; }
+    .input-group .hint { font-size: 0.55rem; }
+    .slider-val { font-size: 1.5rem; }
+    .slider-context { gap: 0.15rem; }
+    .slider-tick { padding: 0.3rem 0.1rem; }
+    .slider-tick .tick-val { font-size: 0.7rem; }
+    .slider-tick .tick-label { font-size: 0.45rem; }
+
+    /* ── BUTTON ── */
+    .judge-btn { padding: 1.1rem 1.5rem; font-size: 1rem; margin-top: 1rem; }
+
+    /* ── VERDICT ── */
+    .verdict-box { padding: 2.5rem 1.5rem 2rem; margin-bottom: 1.5rem; }
+    .verdict-word { font-size: clamp(2.5rem, 12vw, 4.5rem); }
+    .verdict-quip { font-size: 0.75rem; line-height: 1.5; }
+
+    /* ── STAT CARDS ── */
+    .breakdown { grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .stat-card { padding: 1rem 1.25rem; }
+    .stat-card .label { font-size: 0.5rem; }
+    .stat-card .value { font-size: 1.4rem; }
+    .stat-card .sub { font-size: 0.55rem; line-height: 1.4; }
+
+    /* ── CHART ── */
+    .chart-wrap { padding: 1.25rem; margin-bottom: 1.5rem; }
+    .chart-wrap h3 { font-size: 0.9rem; }
+    .chart-wrap .chart-sub { font-size: 0.6rem; margin-bottom: 1rem; }
+    .chart-canvas-wrap { height: 220px; }
+    .chart-legend { gap: 1rem; font-size: 0.55rem; flex-wrap: wrap; }
+    .chart-legend .dot { width: 8px; height: 8px; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap { padding: 1.25rem; }
+    .progress-label { font-size: 0.6rem; }
+    .progress-bar { height: 10px; }
+
+    /* ── COMMENTARY ── */
+    .commentary { padding: 1.25rem 1.25rem; margin-bottom: 1.5rem; }
+    .commentary h4 { font-size: 0.6rem; }
+    .commentary p { font-size: 0.85rem; line-height: 1.6; }
+
+    /* ── SCENARIO TABLE ── */
+    .scenario-table-wrap { padding: 1.25rem; margin-bottom: 1.5rem; }
+    .scenario-table-wrap h3 { font-size: 0.9rem; }
+    .scenario-table-wrap .table-sub { font-size: 0.6rem; }
+    th { font-size: 0.5rem; padding: 0.5rem 0.5rem; }
+    td { font-size: 0.65rem; padding: 0.6rem 0.5rem; }
+
+    /* ── TOOLTIP ── */
+    .chart-tooltip { font-size: 0.6rem; padding: 0.5rem 0.65rem; }
+    .chart-tooltip .tt-age { font-size: 0.65rem; }
+
+    /* ── FOOTER ── */
+    .footer { padding: 2rem 1rem; }
+    .footer p { font-size: 0.6rem; }
+
+    /* ── AUDIO TOGGLE ── */
+    .audio-toggle { width: 38px; height: 38px; font-size: 1rem; bottom: 1rem; right: 1rem; }
+  }
+
+  /* ── Extra small (iPhone SE etc) ── */
+  @media (max-width: 380px) {
+    .hero h1 { font-size: 2.5rem; }
+    .verdict-word { font-size: 2.2rem; }
+    .stat-card .value { font-size: 1.2rem; }
+    .input-group input[type="number"] { font-size: 1.3rem; }
+    .slider-val { font-size: 1.3rem; }
+    td { font-size: 0.6rem; padding: 0.5rem 0.35rem; }
+  }
+
+  /* ── SHAKE ANIMATION ── */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+  }
+
+  .shake { animation: shake 0.6s ease-in-out; }
+
+  /* ── COUNTER ANIMATION ── */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* ── SKULL RAIN ── */
+  .skull-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+  }
+
+  .skull-rain span {
+    position: absolute;
+    top: -50px;
+    font-size: 2rem;
+    animation: fall linear forwards;
+    opacity: 0.6;
+  }
+
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-pre">A financial reality check</div>
+  <h1>
+    CAN YOU
+    <span class="line2">RETIRE?</span>
+  </h1>
+  <p class="hero-sub">
+    You've been dumping money into the S&P 500 like it's a retirement plan.
+    Spoiler: the market doesn't care about your feelings, your avocado toast budget,
+    or your "I'll figure it out later" attitude. Let's find out if you're cooked.
+  </p>
+  <div class="scroll-prompt" onclick="document.querySelector('.calc-section').scrollIntoView()">
+    FACE THE MUSIC
+  </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker"></div>
+</div>
+
+<!-- ── CALCULATOR ── -->
+<section class="calc-section">
+  <h2>The Inputs.</h2>
+  <p class="lead">
+    Be honest. Lying to a calculator is a new low, even for you.
+  </p>
+
+  <div class="input-grid">
+    <div class="input-group">
+      <label>Your Current Age</label>
+      <div class="input-row">
+        <input type="number" id="currentAge" value="28" min="16" max="90">
+      </div>
+      <div class="hint">How many years you've spent not saving enough</div>
+    </div>
+
+    <div class="input-group">
+      <label>Retirement Age</label>
+      <div class="input-row">
+        <input type="number" id="retireAge" value="65" min="20" max="100">
+      </div>
+      <div class="hint">The age you think you'll stop working (cute)</div>
+    </div>
+
+    <div class="input-group">
+      <label>Expected Lifespan</label>
+      <div class="input-row">
+        <input type="number" id="lifespan" value="85" min="50" max="120">
+      </div>
+      <div class="hint">Optimistic or realistic? Your call.</div>
+    </div>
+
+    <div class="input-group">
+      <label>Monthly Spending in Retirement</label>
+      <div class="input-row">
+        <span class="prefix">$</span>
+        <input type="number" id="monthlySpend" value="4000" min="500" max="100000" step="100">
+      </div>
+      <div class="hint">Per month. Yes, including that streaming addiction.</div>
+    </div>
+
+    <div class="input-group">
+      <label>Current S&P 500 Portfolio</label>
+      <div class="input-row">
+        <span class="prefix">$</span>
+        <input type="number" id="currentPortfolio" value="50000" min="0" max="100000000" step="1000">
+      </div>
+      <div class="hint">Total invested in S&P index funds right now</div>
+    </div>
+
+    <div class="input-group">
+      <label>Monthly Contribution</label>
+      <div class="input-row">
+        <span class="prefix">$</span>
+        <input type="number" id="monthlyContrib" value="1000" min="0" max="100000" step="50">
+      </div>
+      <div class="hint">How much you're adding every month</div>
+    </div>
+
+    <div class="input-group">
+      <label>Expected Annual Return (Nominal)</label>
+      <span class="slider-val" id="returnDisplay">10%</span>
+      <input type="range" id="annualReturn" min="3" max="14" step="0.5" value="10">
+      <div class="slider-context" id="returnTicks">
+        <div class="slider-tick" data-target="annualReturn" data-val="5">
+          <span class="tick-val">5%</span>
+          <span class="tick-label">Bond-like / Pessimist</span>
+        </div>
+        <div class="slider-tick" data-target="annualReturn" data-val="7">
+          <span class="tick-val">7%</span>
+          <span class="tick-label">Conservative Estimate</span>
+        </div>
+        <div class="slider-tick active" data-target="annualReturn" data-val="10">
+          <span class="tick-val">10%</span>
+          <span class="tick-label">S&P 500 Historical Avg</span>
+        </div>
+        <div class="slider-tick" data-target="annualReturn" data-val="12">
+          <span class="tick-val">12%</span>
+          <span class="tick-label">Optimist / Bull Run</span>
+        </div>
+      </div>
+      <div class="hint">S&P 500 has averaged ~10%/yr since 1926. That's before inflation eats its cut.</div>
+    </div>
+
+    <div class="input-group">
+      <label>Annual Inflation Rate</label>
+      <span class="slider-val" id="inflationDisplay">3%</span>
+      <input type="range" id="inflation" min="1" max="10" step="0.5" value="3">
+      <div class="slider-context" id="inflationTicks">
+        <div class="slider-tick" data-target="inflation" data-val="2">
+          <span class="tick-val">2%</span>
+          <span class="tick-label">Fed Target / Dream</span>
+        </div>
+        <div class="slider-tick active" data-target="inflation" data-val="3">
+          <span class="tick-val">3%</span>
+          <span class="tick-label">US Historical Avg</span>
+        </div>
+        <div class="slider-tick" data-target="inflation" data-val="5">
+          <span class="tick-val">5%</span>
+          <span class="tick-label">2022-era / Rough</span>
+        </div>
+        <div class="slider-tick" data-target="inflation" data-val="8">
+          <span class="tick-val">8%</span>
+          <span class="tick-label">Things Are Cooked</span>
+        </div>
+      </div>
+      <div class="hint">US long-run average is ~3%. The Fed "targets" 2%. Your grocery bill says otherwise.</div>
+    </div>
+  </div>
+
+  <button class="judge-btn" onclick="calculate()">
+    JUDGE ME
+  </button>
+
+  <!-- ── RESULTS ── -->
+  <div class="results" id="results">
+    <div class="verdict-box" id="verdictBox">
+      <div class="verdict-word" id="verdictWord"></div>
+      <div class="verdict-quip" id="verdictQuip"></div>
+    </div>
+
+    <div class="breakdown" id="breakdown"></div>
+
+    <div class="chart-wrap">
+      <h3>Your Money Over Time</h3>
+      <div class="chart-sub">Hover to inspect any year</div>
+      <div class="chart-canvas-wrap" id="chartWrap">
+        <canvas id="chartCanvas"></canvas>
+        <canvas id="chartOverlay" style="position:absolute;top:0;left:0;pointer-events:none;"></canvas>
+        <div class="chart-tooltip" id="chartTooltip"></div>
+      </div>
+      <div class="chart-legend">
+        <span><span class="dot" style="background:#3b82f6"></span> Portfolio Value</span>
+        <span><span class="dot" style="background:#ff2d55"></span> Cumulative Spending</span>
+        <span><span class="dot" style="background:rgba(255,255,255,0.15)"></span> Retirement Starts</span>
+      </div>
+    </div>
+
+    <div id="progressSection"></div>
+
+    <div class="commentary" id="commentary">
+      <h4>Reality Check</h4>
+      <p id="commentaryText"></p>
+    </div>
+
+    <div class="scenario-table-wrap">
+      <h3>What If You Spent More or Less?</h3>
+      <div class="table-sub">Same savings, different spending habits</div>
+      <table id="scenarioTable">
+        <thead>
+          <tr>
+            <th>Monthly Spend</th>
+            <th>Money Lasts Until</th>
+            <th>Left Over at Death</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody id="scenarioBody"></tbody>
+      </table>
+    </div>
+
+    <div class="commentary" id="finalRoast" style="border-left-color: var(--yellow);">
+      <h4>Parting Wisdom</h4>
+      <p id="finalRoastText"></p>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <p>
+    This is satire. This is not financial advice. If you make life decisions
+    based on a website with skull emojis, you deserve what happens next.<br>
+    S&P 500 historical returns are not guarantees. Past performance is not indicative of future results.<br>
+    &copy; <span id="yr"></span> CAN YOU RETIRE? &mdash; A public service announcement.
+  </p>
+</div>
+
+<div class="audio-toggle" id="audioToggle" title="Toggle sound">&#128266;</div>
+<div class="skull-rain" id="skullRain"></div>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// ── AUDIO ENGINE (Web Audio API) ──
+const Audio = (() => {
+  let ctx = null;
+  let masterGain = null;
+  let ambientNodes = [];
+  let muted = false;
+  let ambientStarted = false;
+
+  function init() {
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = ctx.createGain();
+    masterGain.gain.value = muted ? 0 : 1;
+    masterGain.connect(ctx.destination);
+  }
+
+  function toggle() {
+    init();
+    muted = !muted;
+    const btn = document.getElementById('audioToggle');
+    if (muted) {
+      masterGain.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
+      btn.innerHTML = '&#128263;';
+      btn.classList.add('muted');
+    } else {
+      masterGain.gain.setTargetAtTime(1, ctx.currentTime, 0.1);
+      btn.innerHTML = '&#128266;';
+      btn.classList.remove('muted');
+      if (!ambientStarted) startAmbient();
+    }
+  }
+
+  // ── AMBIENT DRONE ──
+  function startAmbient() {
+    if (ambientStarted) return;
+    ambientStarted = true;
+
+    // Low drone: detuned saw waves through a lowpass
+    const droneGain = ctx.createGain();
+    droneGain.gain.value = 0.06;
+    droneGain.connect(masterGain);
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 200;
+    filter.Q.value = 2;
+    filter.connect(droneGain);
+
+    // Slow filter sweep
+    const filterLFO = ctx.createOscillator();
+    const filterLFOGain = ctx.createGain();
+    filterLFO.frequency.value = 0.03;
+    filterLFOGain.gain.value = 80;
+    filterLFO.connect(filterLFOGain);
+    filterLFOGain.connect(filter.frequency);
+    filterLFO.start();
+
+    [55, 55.5, 82.5].forEach(freq => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.value = freq;
+      osc.connect(filter);
+      osc.start();
+      ambientNodes.push(osc);
+    });
+
+    // Sub bass pulse
+    const subGain = ctx.createGain();
+    subGain.gain.value = 0.08;
+    subGain.connect(masterGain);
+    const sub = ctx.createOscillator();
+    sub.type = 'sine';
+    sub.frequency.value = 36.7;
+    sub.connect(subGain);
+    sub.start();
+    ambientNodes.push(sub);
+
+    // Amplitude wobble on the sub
+    const ampLFO = ctx.createOscillator();
+    const ampLFOGain = ctx.createGain();
+    ampLFO.frequency.value = 0.15;
+    ampLFOGain.gain.value = 0.04;
+    ampLFO.connect(ampLFOGain);
+    ampLFOGain.connect(subGain.gain);
+    ampLFO.start();
+
+    // Eerie high harmonic
+    const highGain = ctx.createGain();
+    highGain.gain.value = 0.012;
+    highGain.connect(masterGain);
+    const highFilter = ctx.createBiquadFilter();
+    highFilter.type = 'bandpass';
+    highFilter.frequency.value = 2000;
+    highFilter.Q.value = 8;
+    highFilter.connect(highGain);
+    const highOsc = ctx.createOscillator();
+    highOsc.type = 'sawtooth';
+    highOsc.frequency.value = 220;
+    highOsc.connect(highFilter);
+    highOsc.start();
+    ambientNodes.push(highOsc);
+
+    // Random dissonant plucks
+    function pluck() {
+      if (muted) { setTimeout(pluck, 3000 + Math.random() * 6000); return; }
+      const notes = [123.47, 130.81, 146.83, 155.56, 185, 233.08, 277.18, 311.13];
+      const freq = notes[Math.floor(Math.random() * notes.length)];
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.04, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.5);
+      g.connect(masterGain);
+      const f = ctx.createBiquadFilter();
+      f.type = 'lowpass';
+      f.frequency.setValueAtTime(800, ctx.currentTime);
+      f.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 2);
+      f.connect(g);
+      const o = ctx.createOscillator();
+      o.type = 'triangle';
+      o.frequency.value = freq;
+      o.connect(f);
+      o.start();
+      o.stop(ctx.currentTime + 3);
+      setTimeout(pluck, 4000 + Math.random() * 8000);
+    }
+    setTimeout(pluck, 2000);
+  }
+
+  // ── VERDICT SOUND EFFECTS ──
+  function playNote(freq, type, duration, volume, delay) {
+    const t = ctx.currentTime + (delay || 0);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(volume, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    g.connect(masterGain);
+    const o = ctx.createOscillator();
+    o.type = type;
+    o.frequency.value = freq;
+    o.connect(g);
+    o.start(t);
+    o.stop(t + duration + 0.1);
+  }
+
+  function playNoise(duration, volume, delay, filterFreq) {
+    const t = ctx.currentTime + (delay || 0);
+    const bufSize = ctx.sampleRate * duration;
+    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const f = ctx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.value = filterFreq || 1000;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(volume, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    src.connect(f);
+    f.connect(g);
+    g.connect(masterGain);
+    src.start(t);
+  }
+
+  function sfxHellNo() {
+    if (muted) return;
+    // Harsh alarm descending into doom
+    [800, 600, 400, 250].forEach((f, i) => {
+      playNote(f, 'square', 0.3, 0.12, i * 0.2);
+    });
+    // Low doom rumble
+    playNote(40, 'sawtooth', 3, 0.15, 0.8);
+    playNote(41.5, 'sawtooth', 3, 0.12, 0.8);
+    playNoise(2, 0.08, 0.5, 300);
+    // Distorted buzz
+    playNote(55, 'square', 2, 0.06, 1.2);
+  }
+
+  function sfxNo() {
+    if (muted) return;
+    // Sad descending tones
+    [392, 349.23, 293.66, 261.63].forEach((f, i) => {
+      playNote(f, 'triangle', 0.5, 0.1, i * 0.25);
+    });
+    // Negative buzz
+    playNote(80, 'sawtooth', 1.5, 0.06, 1.0);
+    playNoise(1, 0.04, 0.8, 400);
+  }
+
+  function sfxMaybe() {
+    if (muted) return;
+    // Tense unresolved chord -- wavering
+    const t = ctx.currentTime;
+    [261.63, 311.13, 370, 415.30].forEach((f, i) => {
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.06, t + 0.1);
+      g.gain.setValueAtTime(0.06, t + 1.5);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 3);
+      g.connect(masterGain);
+      const o = ctx.createOscillator();
+      o.type = 'triangle';
+      o.frequency.value = f;
+      // Add vibrato
+      const lfo = ctx.createOscillator();
+      const lfoG = ctx.createGain();
+      lfo.frequency.value = 4 + i;
+      lfoG.gain.value = 3;
+      lfo.connect(lfoG);
+      lfoG.connect(o.frequency);
+      lfo.start(t);
+      lfo.stop(t + 3.5);
+      o.connect(g);
+      o.start(t + i * 0.1);
+      o.stop(t + 3.5);
+    });
+  }
+
+  function sfxYes() {
+    if (muted) return;
+    // Bright ascending chime
+    [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+      playNote(f, 'sine', 0.8, 0.1, i * 0.15);
+      playNote(f * 2, 'sine', 0.5, 0.03, i * 0.15); // harmonic shimmer
+    });
+    // Soft pad
+    playNote(261.63, 'triangle', 2, 0.04, 0.3);
+    playNote(329.63, 'triangle', 2, 0.04, 0.3);
+  }
+
+  function sfxOhYeah() {
+    if (muted) return;
+    // Triumphant fanfare arpeggio
+    const fanfare = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+    fanfare.forEach((f, i) => {
+      playNote(f, 'sine', 1.2 - i * 0.1, 0.1, i * 0.12);
+      playNote(f * 1.5, 'sine', 0.8, 0.03, i * 0.12 + 0.05); // fifth harmonic
+    });
+    // Major chord pad
+    [523.25, 659.25, 783.99].forEach(f => {
+      playNote(f / 2, 'triangle', 3, 0.05, 0.5);
+    });
+    // Sparkle
+    [2093, 2637, 3136, 2093].forEach((f, i) => {
+      playNote(f, 'sine', 0.3, 0.04, 1.0 + i * 0.15);
+    });
+  }
+
+  function playVerdict(v) {
+    init();
+    if (muted) return;
+    const map = {
+      'HELL NO': sfxHellNo,
+      'NO': sfxNo,
+      'MAYBE': sfxMaybe,
+      'YES': sfxYes,
+      'OH YEAH': sfxOhYeah,
+    };
+    if (map[v]) map[v]();
+  }
+
+  return { init, toggle, startAmbient, playVerdict, isMuted: () => muted };
+})();
+
+document.getElementById('audioToggle').addEventListener('click', Audio.toggle);
+
+// Start ambient on first user interaction (browsers require a gesture for AudioContext)
+document.addEventListener('click', function startOnGesture() {
+  Audio.init();
+  if (!Audio.isMuted()) Audio.startAmbient();
+  document.removeEventListener('click', startOnGesture);
+}, { once: true });
+
+// ── TICKER ──
+const tickerPhrases = [
+  "YOUR 401K IS NOT A PERSONALITY TRAIT",
+  "PAST PERFORMANCE DOES NOT GUARANTEE FUTURE RESULTS",
+  "INFLATION IS EATING YOUR SAVINGS RIGHT NOW",
+  "\"I'LL START INVESTING NEXT YEAR\" \u2014 YOU, EVERY YEAR SINCE 2018",
+  "THE S&P 500 DOESN'T KNOW YOUR NAME",
+  "COMPOUND INTEREST: THE 8TH WONDER OF THE WORLD (THAT YOU'RE IGNORING)",
+  "YOUR RETIREMENT PLAN: VIBES AND PRAYERS",
+  "TIME IN THE MARKET > TIMING THE MARKET (BUT YOU KNEW THAT, RIGHT?)",
+  "SOCIAL SECURITY WON'T SAVE YOU",
+  "YOU CAN'T RETIRE ON MEMES",
+];
+const tickerText = tickerPhrases.map(p => `\u00a0\u00a0\u00a0\u2022\u00a0\u00a0\u00a0${p}`).join('');
+document.getElementById('ticker').textContent = tickerText + tickerText;
+
+// ── SLIDER DISPLAYS + TICK MARKS ──
+function updateTicks(sliderId, tickContainerId) {
+  const val = parseFloat(document.getElementById(sliderId).value);
+  document.querySelectorAll('#' + tickContainerId + ' .slider-tick').forEach(tick => {
+    const tv = parseFloat(tick.dataset.val);
+    tick.classList.toggle('active', tv === val);
+  });
+}
+
+document.getElementById('annualReturn').addEventListener('input', e => {
+  document.getElementById('returnDisplay').textContent = e.target.value + '%';
+  updateTicks('annualReturn', 'returnTicks');
+});
+document.getElementById('inflation').addEventListener('input', e => {
+  document.getElementById('inflationDisplay').textContent = e.target.value + '%';
+  updateTicks('inflation', 'inflationTicks');
+});
+
+// Clickable tick marks
+document.querySelectorAll('.slider-tick[data-target]').forEach(tick => {
+  tick.addEventListener('click', () => {
+    const slider = document.getElementById(tick.dataset.target);
+    slider.value = tick.dataset.val;
+    slider.dispatchEvent(new Event('input'));
+  });
+});
+
+// ── FORMAT HELPERS ──
+function fmt(n) {
+  if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+  if (Math.abs(n) >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K';
+  return '$' + n.toFixed(0);
+}
+
+function fmtFull(n) {
+  return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
+
+// ── SKULL RAIN ──
+function skullRain() {
+  const container = document.getElementById('skullRain');
+  container.innerHTML = '';
+  const emojis = ['\ud83d\udc80', '\ud83d\udcb8', '\ud83d\udd25', '\ud83d\udea9', '\u26b0\ufe0f', '\ud83d\udcc9'];
+  for (let i = 0; i < 30; i++) {
+    const span = document.createElement('span');
+    span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    span.style.left = Math.random() * 100 + '%';
+    span.style.animationDuration = (2 + Math.random() * 3) + 's';
+    span.style.animationDelay = (Math.random() * 2) + 's';
+    span.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+    container.appendChild(span);
+  }
+  setTimeout(() => container.innerHTML = '', 5000);
+}
+
+function confettiRain() {
+  const container = document.getElementById('skullRain');
+  container.innerHTML = '';
+  const emojis = ['\ud83c\udf89', '\ud83d\udcb0', '\ud83e\udd11', '\u2728', '\ud83c\udfc6', '\ud83d\ude0e'];
+  for (let i = 0; i < 30; i++) {
+    const span = document.createElement('span');
+    span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    span.style.left = Math.random() * 100 + '%';
+    span.style.animationDuration = (2 + Math.random() * 3) + 's';
+    span.style.animationDelay = (Math.random() * 2) + 's';
+    span.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+    container.appendChild(span);
+  }
+  setTimeout(() => container.innerHTML = '', 5000);
+}
+
+// ── CORE CALCULATION ──
+function simulate(currentAge, retireAge, lifespan, monthlySpend, portfolio, monthlyContrib, annualReturn, inflation) {
+  const yearsToRetire = retireAge - currentAge;
+  const yearsInRetirement = lifespan - retireAge;
+  const monthsToRetire = yearsToRetire * 12;
+  const monthsInRetirement = yearsInRetirement * 12;
+  const monthlyReturn = annualReturn / 100 / 12;
+  const monthlyInflation = inflation / 100 / 12;
+
+  // Accumulation phase
+  let balance = portfolio;
+  const timeline = []; // { year, balance, totalSpent }
+  let totalContributed = portfolio;
+
+  for (let m = 0; m < monthsToRetire; m++) {
+    balance = balance * (1 + monthlyReturn) + monthlyContrib;
+    totalContributed += monthlyContrib;
+    if (m % 12 === 11 || m === monthsToRetire - 1) {
+      timeline.push({
+        age: currentAge + Math.floor(m / 12) + 1,
+        balance: balance,
+        totalSpent: 0,
+        phase: 'accumulation'
+      });
+    }
+  }
+
+  const portfolioAtRetirement = balance;
+
+  // Withdrawal phase - inflation-adjusted spending
+  let totalSpent = 0;
+  let brokeAge = null;
+  let adjustedMonthlySpend = monthlySpend;
+
+  // Adjust spending to retirement-year dollars
+  adjustedMonthlySpend = monthlySpend * Math.pow(1 + inflation / 100, yearsToRetire);
+
+  let runningSpend = adjustedMonthlySpend;
+  for (let m = 0; m < monthsInRetirement; m++) {
+    // Increase spending by inflation each month
+    if (m > 0 && m % 12 === 0) {
+      runningSpend *= (1 + inflation / 100);
+    }
+    balance = balance * (1 + monthlyReturn) - runningSpend;
+    totalSpent += runningSpend;
+
+    if (balance <= 0 && brokeAge === null) {
+      brokeAge = retireAge + Math.floor(m / 12);
+      balance = 0;
+    }
+
+    if (m % 12 === 11 || m === monthsInRetirement - 1) {
+      timeline.push({
+        age: retireAge + Math.floor(m / 12) + 1,
+        balance: Math.max(0, balance),
+        totalSpent: totalSpent,
+        phase: 'retirement'
+      });
+    }
+  }
+
+  // Total needed (simple: inflation-adjusted spending over retirement)
+  let totalNeeded = 0;
+  let tempSpend = adjustedMonthlySpend;
+  for (let y = 0; y < yearsInRetirement; y++) {
+    totalNeeded += tempSpend * 12;
+    tempSpend *= (1 + inflation / 100);
+  }
+
+  return {
+    yearsToRetire,
+    yearsInRetirement,
+    portfolioAtRetirement,
+    totalContributed,
+    totalNeeded,
+    finalBalance: Math.max(0, balance),
+    brokeAge,
+    timeline,
+    adjustedMonthlySpend,
+    totalSpent
+  };
+}
+
+// ── QUIPS (one-liners shown under the verdict) ──
+const quipsHellNo = [
+  "This isn't a retirement plan. This is a cry for help.",
+  "You're not behind schedule. You're in a different century.",
+  "The gap between your savings and your needs is visible from space.",
+  "I've seen better financial outcomes in Monopoly games.",
+  "If financial ruin were an Olympic sport, you'd medal.",
+  "Your retirement fund doesn't need a calculator. It needs a miracle.",
+  "This is less 'early retirement' and more 'eternal employment.'",
+  "Your savings just looked at your spending and filed for divorce.",
+  "You'd need compound interest AND compound luck AND compound prayer.",
+  "This is the financial equivalent of bringing a spoon to a sword fight.",
+  "Even a fortune teller would refuse to read this portfolio.",
+  "Your retirement plan has a survival rate lower than a horror movie character.",
+  "The math isn't just not mathing. The math has left the building.",
+  "If your savings were a battery, they'd be at 1% with no charger in sight.",
+  "You're going to work forever. Not as a lifestyle choice.",
+  "This is so far from working that 'no' feels generous.",
+  "Your portfolio took one look at your spending and fainted.",
+  "This isn't a gap in your retirement plan. It's a black hole.",
+  "The calculator tried to find a silver lining. It couldn't.",
+  "Statistically, you'd retire faster by finding a treasure map.",
+  "Your retirement plan is currently rated: fiction.",
+  "If denial were a savings vehicle, you'd be rich.",
+  "This is the numerical equivalent of a five-alarm fire.",
+  "Your money and your retirement age exist in different dimensions.",
+  "We're not talking about belt-tightening. We're talking about a completely different belt.",
+];
+
+const quipsNo = [
+  "Congrats, you're speedrunning poverty.",
+  "Your retirement plan is basically a GoFundMe at this point.",
+  "Hope you like the taste of cat food, because that's the premium tier in your future.",
+  "Have you considered a career that doesn't end?",
+  "The S&P giveth, and your spending habits taketh away.",
+  "At this rate, retirement is a concept, not a plan.",
+  "Your future self just filed a restraining order against your current self.",
+  "Plot twist: you're going to die at your desk. But at least it's in the metaverse.",
+  "This isn't a retirement plan. This is a prayer.",
+  "You'd need a time machine, not a calculator.",
+  "Even the calculator feels bad for you. And it doesn't have feelings.",
+  "Your retirement plan has the structural integrity of wet cardboard.",
+  "Somewhere, a financial advisor just felt a disturbance in the Force.",
+  "If your portfolio were a patient, the doctor would ask about organ donation.",
+  "This is less of a retirement and more of a controlled crash landing. Without the controlled part.",
+  "The math isn't mathing.",
+  "On the bright side, you'll never have to worry about being bored in retirement.",
+  "Have you considered marrying rich? Asking for your portfolio.",
+  "Your retirement fund is giving participation trophy energy.",
+  "The gap between your savings and your needs could fit a small country.",
+  "You're not behind. You're in a completely different race.",
+  "Your money said it needs to see other people.",
+  "This is what happens when vibes replace math.",
+  "Your retirement plan is currently rated: thoughts and prayers.",
+  "If retirement were a video game, you just got a Game Over screen.",
+  "You're going to need a bigger boat. And by boat, I mean savings account.",
+  "The number you're looking for is 'way more than this.'",
+  "I've seen better financial plans written on napkins.",
+  "Your savings and your spending are in two different tax brackets.",
+  "Sir/Ma'am, this is a financial emergency.",
+  "Retirement? In THIS economy? With THOSE numbers?",
+  "Your portfolio just sent you a formal letter of resignation.",
+  "Even compound interest can't fix this. And that thing is literal magic.",
+  "This isn't a wake-up call. This is a fire alarm.",
+  "You're bringing a squirt gun to a financial forest fire.",
+  "The only thing retiring here is your optimism.",
+  "If your retirement plan were a movie, it would be rated R for 'Really bad.'",
+  "Houston, we have a financial problem.",
+  "Your money is playing hide and seek. It's winning.",
+  "On a scale of 1 to retired, you're at 'lol.'",
+  "This plan has more holes than Swiss cheese at a shooting range.",
+  "Your future self is writing angry letters to your present self.",
+  "The calculator ran the numbers twice because it thought it made an error. It didn't.",
+  "Your retirement fund is what economists call 'aspirational fiction.'",
+  "You couldn't retire on this if retirement were free.",
+  "I'd say 'back to the drawing board' but you never had a drawing board.",
+  "Your financial plan is sponsored by denial.",
+  "This is the numerical equivalent of 'it's fine, everything is fine.'",
+  "If money talked, yours would be screaming.",
+  "Your savings account is doing its best. Its best isn't good enough.",
+];
+
+const quipsMaybe = [
+  "You're in the financial equivalent of a yellow light. Proceed with extreme caution.",
+  "You might make it... if you never eat out again. Ever.",
+  "This is technically possible the way jumping across a canyon is technically possible.",
+  "You're cutting it so close the margin of error is a rounding error.",
+  "The math says maybe. Your spending habits say LOL.",
+  "Survivable, but you'll be counting every dollar like it owes you money.",
+  "You're threading a needle while riding a roller coaster.",
+  "This is the financial equivalent of running on fumes.",
+  "One bad recession and this whole thing falls apart. No pressure.",
+  "You're on the tightrope. Don't look down.",
+  "Technically yes, emotionally no, statistically 50/50.",
+  "You're the person who shows up to the airport 20 minutes before boarding. And it's international.",
+  "Your retirement is Schrodinger's cat: simultaneously funded and not funded.",
+  "The margin between 'comfortable retirement' and 'eating ramen at 75' is... thin.",
+  "You're one bear market away from a very different outcome.",
+  "It works on paper. Paper is patient. Reality is not.",
+  "You're the financial equivalent of a student who needs a 94 on the final to pass.",
+  "The universe would need to cooperate for 20+ straight years. What could go wrong?",
+  "This is the kind of plan that works until it doesn't.",
+  "Not impossible. Not comfortable. Not recommended.",
+  "Your retirement is a maybe the way 'I'll think about it' from your crush is a maybe.",
+  "The good news: it's possible. The bad news: barely.",
+  "You're playing retirement on Hard Mode.",
+  "If this were a weather forecast, it would say 'partly cloudy with a chance of destitution.'",
+  "Your financial plan works perfectly in a world where nothing unexpected ever happens.",
+  "You're dangerously close to either outcome. Choose your next move wisely.",
+  "A financial advisor would describe this as 'concerning but addressable.' You should address it.",
+  "This plan relies on everything going right. Everything never goes right.",
+  "You're not drowning. You're treading water. For decades.",
+  "Your retirement is held together by optimism and compound interest. Hope both hold up.",
+  "This is the fiscal equivalent of 'I'll sleep on the plane.'",
+  "One emergency expense could tip this whole thing over.",
+  "Possible but stressful. Like parallel parking a bus.",
+  "Your plan works if you never get sick, never have fun, and never eat anything that costs more than $8.",
+  "The math works. The real world might not.",
+  "You're in the sweet spot between 'fine' and 'oh no.'",
+  "If your retirement were a Yelp review, it'd be 2.5 stars. 'Adequate but concerning.'",
+  "You could make it. But 'could' is doing a lot of heavy lifting in that sentence.",
+  "This is a maybe the way skydiving is 'probably safe.'",
+  "Your retirement plan is a house of cards that hasn't fallen yet.",
+  "Not ideal, not hopeless. The most stressful category.",
+  "You're one lifestyle change away from a YES and one bad year away from a NO.",
+  "Your portfolio is giving 'I'll figure it out later' energy. Later is now.",
+  "This works if the next 30 years go exactly as planned. They won't.",
+  "A coin flip would feel more decisive than this outcome.",
+  "You're close enough to taste retirement but too far to reach it comfortably.",
+  "This is the financial equivalent of driving with the gas light on.",
+  "Technically feasible. So is climbing Everest in sneakers.",
+  "Your retirement is rated PG-13: possible for some, not suitable for the faint-hearted.",
+  "You're bringing a knife to a gunfight, but it's a very sharp knife.",
+];
+
+const quipsYes = [
+  "Against all odds, you might actually pull this off. Don't let it go to your head.",
+  "Look at you, financially literate and everything.",
+  "The rare specimen who started early enough. Or earns enough. Probably the latter.",
+  "You can retire. The question is whether you'll be bored out of your mind.",
+  "Compound interest did the heavy lifting. You just showed up. But showing up counts.",
+  "Congratulations. You beat the system. (The system is not rigged in your favor, so genuinely, well done.)",
+  "You're the person your broke friends will ask for advice. Don't be smug about it.",
+  "You can stop doom-scrolling r/financialindependence now.",
+  "Your future self just sent you a thank-you card.",
+  "Welcome to the small club of people who can actually stop working someday.",
+  "The math works. Don't celebrate by buying a boat.",
+  "You've won the game most people don't even know they're playing.",
+  "Not bad. Not bad at all. Your parents would be confused but proud.",
+  "Somewhere, a financial advisor is out of a job because you did this yourself.",
+  "You can retire. The question is whether you'll be the kind of retiree who golfs or the kind who starts a podcast.",
+  "Your portfolio and your spending are actually in the same zip code. That's rare.",
+  "You did the boring thing for years and it's about to pay off. How annoyingly responsible of you.",
+  "Most people your age are worried about this. You just... aren't. Must be nice.",
+  "The spreadsheet gods have smiled upon you.",
+  "You can actually retire. Like, for real. Not the 'retire to a van by the river' kind.",
+  "Time and compound interest: the only cheat code that works.",
+  "Your future is funded. Your boredom is your own problem.",
+  "You're going to be fine. Financially, at least. Existentially? That's above my pay grade.",
+  "The rare case where the calculator delivers good news. Screenshot this.",
+  "You're proof that boring financial decisions lead to exciting life options.",
+  "Your retirement is funded. Your purpose in retirement is a separate calculator entirely.",
+  "You actually don't need to work forever. That's genuinely impressive in this economy.",
+  "You've outrun the financial reaper. For now.",
+  "You're the exception, not the rule. Don't waste it.",
+  "If financial responsibility were a sport, you'd be varsity.",
+  "Your savings will outlive your career. That's the whole point.",
+  "This is what 'pay yourself first' looks like in practice.",
+  "You can retire. Whether you should is a question for your therapist.",
+  "The numbers check out. Don't let lifestyle creep undo decades of discipline.",
+  "Your portfolio is larger than some countries' GDP. Okay, small countries. But still.",
+  "Go ahead, picture yourself not working. Because you actually can.",
+  "You've successfully converted decades of patience into decades of freedom.",
+  "The calculator is impressed. The calculator is never impressed.",
+  "This is what happens when you treat a savings rate like a non-negotiable.",
+  "Retirement isn't a dream for you. It's an Excel cell with a positive number.",
+  "You can stop reading those '7 Ways to Catch Up on Retirement' articles now.",
+  "Your future self is already on the beach. Metaphorically. Please still wear sunscreen.",
+  "Congrats, you'll be spending your golden years actually golden.",
+  "You ran the math and the math didn't run you. That's the whole game.",
+  "The market gave, you didn't take it back. That's called discipline.",
+  "You're going to be the annoying friend who retires first. Own it.",
+  "Financially, you're cooked. In the good way. Like a well-done steak. A rich, well-done steak.",
+  "Your retirement account has more stability than most relationships.",
+  "You've played the long game and the long game played back.",
+  "Most people talk about financial freedom. You've got receipts.",
+];
+
+const quipsAbsolutely = [
+  "You don't just retire. You retire in style. Disgusting.",
+  "The calculator just bowed. It's never done that before.",
+  "You could stop working today and your grandkids would still be fine.",
+  "This isn't a retirement plan. It's a dynasty.",
+  "You're so funded it's almost offensive.",
+  "Compound interest didn't just work for you. It built you a monument.",
+  "Your portfolio could retire before you do.",
+  "The money will outlive you, your children, and possibly your children's children.",
+  "You didn't just beat the game. You're speedrunning it on easy mode.",
+  "The only problem with your retirement is finding enough hobbies.",
+  "You could light money on fire every week and still be fine. (Don't.)",
+  "If financial security were a fortress, yours would have a moat and dragons.",
+  "Your retirement plan is so solid it makes other retirement plans insecure.",
+  "The S&P 500 should be thanking YOU at this point.",
+  "You're not retiring. You're ascending.",
+  "This is what happens when discipline meets time meets math. It's boring and it's beautiful.",
+  "Your biggest retirement risk is dying of boredom, not poverty.",
+  "You could retire to a different country each decade and still have leftovers.",
+  "The calculator is speechless. And it's literally made of words and numbers.",
+  "You've achieved what most financial advisors promise and few deliver.",
+  "Your retirement fund has retirement funds.",
+  "This is generational wealth territory. Use it wisely.",
+  "You're bringing a nuclear arsenal to a knife fight. Financially speaking.",
+  "At this point, working is a choice, not a necessity. Must be nice.",
+  "The math is so in your favor it feels like cheating. It's not. It's patience.",
+];
+
+// ── ROASTS (longer commentary shown in the Reality Check box) ──
+const roastsHellNo = [
+  "There is no gentle way to say this: you are catastrophically underfunded. Your money runs out <BROKE_AGE>, and that's not a 'tighten the belt' situation \u2014 that's a complete structural failure. You need to either radically increase your income, radically decrease your spending expectations, or accept that retirement as you've imagined it is not on the table. Start over from first principles.",
+  "The gap here isn't something you can close with an extra $100 a month. You need an entirely different financial trajectory. Think career changes, geographic arbitrage, dramatically extended working years, or some combination of all three. The current plan isn't a plan. It's a countdown to crisis.",
+  "I want to be direct: at this rate, you'll run out of money less than halfway through retirement. That means decades \u2014 not years, decades \u2014 with zero income and zero savings. The safety nets that exist (Social Security, family, public assistance) were not designed to be your entire retirement plan. Something fundamental has to change, and it has to change now.",
+  "Your savings would need to be several multiples of what they are to make this work. That's not a tweak. That's a rebuild. The question isn't 'how do I optimize my portfolio?' The question is 'how do I completely restructure my financial life?' Start there.",
+  "If you keep on this path, you'll exhaust your savings <BROKE_AGE> and spend the rest of your life dependent on whatever lifeline exists. That's not pessimism \u2014 that's what the math says. The only way to change the math is to change the inputs. Dramatically.",
+  "Here's the reality: you're planning to spend money you will never have. Not 'might not have.' Will never have. The portfolio you're building cannot grow fast enough to cover the life you're planning. You need a fundamentally different set of numbers.",
+  "The simulation ran every month of your retirement. It found the breaking point, and it's early. Very early. This isn't about being smarter with money. This is about having an honest conversation with yourself about what's realistic.",
+  "I know the instinct is to think 'I'll figure it out.' But this isn't a problem that resolves through optimism. It resolves through action. Bigger contributions, smaller lifestyle, longer career. The math doesn't negotiate.",
+  "You're looking at a future where your money disappears while you still need it desperately. That's the scariest sentence in personal finance. But it's also the most actionable one, because every variable in this equation is something you can change. If you start now.",
+  "This result isn't a judgment. It's a warning. A warning that still has time attached to it. Use that time. Because the one thing this calculator can't give you is more of it.",
+];
+
+const roastsNo = [
+  "Let's be real: you need to either earn significantly more, spend dramatically less, or redefine what \"retirement\" means. At your current trajectory, you'll run out of money <BROKE_AGE>. That's not a soft landing \u2014 that's a cliff. Consider: can you push back retirement by 5 years? Can you cut monthly spending by 30%? Can you increase contributions? These aren't fun questions, but they're the ones that matter.",
+  "The cold math doesn't care about your optimism. Your portfolio grows, sure, but your spending ambitions grow faster. You need a fundamental recalibration \u2014 not a minor tweak, not a vibe shift, an actual behavioral change. The gap between what you want and what you'll have is not a gap. It's a canyon.",
+  "Here's the thing about running out of money <BROKE_AGE>: there is no \"undo\" button. No pension fairy. No magic. Just you, an empty account, and an economy that will not give a single damn. The only move is to change the inputs. Now. Not tomorrow. Now.",
+  "Running out of money <BROKE_AGE> means years of relying on whatever safety net exists at that point. Social Security, if it's still solvent. Family, if they're willing. Charity, if you're lucky. None of these are a plan. A plan has numbers. Yours just ran out.",
+  "You're not going to budget your way out of this with coupons and meal prep. The gap here is structural. You either need a fundamentally higher income, a fundamentally lower cost of living, or fundamentally more time in the market. Pick at least one. Preferably two.",
+  "I know you didn't want to hear this, but pretending the math works when it doesn't is how people end up 70 years old and applying to jobs. There are exactly three levers: earn more, spend less, retire later. The calculator doesn't care which one you pull, but you need to pull something.",
+  "Your spending plans assume a lifestyle your savings simply cannot sustain. That's not a judgment on your character \u2014 it's just arithmetic. The market can do a lot, but it can't do everything. You need to meet it halfway, and right now you're not even in the same building.",
+  "The good news is that this is fixable. The bad news is that the fix involves making choices you probably don't want to make. More savings, less spending, or more years at the desk. Every year you delay these decisions, the math gets worse. Not a little worse. Exponentially worse.",
+  "I want to be clear: this isn't a 'tighten the belt' situation. This is a 'redesign your entire financial life' situation. The spending you've planned will eat through your savings like termites through balsa wood. Something fundamental has to change.",
+  "Your portfolio at retirement is nowhere near enough to sustain your planned lifestyle. Think of it this way: your money runs out <BROKE_AGE>, and then what? You go back to work at an age when no one wants to hire you? Move in with your kids? The time to fix this is while you still have time.",
+  "There's a version of this where you make it work. But it's not the version where you change nothing. The market is powerful but it's not a miracle worker. You need to give it more fuel (contributions), more time (later retirement), or less drag (lower spending).",
+  "If you squint hard enough at any number, you can convince yourself it's fine. Please don't squint at these numbers. They need glasses, and the prescription is 'save way more money.'",
+  "You're essentially planning to fund a champagne retirement with a beer budget. And not even craft beer. We're talking store-brand light beer. In a can. That's been in the sun.",
+  "Here's the uncomfortable truth: every dollar you overspend today is a dollar you won't have when you physically cannot earn more. Your body will stop cooperating long before your expenses do.",
+  "The math here isn't subtle. It's not hiding nuance behind complex formulas. It's screaming, loudly, in a language everyone understands: you do not have enough money for what you're planning.",
+  "You might be thinking 'but what about Social Security?' Great question. The average monthly benefit is about $1,900. Your planned spending is significantly higher than that. Social Security is a floor, not a retirement plan.",
+  "This is fixable, but the window is closing. Compound interest works best with time, and you're burning through the one resource you can't buy more of.",
+  "I've run the numbers forward and backward. They don't work sideways, upside down, or in any creative interpretation. You need more money or less spending. There's no third option.",
+  "If your financial plan were a building, the inspector would condemn it. Not because it's ugly \u2014 because it's structurally unsound and people could get hurt.",
+  "Think of every year between now and retirement as a chance to change this outcome. Now count those years. That's how many chances you have left. Use them.",
+  "The difference between 'I ran out of money at 72' and 'I had enough to live comfortably' is the decision you make in the next 12 months. Not 12 years. 12 months. That's when the math either starts working or doesn't.",
+  "Your spending assumptions are built for someone with about three times your projected savings. Either become that person or plan like the person you actually are.",
+  "Here's a fun exercise: imagine yourself at the exact age your money runs out. What does that day look like? That's not a hypothetical. The numbers say that day is coming unless you change course.",
+  "The market doesn't do charity. It grows your money at a rate, and that rate is not high enough to cover the gap between what you have and what you need. Close the gap yourself, or the gap will close on you.",
+  "There's no shame in this result. Most people don't run the numbers at all. You did. Now you know. The question is what you do with that knowledge.",
+];
+
+const roastsMaybe = [
+  "You're on the edge. A good decade of returns and you're golden. A recession at the wrong time and you're eating rice and beans forever. This is not a comfortable place to be. Your margin of safety is paper-thin. Consider any way to widen the gap \u2014 higher contributions, lower spending, or a few more working years could turn \"maybe\" into \"yes.\"",
+  "Technically viable, but you're relying on the market to cooperate for decades. Markets have a funny way of not cooperating. Build in a buffer. Your future self will thank you (or at least not curse you).",
+  "You're in the danger zone where sequence-of-returns risk actually matters. If the market drops 30% in your first two years of retirement, your plan goes from 'maybe' to 'definitely not' real fast. A few extra years of saving could insulate you from that kind of bad luck.",
+  "This plan works in an average scenario. The problem is that you don't live in an average scenario. You live in a specific one, with specific recessions, specific health costs, and specific bad luck. 'Maybe' means your plan has no room for life happening.",
+  "You're close enough that small changes could tip the scales. An extra $200/month in contributions, a $500 reduction in planned spending, or two more years of work could be the difference between comfort and anxiety. The question is whether you'll make those changes or just hope for the best.",
+  "The math is giving you a conditional pass. The condition is that nothing goes wrong for the next several decades. That's a big condition. Consider what it would take to make this an unconditional pass.",
+  "You know that feeling when your phone is at 12% and you're not near a charger? That's your retirement plan. It might last. It might not. And you won't know until it's too late to do anything about it.",
+  "The good news: you're not hopeless. The bad news: you're not comfortable either. You're in financial purgatory \u2014 the numbers don't damn you, but they don't save you. The next few years of decisions will determine which way you tip.",
+  "This is the kind of outcome where people say 'I'll be fine' and then aren't. Not because they're stupid, but because they confused 'possible' with 'probable.' Give yourself a margin. You'll sleep better.",
+  "Your retirement plan is a B-minus. It's passing, but it's not the kind of passing that makes anyone comfortable. A few more points and you're solid. Where are you going to find those points?",
+  "Think of it this way: if someone told you there was a 60% chance your parachute would open, would you jump? That's roughly the confidence level of your retirement plan.",
+  "You're in the zone where inflation is your biggest enemy. A few extra percentage points of inflation over a decade could eat the difference between 'fine' and 'broke.' Build in a cushion.",
+  "The scariest thing about a 'maybe' isn't the math. It's that you won't know the answer until you're 75 and it's too late to go back to work. Make the adjustments now while the option exists.",
+  "Your plan assumes a straight line through life. Life isn't a straight line. It has car repairs, medical bills, family emergencies, and that one year where everything goes wrong at once. Does your plan survive that year?",
+  "This is close enough that behavioral changes matter more than market returns. Skip the daily coffee? No. Skip the lifestyle upgrade when you get a raise? Yes. That's the stuff that moves the needle at this level.",
+  "A 'maybe' today can become a 'yes' in 3-5 years if you increase contributions even modestly. Or it can become a 'no' if you increase spending. The trajectory is yours to choose.",
+  "You're in the financial equivalent of check, not checkmate. You still have moves. But you need to start making them before the board gets worse.",
+  "The difference between your 'maybe' and a confident 'yes' is probably less than you think. Run the scenario table below \u2014 a small spending cut might be all it takes.",
+  "Right now your retirement plan is held together by assumptions. If those assumptions hold, great. If they don't, you'll wish you'd built in a buffer. The cost of a buffer is small. The cost of being wrong is enormous.",
+  "You're not in trouble. But you're not safe either. Think of yourself as driving in a lane that's about to merge. You need to either speed up or slow down. Staying at this speed is the worst option.",
+  "Your plan works in the simulation. But the simulation assumes constant returns, predictable inflation, and no surprises. Your actual life will feature none of those things. Plan accordingly.",
+  "Most people in 'maybe' territory do nothing and hope for the best. Most people in 'maybe' territory end up in 'no' territory. Be the exception.",
+  "The cruel irony of a 'maybe' is that the actions needed to fix it are small and easy right now, but impossible later. Future you can't save more. Future you can't go back to work easily. Present you can do both.",
+  "You're in a position where one good habit \u2014 one recurring transfer, one spending freeze, one side income \u2014 could change your outcome. That's not motivational poster fluff. That's what the math says.",
+  "This is the output where I tell you it's going to be okay, but only if you treat it like it might not be. Complacency is the enemy of 'maybe.'",
+];
+
+const roastsYes = [
+  "You're in good shape. Your portfolio at retirement should comfortably cover your spending, and you'll likely leave money on the table \u2014 or leave it to someone. The key risk now isn't running out of money; it's lifestyle creep. Don't let success make you sloppy. Keep the contributions consistent and resist the urge to inflate your spending just because you can.",
+  "The numbers work. You've either been disciplined, lucky, or both. Don't overthink it, but don't get cocky either. Markets can give and take. Stay the course, and you'll be one of the few people who actually retires on their own terms.",
+  "Your biggest financial risk at this point is yourself. The math is solid, but the math doesn't account for the sports car you might buy when you turn 50, the kitchen remodel that 'adds value,' or the 'once in a lifetime' trip that happens three times. Stay boring. Boring works.",
+  "Congratulations on being the kind of person who makes spreadsheets instead of excuses. Your portfolio can sustain your lifestyle through retirement. That's genuinely rare. Don't forget to actually enjoy the money at some point.",
+  "The hard part \u2014 building the habit, staying consistent, not panicking during downturns \u2014 is done. The easy part is just... continuing. Don't overthink it. Don't overtrade. Don't over-optimize. The plan is working.",
+  "Here's something most people never hear: you have enough. Not 'enough if everything goes right.' Enough even if some things go wrong. That's a powerful position. Use it to make decisions from confidence, not fear.",
+  "You're in the rare position of having more money than you need. Which means you have options. Retire early. Work part-time doing something you actually like. Leave something behind. These are luxury problems. Enjoy them.",
+  "The compound interest machine has done its job. From here, the biggest value comes not from saving more, but from planning well \u2014 tax strategy, withdrawal order, estate planning. The boring stuff that rich people pay other people to think about.",
+  "Your plan survives bad years, market corrections, and the occasional splurge. That's what a cushion looks like. Don't mistake the cushion for excess \u2014 it's there for the shocks you can't predict.",
+  "There's a version of this where you stress about money anyway, because that's what humans do. Try not to be that version. The numbers say you're fine. Trust the numbers. (But verify annually.)",
+  "You've done something most people only talk about: you've actually built a retirement fund that works. The only thing left to do is not sabotage it. Which, statistically, is harder than it sounds.",
+  "If you feel like you should be doing something more, you probably shouldn't. Over-optimization is the enemy of a good plan. Set it, forget it (mostly), and go live your life.",
+  "The thing about being on the right side of the math is that every additional year of work is optional. Not 'optional if you're okay with ramen' \u2014 actually optional. That's freedom.",
+  "You can afford to take risks that aren't financial. Start that business. Take that trip. Say no to the meeting. Your savings have bought you something money can't buy: leverage.",
+  "Statistically, you're in the top quartile of retirement preparedness. Which sounds good until you realize the bottom three quartiles are terrifying. You're not special \u2014 you just did the math early enough.",
+  "The market did a lot of the work, but you did the part the market can't: you showed up consistently and didn't panic. That's the actual edge. Algorithms can't replicate discipline.",
+  "Your plan has room for a recession, a health scare, and still comes out ahead. That's not luck \u2014 that's margin. And margin is the most underrated word in personal finance.",
+  "At this point, the biggest upgrade isn't more savings \u2014 it's clarity. Know your withdrawal strategy. Know your tax brackets. Know your estate plan. The accumulation game is won. Now play the distribution game well.",
+  "You're going to have more money than time. That's the real luxury. Don't wait until retirement to spend time on the things that matter. You've earned the right to start now.",
+  "The calculator says yes. But I'll add: don't let 'yes' turn into 'more.' You don't need a bigger house, a nicer car, or a fancier lifestyle. You need to hold the line. The line is already good.",
+  "You've solved the money problem. Now solve the purpose problem. People who retire with money but no plan for their days are more miserable than people who work. Figure out what you're retiring TO, not just FROM.",
+  "Your portfolio is stress-tested against mediocre returns and comes out fine. That's the whole game. You're not betting on a bull run; you're prepared for an average one.",
+  "If you're reading this and feeling good, I have one word for you: maintain. Maintain the contributions. Maintain the spending discipline. Maintain the boring consistency that got you here.",
+  "You've essentially given yourself permission to stop worrying about money. Whether you actually stop worrying is a psychology problem, not a math problem.",
+  "Most people your age have a retirement plan that looks like a vague hope. Yours looks like a funded account with a trajectory. That's the difference between wishing and planning.",
+];
+
+const roastsAbsolutely = [
+  "Let's be real: you've won. Not 'winning' \u2014 won. Your portfolio doesn't just survive retirement, it thrives through it and comes out the other side with more than most people earn in a lifetime. The only real question left is: what do you want your money to mean? Legacy? Freedom? Impact? That's a philosophical question, not a financial one.",
+  "You're in the rare position of having 'enough' by every reasonable definition. The danger now is purely psychological: the inability to stop optimizing, the fear of spending what you've earned, the hedonic treadmill that makes enough feel insufficient. The math is done. Work on the mindset.",
+  "Your portfolio will generate more in returns during retirement than most people save in their entire careers. That's not a flex \u2014 it's a responsibility. You have the resources to retire well, give generously, and still leave a legacy. The question is whether you'll actually live that way or just keep accumulating out of habit.",
+  "At this level of funding, the conversation shifts from 'can I retire?' to 'how do I want to live?' Tax optimization, estate planning, charitable giving, early retirement \u2014 these are your actual decisions now. Congratulations on having luxury problems.",
+  "You've built something most people only dream about: genuine financial independence. Not the Instagram kind. The real kind. Where you wake up and your time is yours. Don't waste it doing the same things you'd do if you were broke. You're not.",
+  "The compound interest machine hasn't just worked for you \u2014 it's worked spectacularly. You'll leave behind more money than you started retirement with. Think about that. Your wealth grows faster than you can spend it. That's a remarkable position.",
+  "Here's something nobody tells you about being overfunded: the hard part isn't the money anymore. It's the identity shift. You've spent decades defining yourself by productivity and earning. Now what? Figure that out before you retire, not after.",
+  "Your retirement isn't a financial event. It's a lifestyle redesign. You have the budget for literally any version of retirement you want. Traveling the world, starting a foundation, learning every instrument \u2014 the constraint isn't money. It's imagination.",
+  "You're so far ahead that even a catastrophic market event \u2014 a 50% crash, a decade of flat returns \u2014 wouldn't derail you. That's what a real cushion looks like. Not a buffer. A fortress.",
+  "The honest truth: you could have retired years ago and been fine. Every year you keep working is a choice, not a necessity. Whether that's a good choice depends on whether you love the work or just love the number going up.",
+];
+
+const partingWisdom = [
+  "Remember: every financial projection is a fiction we tell ourselves to sleep at night. The market will do whatever the market wants. Your job is to make sure you survive the plot twists.",
+  "The best time to start investing was 10 years ago. The second best time is now. The worst time is 'after I buy this one thing.' It's always 'one thing.'",
+  "Nobody on their deathbed wished they'd spent more time optimizing their portfolio. But also, nobody on their deathbed wished they'd run out of money at 72. Balance, people.",
+  "If this calculator ruined your day: good. Discomfort is the first step to change. If this calculator made your day: don't let it make you complacent.",
+  "This entire exercise assumes the S&P 500 continues to exist and perform roughly as it has. That's not guaranteed. Nothing is. Sleep tight.",
+  "The stock market is a device for transferring money from the impatient to the patient. Figure out which one you are.",
+  "Inflation is the silent tax that no one voted for. It's always there, always eating. Plan accordingly.",
+  "Your spending habits today are your retirement's biggest threat or biggest ally. There is no neutral.",
+  "The scariest number isn't how much you need. It's how many years you have left to get there.",
+  "A 1% difference in return rate over 30 years is the difference between a vacation home and a shared apartment. Details matter.",
+  "The market has returned ~10% annually for 100 years. It has also lost 50% twice, gained 30% in single years, and done nothing for a decade straight. Averages lie about the experience.",
+  "You can't time the market. But you can time your spending. One of these is in your control.",
+  "Most people overestimate what they can earn and underestimate what they'll spend. Be the exception.",
+  "The calculator is a map. The territory is your actual life. They will not match perfectly.",
+  "Healthcare costs in retirement are the thing nobody wants to talk about and everybody should. They're probably higher than you think.",
+  "If you're young and reading this: time is your greatest asset. Not stocks, not income, not intelligence. Time. Don't waste it.",
+  "If you're old and reading this: it's never too late to improve your position. Never. Even small changes compound.",
+  "The gap between 'I should start saving' and 'I started saving' is where most people's retirement plans die.",
+  "Diversification is boring. Diversification works. These two things are related.",
+  "Your most dangerous financial assumption is the one you don't know you're making.",
+  "The people who retire comfortably aren't smarter than you. They just started earlier and quit later. That's it.",
+  "Nobody plans to work until they die. Many people do anyway. The difference is almost always a decision made (or not made) in their 30s and 40s.",
+  "Money is a tool. Tools don't care about your feelings. Learn to use the tool before the tool uses you.",
+  "The biggest risk to your retirement isn't a market crash. It's doing nothing.",
+  "This calculator can tell you if the math works. It can't tell you if you'll actually follow through. That part is on you.",
+  "Somewhere between 'YOLO' and 'extreme frugality' is a number that lets you sleep at night and live during the day. Find it.",
+  "The fact that you ran this calculation puts you ahead of 90% of people. Don't let that make you complacent about the other 10%.",
+  "Your future self has no voice in this conversation. Make decisions as if they do.",
+  "Compounding is the only free lunch in finance. Everything else has a fee, a catch, or a risk.",
+  "This isn't about being rich. It's about not being scared. Financial security is the absence of money panic, not the presence of luxury.",
+  "The market doesn't reward you for being clever. It rewards you for being present. Show up, contribute, don't touch it.",
+  "If your retirement plan depends on winning the lottery, inheritance, or a crypto moon shot, it's not a plan. It's a wish.",
+  "The most important financial decision you'll ever make is your savings rate. Not your investment picks. Not your timing. Your rate.",
+  "Retirement calculators are wrong. All of them. Including this one. But they're useful in the same way a compass is useful: not because it shows you the exact tree, but because it points you at the forest.",
+  "The goal isn't to die with the most money. The goal is to not run out before you die. Everything else is optimization.",
+  "Money problems are math problems with emotional complications. Solve the math first. Then deal with the feelings.",
+  "You will not remember the lattes you skipped. You will remember the decade you didn't have to work.",
+  "The worst financial plan is the one you don't follow. The second worst is the one you never made.",
+  "Every expert was once a beginner who Googled 'how does compound interest work.' You're doing fine.",
+  "If this calculator told you something you didn't want to hear, that's not the calculator's problem.",
+];
+
+function randomFrom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// ── MAIN CALCULATE ──
+function calculate() {
+  const currentAge = parseInt(document.getElementById('currentAge').value);
+  const retireAge = parseInt(document.getElementById('retireAge').value);
+  const lifespan = parseInt(document.getElementById('lifespan').value);
+  const monthlySpend = parseFloat(document.getElementById('monthlySpend').value);
+  const portfolio = parseFloat(document.getElementById('currentPortfolio').value);
+  const monthlyContrib = parseFloat(document.getElementById('monthlyContrib').value);
+  const annualReturn = parseFloat(document.getElementById('annualReturn').value);
+  const inflation = parseFloat(document.getElementById('inflation').value);
+
+  // Validation
+  if (retireAge <= currentAge) {
+    alert("Your retirement age needs to be after your current age. Time travel isn't a financial strategy.");
+    return;
+  }
+  if (lifespan <= retireAge) {
+    alert("If you die before you retire, congratulations \u2014 you never need to worry about retirement funding. Problem solved, I guess.");
+    return;
+  }
+
+  const r = simulate(currentAge, retireAge, lifespan, monthlySpend, portfolio, monthlyContrib, annualReturn, inflation);
+
+  // Determine verdict purely from the simulation -- 5 tiers
+  let verdict, verdictClass, verdictTier;
+  const moneyLasts = !r.brokeAge;
+  const coverageRatio = r.brokeAge
+    ? (r.brokeAge - retireAge) / r.yearsInRetirement
+    : 1;
+
+  const finalRatio = moneyLasts ? r.finalBalance / r.portfolioAtRetirement : 0;
+
+  if (moneyLasts && finalRatio >= 1.0) {
+    // You die richer than you retired. Absurd.
+    verdict = 'OH YEAH';
+    verdictClass = 'absolutely';
+    verdictTier = 5;
+  } else if (moneyLasts && finalRatio >= 0.3) {
+    // Money lasts with a solid cushion
+    verdict = 'YES';
+    verdictClass = 'yes';
+    verdictTier = 4;
+  } else if (moneyLasts) {
+    // Money technically lasts but it's tight -- less than 30% left
+    verdict = 'MAYBE';
+    verdictClass = 'maybe';
+    verdictTier = 3;
+  } else if (coverageRatio >= 0.5) {
+    // Money runs out but covers at least half of retirement
+    verdict = 'NO';
+    verdictClass = 'no';
+    verdictTier = 2;
+  } else {
+    // Money runs out fast -- covers less than half of retirement
+    verdict = 'HELL NO';
+    verdictClass = 'hellno';
+    verdictTier = 1;
+  }
+
+  // ── Verdict Box ──
+  const verdictBox = document.getElementById('verdictBox');
+  verdictBox.className = 'verdict-box ' + verdictClass;
+  document.getElementById('verdictWord').textContent = verdict;
+
+  const quipMap = {
+    'HELL NO': quipsHellNo,
+    'NO': quipsNo,
+    'MAYBE': quipsMaybe,
+    'YES': quipsYes,
+    'OH YEAH': quipsAbsolutely,
+  };
+  document.getElementById('verdictQuip').textContent = randomFrom(quipMap[verdict]);
+
+  // ── Breakdown Cards ──
+  const breakdownEl = document.getElementById('breakdown');
+  const realReturn = ((1 + annualReturn / 100) / (1 + inflation / 100) - 1) * 100;
+
+  // How much the market earned on top of contributions
+  const marketGains = r.portfolioAtRetirement - r.totalContributed;
+  const marketGainsPct = r.totalContributed > 0 ? ((marketGains / r.totalContributed) * 100).toFixed(0) : 0;
+
+  const yearsMoneyLasts = r.brokeAge ? (r.brokeAge - retireAge) : r.yearsInRetirement;
+  const yearsShort = r.brokeAge ? (lifespan - r.brokeAge) : 0;
+
+  breakdownEl.innerHTML = `
+    <div class="stat-card">
+      <div class="label">Your Savings by Age ${retireAge}</div>
+      <div class="value ${moneyLasts ? 'green' : 'red'}">${fmt(r.portfolioAtRetirement)}</div>
+      <div class="sub">What your investments grow to when you stop working</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Monthly Spending (in Future Dollars)</div>
+      <div class="value yellow">${fmt(r.adjustedMonthlySpend)}</div>
+      <div class="sub">$${monthlySpend.toLocaleString()}/mo today = $${Math.round(r.adjustedMonthlySpend).toLocaleString()}/mo at age ${retireAge} because of inflation</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">${moneyLasts ? 'Your Money Lasts' : 'Your Money Runs Out At'}</div>
+      <div class="value ${moneyLasts ? 'green' : 'red'}">${moneyLasts ? 'All ' + r.yearsInRetirement + ' Years' : 'Age ' + r.brokeAge}</div>
+      <div class="sub">${moneyLasts
+        ? 'Your savings keep earning returns while you spend, so the money outlives you'
+        : `Covers ${yearsMoneyLasts} of the ${r.yearsInRetirement} years you need. You\u2019re broke for the last ${yearsShort}.`
+      }</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">${moneyLasts ? 'Money Left When You Die' : 'Years With $0 in the Bank'}</div>
+      <div class="value ${moneyLasts ? 'green' : 'red'}">${moneyLasts ? fmt(r.finalBalance) : yearsShort + ' Years'}</div>
+      <div class="sub">${moneyLasts
+        ? 'Unspent at age ' + lifespan + '. Leave it to someone, donate it, whatever.'
+        : 'From age ' + r.brokeAge + ' to ' + lifespan + ', you have nothing. Zero. Zip.'
+      }</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">The Market Did This for You</div>
+      <div class="value blue">${fmt(marketGains)}</div>
+      <div class="sub">You put in ${fmt(r.totalContributed)} of your own money. The market grew it by an extra ${marketGainsPct}%.</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">What ${annualReturn}% Growth Really Means</div>
+      <div class="value ${realReturn > 4 ? 'green' : realReturn > 2 ? 'yellow' : 'red'}">${realReturn.toFixed(1)}%</div>
+      <div class="sub">Market grows ${annualReturn}%/yr, but ${inflation}% inflation eats into it. Your buying power only grows ${realReturn.toFixed(1)}%/yr.</div>
+    </div>
+  `;
+
+  // ── Progress Bar ── based on how many retirement years the money covers
+  const progressSection = document.getElementById('progressSection');
+  const coveragePct = Math.min((yearsMoneyLasts / r.yearsInRetirement) * 100, 100);
+  const pctClass = moneyLasts ? 'green' : coveragePct >= 75 ? 'yellow' : 'red';
+  progressSection.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>How Much of Retirement Is Covered?</span>
+        <span>${moneyLasts ? 'All ' + r.yearsInRetirement + ' years' : yearsMoneyLasts + ' of ' + r.yearsInRetirement + ' years (' + coveragePct.toFixed(0) + '%)'}</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill ${pctClass}" style="width: 0%;" id="progressFill"></div>
+      </div>
+    </div>
+  `;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.getElementById('progressFill').style.width = coveragePct + '%';
+    });
+  });
+
+  // ── Commentary ──
+  const roastMap = {
+    'HELL NO': roastsHellNo,
+    'NO': roastsNo,
+    'MAYBE': roastsMaybe,
+    'YES': roastsYes,
+    'OH YEAH': roastsAbsolutely,
+  };
+  let roast = randomFrom(roastMap[verdict]);
+  if (r.brokeAge) roast = roast.replace(/<BROKE_AGE>/g, 'at age ' + r.brokeAge);
+  document.getElementById('commentaryText').textContent = roast;
+
+  // ── Scenario Table ──
+  const scenarios = [0.5, 0.75, 1, 1.25, 1.5, 2].map(mult => {
+    const spend = monthlySpend * mult;
+    const s = simulate(currentAge, retireAge, lifespan, spend, portfolio, monthlyContrib, annualReturn, inflation);
+    const sMoneyLasts = !s.brokeAge;
+    return { spend, s, sMoneyLasts };
+  });
+
+  const tbody = document.getElementById('scenarioBody');
+  tbody.innerHTML = scenarios.map(sc => {
+    let verdictLabel, cls;
+    const scCoverage = sc.s.brokeAge
+      ? (sc.s.brokeAge - retireAge) / r.yearsInRetirement
+      : 1;
+    const scFinalRatio = sc.sMoneyLasts ? sc.s.finalBalance / sc.s.portfolioAtRetirement : 0;
+    if (sc.sMoneyLasts && scFinalRatio >= 1.0) {
+      verdictLabel = 'OH YEAH'; cls = 'legendary';
+    } else if (sc.sMoneyLasts && scFinalRatio >= 0.3) {
+      verdictLabel = 'YES'; cls = 'pass';
+    } else if (sc.sMoneyLasts) {
+      verdictLabel = 'MAYBE'; cls = 'warn';
+    } else if (scCoverage >= 0.5) {
+      verdictLabel = 'NO'; cls = 'fail';
+    } else {
+      verdictLabel = 'HELL NO'; cls = 'doom';
+    }
+    const lastsUntil = sc.sMoneyLasts
+      ? 'Age ' + lifespan + '+'
+      : 'Age ' + sc.s.brokeAge;
+    const leftOver = sc.sMoneyLasts
+      ? fmt(sc.s.finalBalance)
+      : '$0';
+    return `<tr>
+      <td>${fmtFull(sc.spend)}/mo</td>
+      <td class="${cls}">${lastsUntil}</td>
+      <td>${leftOver}</td>
+      <td class="${cls}">${verdictLabel}</td>
+    </tr>`;
+  }).join('');
+
+  // ── Final Roast ──
+  document.getElementById('finalRoastText').textContent = randomFrom(partingWisdom);
+
+  // ── Show Results ──
+  const results = document.getElementById('results');
+  results.classList.add('visible');
+
+  // ── Chart (must render after results are visible so canvas has dimensions) ──
+  requestAnimationFrame(() => renderChart(r.timeline, retireAge));
+
+  // Effects
+  Audio.playVerdict(verdict);
+  if (verdict === 'HELL NO') {
+    skullRain();
+    skullRain(); // double dose
+    verdictBox.classList.add('shake');
+    setTimeout(() => verdictBox.classList.remove('shake'), 600);
+  } else if (verdict === 'NO') {
+    skullRain();
+    verdictBox.classList.add('shake');
+    setTimeout(() => verdictBox.classList.remove('shake'), 600);
+  } else if (verdict === 'OH YEAH') {
+    confettiRain();
+    confettiRain(); // double dose
+  } else if (verdict === 'YES') {
+    confettiRain();
+  }
+
+  // Scroll to results
+  setTimeout(() => {
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ── CANVAS CHART RENDERER ──
+let chartData = null; // stored for hover
+
+function renderChart(timeline, retireAge) {
+  const wrap = document.getElementById('chartWrap');
+  const canvas = document.getElementById('chartCanvas');
+  const tooltip = document.getElementById('chartTooltip');
+  const dpr = window.devicePixelRatio || 1;
+
+  const rect = wrap.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width;
+  const H = rect.height;
+  const pad = { top: 20, right: 20, bottom: 40, left: 65 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+
+  // Store for hover
+  chartData = { timeline, retireAge, pad, plotW, plotH, W, H };
+
+  const maxVal = Math.max(
+    ...timeline.map(t => t.balance),
+    ...timeline.map(t => t.totalSpent),
+    1
+  );
+
+  const ages = timeline.map(t => t.age);
+  const minAge = ages[0];
+  const maxAge = ages[ages.length - 1];
+  const ageRange = maxAge - minAge || 1;
+
+  function xFor(age) { return pad.left + ((age - minAge) / ageRange) * plotW; }
+  function yFor(val) { return pad.top + plotH - (val / maxVal) * plotH; }
+
+  // ── Gridlines ──
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  const gridLines = 5;
+  for (let i = 0; i <= gridLines; i++) {
+    const y = pad.top + (plotH / gridLines) * i;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + plotW, y);
+    ctx.stroke();
+
+    // Y-axis labels
+    const val = maxVal - (maxVal / gridLines) * i;
+    ctx.fillStyle = '#555';
+    ctx.font = '10px "Space Mono", monospace';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(fmt(val), pad.left - 8, y);
+  }
+
+  // ── Retirement divider ──
+  const retireX = xFor(retireAge);
+  if (retireAge >= minAge && retireAge <= maxAge) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(retireX, pad.top);
+    ctx.lineTo(retireX, pad.top + plotH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Label
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '600 10px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('RETIRE', retireX, pad.top - 6);
+
+    // Shade accumulation phase
+    ctx.fillStyle = 'rgba(59, 130, 246, 0.03)';
+    ctx.fillRect(pad.left, pad.top, retireX - pad.left, plotH);
+
+    // Shade retirement phase
+    ctx.fillStyle = 'rgba(255, 45, 85, 0.03)';
+    ctx.fillRect(retireX, pad.top, pad.left + plotW - retireX, plotH);
+  }
+
+  // ── X-axis labels ──
+  ctx.fillStyle = '#555';
+  ctx.font = '10px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  const labelStep = Math.max(1, Math.ceil(timeline.length / 15));
+  timeline.forEach((t, i) => {
+    if (i % labelStep === 0 || i === timeline.length - 1) {
+      ctx.fillText(t.age, xFor(t.age), pad.top + plotH + 8);
+    }
+  });
+
+  // ── Area fill: Portfolio ──
+  ctx.beginPath();
+  ctx.moveTo(xFor(timeline[0].age), yFor(0));
+  timeline.forEach(t => ctx.lineTo(xFor(t.age), yFor(t.balance)));
+  ctx.lineTo(xFor(timeline[timeline.length - 1].age), yFor(0));
+  ctx.closePath();
+  const gradBlue = ctx.createLinearGradient(0, pad.top, 0, pad.top + plotH);
+  gradBlue.addColorStop(0, 'rgba(59, 130, 246, 0.25)');
+  gradBlue.addColorStop(1, 'rgba(59, 130, 246, 0.02)');
+  ctx.fillStyle = gradBlue;
+  ctx.fill();
+
+  // ── Area fill: Cumulative Spending ──
+  const spendPoints = timeline.filter(t => t.totalSpent > 0);
+  if (spendPoints.length > 1) {
+    ctx.beginPath();
+    ctx.moveTo(xFor(spendPoints[0].age), yFor(0));
+    spendPoints.forEach(t => ctx.lineTo(xFor(t.age), yFor(t.totalSpent)));
+    ctx.lineTo(xFor(spendPoints[spendPoints.length - 1].age), yFor(0));
+    ctx.closePath();
+    const gradRed = ctx.createLinearGradient(0, pad.top, 0, pad.top + plotH);
+    gradRed.addColorStop(0, 'rgba(255, 45, 85, 0.2)');
+    gradRed.addColorStop(1, 'rgba(255, 45, 85, 0.02)');
+    ctx.fillStyle = gradRed;
+    ctx.fill();
+  }
+
+  // ── Line: Portfolio (with glow) ──
+  ctx.save();
+  ctx.shadowColor = 'rgba(59, 130, 246, 0.4)';
+  ctx.shadowBlur = 8;
+  ctx.beginPath();
+  timeline.forEach((t, i) => {
+    const x = xFor(t.age), y = yFor(t.balance);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+  ctx.restore();
+
+  // ── Line: Cumulative Spending (with glow) ──
+  if (spendPoints.length > 1) {
+    ctx.save();
+    ctx.shadowColor = 'rgba(255, 45, 85, 0.4)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    spendPoints.forEach((t, i) => {
+      const x = xFor(t.age), y = yFor(t.totalSpent);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = '#ff2d55';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── Overlay canvas for hover effects ──
+  const overlay = document.getElementById('chartOverlay');
+  overlay.width = canvas.width;
+  overlay.height = canvas.height;
+  overlay.style.width = W + 'px';
+  overlay.style.height = H + 'px';
+  const octx = overlay.getContext('2d');
+  octx.scale(dpr, dpr);
+
+  function onMove(e) {
+    const bounds = canvas.getBoundingClientRect();
+    const mx = e.clientX - bounds.left;
+    const my = e.clientY - bounds.top;
+
+    // Clear overlay
+    octx.clearRect(0, 0, W, H);
+
+    // Find closest data point
+    let closest = null, closestDist = Infinity;
+    timeline.forEach(t => {
+      const dx = Math.abs(xFor(t.age) - mx);
+      if (dx < closestDist) { closestDist = dx; closest = t; }
+    });
+
+    if (!closest || closestDist > plotW / timeline.length + 10) {
+      tooltip.classList.remove('visible');
+      return;
+    }
+
+    const cx = xFor(closest.age);
+    const cy = yFor(closest.balance);
+
+    // Draw vertical crosshair line
+    octx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    octx.lineWidth = 1;
+    octx.setLineDash([3, 3]);
+    octx.beginPath();
+    octx.moveTo(cx, pad.top);
+    octx.lineTo(cx, pad.top + plotH);
+    octx.stroke();
+    octx.setLineDash([]);
+
+    // Draw dots on data points
+    octx.beginPath();
+    octx.arc(cx, cy, 5, 0, Math.PI * 2);
+    octx.fillStyle = '#3b82f6';
+    octx.fill();
+    octx.strokeStyle = '#fff';
+    octx.lineWidth = 2;
+    octx.stroke();
+
+    if (closest.totalSpent > 0) {
+      const sy = yFor(closest.totalSpent);
+      octx.beginPath();
+      octx.arc(cx, sy, 5, 0, Math.PI * 2);
+      octx.fillStyle = '#ff2d55';
+      octx.fill();
+      octx.strokeStyle = '#fff';
+      octx.lineWidth = 2;
+      octx.stroke();
+    }
+
+    // Tooltip content
+    const phase = closest.phase === 'accumulation' ? 'Saving' : 'Retired';
+    let html = `<div class="tt-age">Age ${closest.age} &middot; ${phase}</div>`;
+    html += `<div class="tt-row"><span class="tt-dot" style="background:#3b82f6"></span> Portfolio: ${fmtFull(closest.balance)}</div>`;
+    if (closest.totalSpent > 0) {
+      html += `<div class="tt-row"><span class="tt-dot" style="background:#ff2d55"></span> Total Spent: ${fmtFull(closest.totalSpent)}</div>`;
+    }
+    tooltip.innerHTML = html;
+    tooltip.classList.add('visible');
+
+    // Position tooltip
+    const ttW = tooltip.offsetWidth;
+    const ttH = tooltip.offsetHeight;
+    let tx = cx + 16;
+    let ty = cy - ttH / 2;
+    if (tx + ttW > W - 10) tx = cx - ttW - 16;
+    if (ty < 5) ty = 5;
+    if (ty + ttH > H - 5) ty = H - ttH - 5;
+    tooltip.style.left = tx + 'px';
+    tooltip.style.top = ty + 'px';
+  }
+
+  canvas.onmousemove = onMove;
+  canvas.onmouseleave = () => {
+    tooltip.classList.remove('visible');
+    octx.clearRect(0, 0, W, H);
+  };
+}
+
+// Handle resize
+window.addEventListener('resize', () => {
+  if (chartData) renderChart(chartData.timeline, chartData.retireAge);
+});
+</script>
+</body>
+</html>
