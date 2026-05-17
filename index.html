@@ -36,114 +36,94 @@
     min-height: 100vh;
   }
 
-  /* ── HERO ── */
-  .hero {
+  /* ── DASHBOARD SHELL ── */
+  .dashboard {
+    display: flex;
+    align-items: flex-start;
     min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 360px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 1.25rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
+    gap: 0.85rem;
   }
 
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 40px,
-      rgba(255, 45, 85, 0.04) 40px,
-      rgba(255, 45, 85, 0.04) 80px
-    );
-    animation: drift 20s linear infinite;
+  .sidebar::-webkit-scrollbar { width: 8px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .brand {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
   }
 
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40%;
-    background: linear-gradient(to top, var(--bg), transparent);
-    z-index: 0;
-  }
-
-  @keyframes drift {
-    to { transform: translate(56px, 56px); }
-  }
-
-  .hero-pre {
-    font-family: 'Space Mono', monospace;
-    font-size: clamp(0.8rem, 1.5vw, 1rem);
-    color: var(--accent);
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero h1 {
-    font-size: clamp(3.5rem, 12vw, 10rem);
+  .brand-mark {
+    font-size: 1.6rem;
     font-weight: 900;
-    line-height: 0.9;
-    letter-spacing: -0.04em;
-    position: relative;
-    z-index: 1;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
   }
 
-  .hero h1 .line2 {
-    display: block;
+  .brand-mark span {
     background: linear-gradient(90deg, var(--accent), #ff6b8a);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .hero-sub {
+  .brand-tag {
     font-family: 'Space Mono', monospace;
-    font-size: clamp(0.8rem, 1.3vw, 0.95rem);
-    color: #aaa;
-    max-width: 600px;
-    margin-top: 2rem;
-    line-height: 1.8;
-    position: relative;
-    z-index: 1;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.5rem;
   }
 
-  .scroll-prompt {
-    position: absolute;
-    bottom: 2rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-    letter-spacing: 0.2em;
-    animation: bob 2s ease-in-out infinite;
-    cursor: pointer;
-    z-index: 1;
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
-  .scroll-prompt::after {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 40px;
-    background: var(--muted);
-    margin: 0.5rem auto 0;
-    animation: grow 2s ease-in-out infinite;
-  }
+  /* gap drives spacing; neutralise legacy panel margins */
+  .main > * { margin-top: 0 !important; margin-bottom: 0 !important; }
+  .main .progress-wrap { margin: 0 !important; }
 
-  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
-  @keyframes grow { 0%, 100% { scaleY: 1; opacity: 0.5; } 50% { scaleY: 1.3; opacity: 1; } }
+  /* compact, fixed-height verdict banner — stops layout shift when the verdict changes */
+  .main .verdict-box {
+    padding: 1.6rem 2rem;
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .main .verdict-word {
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    margin-bottom: 0.35rem;
+    white-space: nowrap;
+  }
+  .main .verdict-quip {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
 
   /* ── TICKER ── */
   .ticker-wrap {
@@ -175,163 +155,172 @@
     100% { transform: translateX(-50%); }
   }
 
-  /* ── CALCULATOR SECTION ── */
-  .calc-section {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 4rem 2rem 6rem;
-  }
-
-  .calc-section h2 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 900;
-    margin-bottom: 0.5rem;
-  }
-
-  .calc-section .lead {
+  /* ── SIDEBAR FIELDS ── */
+  .side-head {
     font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-bottom: 3rem;
-    line-height: 1.6;
-  }
-
-  /* ── INPUT GRID ── */
-  .input-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .input-group {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: border-color 0.2s;
-  }
-
-  .input-group:hover, .input-group:focus-within {
-    border-color: var(--accent);
-  }
-
-  .input-group label {
-    display: block;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #aaa;
-    margin-bottom: 0.75rem;
-  }
-
-  .input-group .input-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.25rem;
-  }
-
-  .input-group .prefix {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--muted);
-  }
-
-  .input-group input[type="number"],
-  .input-group input[type="range"] {
-    background: transparent;
-    border: none;
     color: var(--fg);
-    font-family: 'Inter', sans-serif;
-    font-size: 2rem;
-    font-weight: 900;
-    width: 100%;
-    outline: none;
-    -moz-appearance: textfield;
+    margin-top: 0.25rem;
   }
-
-  .input-group input[type="number"]::-webkit-inner-spin-button,
-  .input-group input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-  }
-
-  .input-group .hint {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
+  .side-head span {
     color: var(--muted);
-    margin-top: 0.5rem;
-    line-height: 1.4;
+    text-transform: none;
+    letter-spacing: 0.04em;
   }
 
-  /* slider styling */
-  input[type="range"] {
-    -webkit-appearance: none;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin-top: 0.75rem;
-    cursor: pointer;
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-    border: 2px solid var(--bg);
-  }
-
-  .slider-val {
-    font-size: 2rem;
-    font-weight: 900;
-    font-family: 'Inter', sans-serif;
-  }
-
-  .slider-context {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-    gap: 0.25rem;
-  }
-
-  .slider-tick {
+  .side-fields {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    flex: 1;
-    cursor: pointer;
-    padding: 0.4rem 0.15rem;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    transition: all 0.15s;
+    gap: 1.1rem;
   }
 
-  .slider-tick:hover {
-    border-color: var(--border);
-    background: rgba(255, 255, 255, 0.03);
+  .side-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    color: var(--muted-dim);
+    text-align: center;
+    margin-top: 0.15rem;
   }
 
-  .slider-tick.active {
-    border-color: var(--accent);
-    background: rgba(255, 45, 85, 0.06);
+  /* ── PROFILE BAR ── */
+  .profile-bar { margin-top: 0.5rem; }
+  .profile-bar-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
   }
-
-  .slider-tick .tick-val {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
+  .profile-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .profile-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
     font-weight: 700;
+    color: var(--muted);
+    background: var(--card-elevated);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.38rem 0.72rem;
+    cursor: pointer;
+    transition: color .15s, background .15s, border-color .15s;
+    line-height: 1;
+    user-select: none;
+  }
+  .profile-chip:hover { border-color: #555; color: #ddd; }
+  .profile-chip.active {
+    color: #fff;
+    background: rgba(59, 130, 246, 0.16);
+    border-color: var(--blue);
+  }
+
+  /* ── FIELD SECTIONS ── */
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.34rem 0;
+  }
+
+  .field label {
+    font-size: 0.8rem;
+    font-weight: 500;
     color: var(--fg);
   }
 
-  .slider-tick .tick-label {
+  .field-control {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 116px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 0 0.55rem;
+    transition: border-color 0.15s;
+  }
+  .field-control:focus-within { border-color: var(--accent); }
+
+  .field-control .affix {
     font-family: 'Space Mono', monospace;
-    font-size: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
     color: var(--muted);
-    text-align: center;
-    line-height: 1.3;
-    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+
+  .field-control input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: right;
+    padding: 0.42rem 0.2rem;
+    -moz-appearance: textfield;
+  }
+  .field-control input::-webkit-inner-spin-button,
+  .field-control input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* segmented toggle (compounding mode) */
+  .seg {
+    display: flex;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  .seg-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .seg-btn.active { background: var(--accent); color: #fff; }
+  .seg-btn:not(.active):hover { color: var(--fg); }
+
+  /* glidepath sub-block */
+  .glide-block { margin-top: 0.7rem; }
+  .glide-title {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--fg);
+    margin-bottom: 0.55rem;
+  }
+  .glide-title span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-left: 0.15rem;
   }
 
   /* ── BUTTON ── */
@@ -362,20 +351,7 @@
 
   .judge-btn:active { transform: translateY(0); box-shadow: 0 2px 10px rgba(255, 45, 85, 0.3); }
 
-  /* ── RESULTS ── */
-  .results {
-    display: none;
-    margin-top: 3rem;
-    animation: fadeUp 0.6s ease-out;
-  }
-
-  .results.visible { display: block; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
+  /* ── RESULTS (render directly inside .main) ── */
   .verdict-box {
     text-align: center;
     padding: 4rem 2rem 3rem;
@@ -547,8 +523,73 @@
     font-family: 'Space Mono', monospace;
     font-size: 0.7rem;
     color: var(--muted);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
+
+  /* ── DRAG-TO-SOLVE PANEL ── */
+  .drag-solver {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .drag-solver .ds-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 0.15rem;
+  }
+
+  .ds-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--card-elevated);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.38rem 0.72rem;
+    cursor: pointer;
+    transition: color .15s, background .15s, border-color .15s;
+    display: flex;
+    align-items: center;
+    gap: 0.34rem;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .ds-chip:hover { border-color: #555; color: #ddd; }
+  .ds-chip .ds-ico { font-size: 0.72rem; }
+
+  .ds-chip.active {
+    color: #fff;
+    background: rgba(59, 130, 246, 0.16);
+    border-color: var(--blue);
+  }
+
+  .ds-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    line-height: 1.5;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+    min-height: 1rem;
+  }
+
+  .ds-note strong { color: var(--blue); font-weight: 700; }
+  .ds-note.warn, .ds-note.warn strong { color: var(--yellow); }
+  .ds-note.ok, .ds-note.ok strong { color: var(--green); }
+
+  @keyframes inputFlash {
+    0%   { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+    20%  { box-shadow: 0 0 0 3px rgba(59,130,246,0.55); }
+    100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+  }
+  .input-flash { animation: inputFlash 1s ease-out; border-radius: 10px; }
 
   /* ── ROAST / COMMENTARY ── */
   .commentary {
@@ -651,7 +692,7 @@
   /* ── CANVAS CHART ── */
   .chart-canvas-wrap {
     position: relative;
-    height: 320px;
+    height: 440px;
     cursor: crosshair;
   }
 
@@ -659,6 +700,7 @@
     width: 100% !important;
     height: 100% !important;
     display: block;
+    touch-action: none;
   }
 
   .chart-tooltip {
@@ -721,6 +763,117 @@
     height: 10px;
     border-radius: 50%;
   }
+
+  .chart-legend .legend-toggle {
+    cursor: pointer;
+    user-select: none;
+    transition: opacity .15s, color .15s;
+  }
+  .chart-legend .legend-toggle:hover { color: var(--fg); }
+  .chart-legend .legend-toggle.off { opacity: 0.45; }
+  .chart-legend .legend-toggle.off .dot {
+    background: transparent !important;
+    border: 2px solid #ff2d55;
+  }
+
+  .chart-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-bottom: 0.3rem;
+  }
+  .chart-head h3 { margin-bottom: 0; }
+
+  .rescale-btn {
+    flex-shrink: 0;
+    background: var(--card-elevated);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 7px;
+    padding: 0.4rem 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .rescale-btn:hover { border-color: var(--accent); color: var(--fg); background: var(--card); }
+
+  /* ── GLIDEPATH EDITOR (sidebar) ── */
+  .glide-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 0.35rem;
+  }
+  .glide-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .glide-pct {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .glide-row input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    width: 3rem;
+    padding: 0.25rem 0.3rem;
+    outline: none;
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+  .glide-row input::-webkit-inner-spin-button,
+  .glide-row input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .glide-row input:focus { border-color: var(--accent); }
+  .glide-row input.contrib-amt { width: 4.6rem; }
+  .glide-del {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 6px;
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .glide-del:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .glide-del:disabled { opacity: 0.3; cursor: not-allowed; }
+  .glide-add {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 0.4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    margin-top: 0.35rem;
+    transition: border-color .15s, color .15s;
+  }
+  .glide-add:hover { border-color: var(--accent); color: var(--fg); }
+
+  /* ── GLIDEPATH PANEL (main) ── */
+  .glide-table { width: 100%; }
+  .glide-table td.wtd { color: var(--blue); font-weight: 700; }
 
   /* ── PROGRESS BAR ── */
   .progress-wrap {
@@ -786,33 +939,35 @@
   .audio-toggle.muted { opacity: 0.4; }
 
   /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    .dashboard { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      position: static;
+      max-height: none;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .side-fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem 2rem;
+      align-items: start;
+    }
+    .main { padding: 1.25rem; }
+    .chart-canvas-wrap { height: 340px; }
+  }
+
   @media (max-width: 600px) {
-    /* ── HERO ── */
-    .hero { min-height: 85vh; padding: 1.5rem; }
-    .hero h1 { font-size: 3rem; }
-    .hero-pre { font-size: 0.65rem; letter-spacing: 0.2em; }
-    .hero-sub { font-size: 0.75rem; margin-top: 1.25rem; line-height: 1.6; }
-    .scroll-prompt { font-size: 0.6rem; bottom: 1rem; }
+    /* ── DASHBOARD ── */
+    .main { padding: 1rem; gap: 0.9rem; }
+    .sidebar { padding: 1rem; gap: 0.6rem; }
+    .brand-mark { font-size: 1.4rem; }
+    .side-fields { grid-template-columns: 1fr; }
 
     /* ── TICKER ── */
     .ticker-wrap { padding: 0.5rem 0; }
     .ticker { font-size: 0.7rem; }
-
-    /* ── CALCULATOR ── */
-    .calc-section { padding: 2rem 1rem 3rem; }
-    .calc-section h2 { font-size: 1.75rem; }
-    .calc-section .lead { font-size: 0.75rem; margin-bottom: 2rem; }
-    .input-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .input-group { padding: 1.25rem; }
-    .input-group input[type="number"] { font-size: 1.5rem; }
-    .input-group .prefix { font-size: 1.2rem; }
-    .input-group label { font-size: 0.55rem; margin-bottom: 0.5rem; }
-    .input-group .hint { font-size: 0.55rem; }
-    .slider-val { font-size: 1.5rem; }
-    .slider-context { gap: 0.15rem; }
-    .slider-tick { padding: 0.3rem 0.1rem; }
-    .slider-tick .tick-val { font-size: 0.7rem; }
-    .slider-tick .tick-label { font-size: 0.45rem; }
 
     /* ── BUTTON ── */
     .judge-btn { padding: 1.1rem 1.5rem; font-size: 1rem; margin-top: 1rem; }
@@ -833,7 +988,11 @@
     .chart-wrap { padding: 1.25rem; margin-bottom: 1.5rem; }
     .chart-wrap h3 { font-size: 0.9rem; }
     .chart-wrap .chart-sub { font-size: 0.6rem; margin-bottom: 1rem; }
-    .chart-canvas-wrap { height: 220px; }
+    .chart-canvas-wrap { height: 270px; }
+    .drag-solver { gap: 0.35rem; margin-bottom: 0.5rem; }
+    .drag-solver .ds-label { font-size: 0.52rem; width: 100%; margin-bottom: 0.15rem; }
+    .ds-chip { font-size: 0.56rem; padding: 0.3rem 0.55rem; }
+    .ds-note { font-size: 0.55rem; margin-bottom: 1rem; }
     .chart-legend { gap: 1rem; font-size: 0.55rem; flex-wrap: wrap; }
     .chart-legend .dot { width: 8px; height: 8px; }
 
@@ -868,11 +1027,8 @@
 
   /* ── Extra small (iPhone SE etc) ── */
   @media (max-width: 380px) {
-    .hero h1 { font-size: 2.5rem; }
     .verdict-word { font-size: 2.2rem; }
     .stat-card .value { font-size: 1.2rem; }
-    .input-group input[type="number"] { font-size: 1.3rem; }
-    .slider-val { font-size: 1.3rem; }
     td { font-size: 0.6rem; padding: 0.5rem 0.35rem; }
   }
 
@@ -914,169 +1070,544 @@
   @keyframes fall {
     to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
   }
+
+  /* ══ LIFE EVENTS ══ */
+
+  /* sidebar event list */
+  .evt-empty {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    line-height: 1.6;
+    color: var(--muted-dim);
+    padding: 0.3rem 0 0.5rem;
+  }
+
+  .evt-card {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.45rem 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+  .evt-card.disabled { opacity: 0.45; }
+
+  /* event + its inline effects, grouped */
+  .evt-item { margin-bottom: 0.55rem; }
+  .evt-item .evt-card { margin-bottom: 0; }
+  .evt-meta[data-act] { cursor: pointer; }
+  .evt-fx-host {
+    padding: 0.45rem 0 0 0.55rem;
+    border-left: 1px solid var(--border);
+    margin: 0.35rem 0 0 0.9rem;
+  }
+  .evt-fx-host:empty { display: none; }
+  .evt-fx-host .fx-card:last-child { margin-bottom: 0; }
+
+  .evt-ico {
+    flex-shrink: 0;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  .evt-meta { flex: 1; min-width: 0; }
+  .evt-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .evt-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  .evt-btn {
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 6px;
+    width: 1.55rem;
+    height: 1.55rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .evt-btn:hover { border-color: var(--accent); color: var(--fg); }
+  .evt-btn.evt-eye.on { border-color: var(--blue); color: var(--blue); background: rgba(59,130,246,0.12); }
+  .evt-btn.evt-eye:not(.on) { opacity: 0.55; }
+
+  /* track-toggle chips under the graph */
+  .track-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+  }
+  .track-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--card-elevated);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.34rem 0.66rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    line-height: 1;
+    user-select: none;
+    transition: color .15s, border-color .15s, background .15s;
+  }
+  .track-chip .track-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid var(--tc, var(--muted));
+    flex-shrink: 0;
+  }
+  .track-chip.on { color: var(--fg); border-color: var(--tc, var(--blue)); }
+  .track-chip.on .track-dot { background: var(--tc, var(--blue)); }
+  .track-chip.nw { --tc: var(--green); }
+  .track-chip:hover { color: var(--fg); }
+
+  /* event modal */
+  .evt-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.78);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 4vh 1rem;
+    overflow-y: auto;
+  }
+  .evt-modal-backdrop.open { display: flex; }
+
+  .evt-modal {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.6rem 1.5rem;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.65);
+  }
+  .evt-modal-x {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 7px;
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .evt-modal-x:hover { border-color: var(--accent); color: var(--accent); }
+
+  .evt-modal-title {
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.25rem;
+  }
+  .evt-modal-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 1.1rem;
+  }
+
+  /* type picker grid */
+  .evt-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem;
+  }
+  .evt-type {
+    text-align: left;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 0.7rem 0.75rem;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .evt-type:hover { border-color: var(--accent); background: var(--card-elevated); }
+  .evt-type-ico { font-size: 1.3rem; }
+  .evt-type-name {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--fg);
+    margin: 0.25rem 0 0.15rem;
+  }
+  .evt-type-blurb {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.54rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  /* event editor */
+  .evt-ed-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.1rem;
+  }
+  .evt-ed-field { display: flex; flex-direction: column; gap: 0.25rem; }
+  .evt-ed-field.grow { flex: 1; min-width: 8rem; }
+  .evt-ed-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .evt-ed-top input[type=text],
+  .evt-ed-top input[type=number] {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.5rem;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .evt-ed-top input:focus { border-color: var(--accent); }
+  .evt-ed-top input[type=number] { width: 4.5rem; text-align: center; }
+  .evt-color-row { display: flex; gap: 0.3rem; align-items: center; }
+  .evt-swatch {
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .evt-swatch.sel { border-color: var(--fg); }
+
+  .evt-fx-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.35rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .fx-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted-dim);
+    border-radius: 8px;
+    padding: 0.6rem 0.65rem;
+    margin-bottom: 0.55rem;
+  }
+  .fx-card.income { border-left-color: var(--green); }
+  .fx-card.cost { border-left-color: var(--accent); }
+  .fx-card.asset { border-left-color: var(--yellow); }
+  .fx-card.invest { border-left-color: var(--blue); }
+
+  .fx-head { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
+  .fx-label {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    padding: 0.15rem 0.1rem;
+    outline: none;
+  }
+  .fx-label:focus { border-bottom-color: var(--accent); }
+  .fx-kind {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-dim);
+  }
+  .fx-del {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 5px;
+    width: 1.3rem;
+    height: 1.3rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .fx-del:hover { border-color: var(--accent); color: var(--accent); }
+
+  .fx-fields { display: flex; flex-wrap: wrap; gap: 0.45rem 0.7rem; align-items: flex-end; }
+  .fx-field { display: flex; flex-direction: column; gap: 0.2rem; }
+  .fx-field-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .fx-fields input[type=number] {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.3rem 0.35rem;
+    outline: none;
+    text-align: center;
+    width: 5rem;
+    -moz-appearance: textfield;
+  }
+  .fx-fields input::-webkit-inner-spin-button,
+  .fx-fields input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .fx-fields input[type=number].wide { width: 6.5rem; }
+  .fx-fields input[type=number].narrow { width: 3.4rem; }
+  .fx-fields input:focus { border-color: var(--accent); }
+
+  .fx-seg {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .fx-seg-btn {
+    background: var(--card);
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    font-weight: 700;
+    padding: 0.32rem 0.5rem;
+    cursor: pointer;
+  }
+  .fx-seg-btn.sel.cost { background: var(--accent); color: #fff; }
+  .fx-seg-btn.sel.income { background: var(--green); color: #04130c; }
+  .fx-pct-btn {
+    background: var(--card);
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    font-weight: 700;
+    padding: 0.32rem 0.5rem;
+    cursor: pointer;
+  }
+  .fx-pct-btn.sel { background: var(--blue); color: #fff; }
+  .fx-check {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .fx-check input { accent-color: var(--accent); cursor: pointer; }
+
+  .evt-add-fx { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.2rem; }
+  .evt-add-fx button {
+    flex: 1;
+    min-width: 6rem;
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    border-radius: 7px;
+    padding: 0.42rem 0.3rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: border-color .15s, color .15s;
+  }
+  .evt-add-fx button:hover { border-color: var(--accent); color: var(--fg); }
+
+  .evt-modal-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .evt-done {
+    flex: 1;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    padding: 0.7rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .evt-done:hover { background: #ff4d6d; }
+  .evt-del-event {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 9px;
+    padding: 0.7rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .evt-del-event:hover { border-color: var(--accent); color: var(--accent); }
 </style>
 </head>
 <body>
-
-<!-- ── HERO ── -->
-<section class="hero">
-  <div class="hero-pre">A financial reality check</div>
-  <h1>
-    CAN YOU
-    <span class="line2">RETIRE?</span>
-  </h1>
-  <p class="hero-sub">
-    You've been dumping money into the S&P 500 like it's a retirement plan.
-    Spoiler: the market doesn't care about your feelings, your avocado toast budget,
-    or your "I'll figure it out later" attitude. Let's find out if you're cooked.
-  </p>
-  <div class="scroll-prompt" onclick="document.querySelector('.calc-section').scrollIntoView()">
-    FACE THE MUSIC
-  </div>
-</section>
 
 <!-- ── TICKER ── -->
 <div class="ticker-wrap">
   <div class="ticker" id="ticker"></div>
 </div>
 
-<!-- ── CALCULATOR ── -->
-<section class="calc-section">
-  <h2>The Inputs.</h2>
-  <p class="lead">
-    Be honest. Lying to a calculator is a new low, even for you.
-  </p>
+<!-- ── DASHBOARD ── -->
+<div class="dashboard">
 
-  <div class="input-grid">
-    <div class="input-group">
-      <label>Your Current Age</label>
-      <div class="input-row">
-        <input type="number" id="currentAge" value="28" min="16" max="90">
-      </div>
-      <div class="hint">How many years you've spent not saving enough</div>
+  <!-- ── SIDEBAR: INPUTS ── -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">CAN YOU<br><span>RETIRE?</span></div>
+      <div class="brand-tag">A financial reality check</div>
     </div>
 
-    <div class="input-group">
-      <label>Retirement Age</label>
-      <div class="input-row">
-        <input type="number" id="retireAge" value="65" min="20" max="100">
-      </div>
-      <div class="hint">The age you think you'll stop working (cute)</div>
+    <div class="side-head">The Inputs <span>&mdash; be honest, lying to a calculator is a new low.</span></div>
+
+    <div class="profile-bar">
+      <div class="profile-bar-label">Load a profile</div>
+      <div class="profile-chips" id="profileChips"></div>
     </div>
 
-    <div class="input-group">
-      <label>Expected Lifespan</label>
-      <div class="input-row">
-        <input type="number" id="lifespan" value="85" min="50" max="120">
-      </div>
-      <div class="hint">Optimistic or realistic? Your call.</div>
-    </div>
+    <div class="side-fields">
 
-    <div class="input-group">
-      <label>Monthly Spending in Retirement</label>
-      <div class="input-row">
-        <span class="prefix">$</span>
-        <input type="number" id="monthlySpend" value="4000" min="500" max="100000" step="100">
-      </div>
-      <div class="hint">Per month. Yes, including that streaming addiction.</div>
-    </div>
-
-    <div class="input-group">
-      <label>Current S&P 500 Portfolio</label>
-      <div class="input-row">
-        <span class="prefix">$</span>
-        <input type="number" id="currentPortfolio" value="50000" min="0" max="100000000" step="1000">
-      </div>
-      <div class="hint">Total invested in S&P index funds right now</div>
-    </div>
-
-    <div class="input-group">
-      <label>Monthly Contribution</label>
-      <div class="input-row">
-        <span class="prefix">$</span>
-        <input type="number" id="monthlyContrib" value="1000" min="0" max="100000" step="50">
-      </div>
-      <div class="hint">How much you're adding every month</div>
-    </div>
-
-    <div class="input-group">
-      <label>Expected Annual Return (Nominal)</label>
-      <span class="slider-val" id="returnDisplay">10%</span>
-      <input type="range" id="annualReturn" min="3" max="14" step="0.5" value="10">
-      <div class="slider-context" id="returnTicks">
-        <div class="slider-tick" data-target="annualReturn" data-val="5">
-          <span class="tick-val">5%</span>
-          <span class="tick-label">Bond-like / Pessimist</span>
+      <div class="field-section">
+        <div class="section-title">About You</div>
+        <div class="field">
+          <label for="currentAge" title="How many years you've spent not saving enough.">Current age</label>
+          <div class="field-control"><input type="number" id="currentAge" value="46" min="16" max="90"></div>
         </div>
-        <div class="slider-tick" data-target="annualReturn" data-val="7">
-          <span class="tick-val">7%</span>
-          <span class="tick-label">Conservative Estimate</span>
+        <div class="field">
+          <label for="lifespan" title="How long you expect to live. Optimistic or realistic? Your call.">Life expectancy</label>
+          <div class="field-control"><input type="number" id="lifespan" value="160" min="50" max="250"></div>
         </div>
-        <div class="slider-tick active" data-target="annualReturn" data-val="10">
-          <span class="tick-val">10%</span>
-          <span class="tick-label">S&P 500 Historical Avg</span>
-        </div>
-        <div class="slider-tick" data-target="annualReturn" data-val="12">
-          <span class="tick-val">12%</span>
-          <span class="tick-label">Optimist / Bull Run</span>
+        <div class="field">
+          <label for="currentPortfolio" title="Everything you've got invested right now.">Current portfolio</label>
+          <div class="field-control"><span class="affix">$</span><input type="number" id="currentPortfolio" value="2000000" min="0" max="100000000" step="1000"></div>
         </div>
       </div>
-      <div class="hint">S&P 500 has averaged ~10%/yr since 1926. That's before inflation eats its cut.</div>
-    </div>
 
-    <div class="input-group">
-      <label>Annual Inflation Rate</label>
-      <span class="slider-val" id="inflationDisplay">3%</span>
-      <input type="range" id="inflation" min="1" max="10" step="0.5" value="3">
-      <div class="slider-context" id="inflationTicks">
-        <div class="slider-tick" data-target="inflation" data-val="2">
-          <span class="tick-val">2%</span>
-          <span class="tick-label">Fed Target / Dream</span>
+      <div class="field-section">
+        <div class="section-title">Life Events</div>
+        <div class="glide-title">Your money timeline <span>income, retirement &amp; one-off events &mdash; each is a track</span></div>
+        <div id="eventList"></div>
+        <button type="button" class="glide-add" onclick="openEventPicker()">+ add life event</button>
+      </div>
+
+      <div class="field-section">
+        <div class="section-title">Assumptions</div>
+        <div class="field">
+          <label for="inflation" title="Long-run average is about 3%. Your grocery bill may disagree.">Inflation</label>
+          <div class="field-control"><input type="number" id="inflation" value="2.5" min="1" max="10" step="0.5"><span class="affix">%</span></div>
         </div>
-        <div class="slider-tick active" data-target="inflation" data-val="3">
-          <span class="tick-val">3%</span>
-          <span class="tick-label">US Historical Avg</span>
-        </div>
-        <div class="slider-tick" data-target="inflation" data-val="5">
-          <span class="tick-val">5%</span>
-          <span class="tick-label">2022-era / Rough</span>
-        </div>
-        <div class="slider-tick" data-target="inflation" data-val="8">
-          <span class="tick-val">8%</span>
-          <span class="tick-label">Things Are Cooked</span>
+        <div class="field">
+          <label title="Monthly spreads recurring flows across 12 months. Annual applies them once a year — matching the Excel model.">Compounding</label>
+          <div class="seg" id="compoundToggle">
+            <button type="button" class="seg-btn" data-mode="monthly">Monthly</button>
+            <button type="button" class="seg-btn active" data-mode="annual">Annual</button>
+          </div>
         </div>
       </div>
-      <div class="hint">US long-run average is ~3%. The Fed "targets" 2%. Your grocery bill says otherwise.</div>
+
     </div>
-  </div>
 
-  <button class="judge-btn" onclick="calculate()">
-    JUDGE ME
-  </button>
+    <button class="judge-btn" onclick="calculate()">JUDGE ME</button>
+    <div class="side-note">Satire &mdash; not financial advice.</div>
+  </aside>
 
-  <!-- ── RESULTS ── -->
-  <div class="results" id="results">
+  <!-- ── MAIN: GRAPH + RESULTS ── -->
+  <main class="main" id="results">
     <div class="verdict-box" id="verdictBox">
       <div class="verdict-word" id="verdictWord"></div>
       <div class="verdict-quip" id="verdictQuip"></div>
     </div>
 
-    <div class="breakdown" id="breakdown"></div>
-
     <div class="chart-wrap">
-      <h3>Your Money Over Time</h3>
-      <div class="chart-sub">Hover to inspect any year</div>
+      <div class="chart-head">
+        <h3>Your Money Over Time</h3>
+        <button type="button" class="rescale-btn" id="rescaleBtn" title="Fit the Y-axis to the current curve">&#8597; Rescale Y-axis</button>
+      </div>
+      <div class="chart-sub">Hover to inspect. Drag the blue line to back-solve an input, or drag the RETIRE marker to move your retirement age.</div>
+      <div class="drag-solver" id="dragSolver">
+        <span class="ds-label">Drag solves for</span>
+        <button type="button" class="ds-chip active" data-solve="monthlyContrib"><span class="ds-ico">&#127919;</span><span>Monthly Savings</span></button>
+        <button type="button" class="ds-chip" data-solve="currentPortfolio"><span class="ds-ico">&#128274;</span><span>Starting Portfolio</span></button>
+        <button type="button" class="ds-chip" data-solve="monthlySpend"><span class="ds-ico">&#128274;</span><span>Monthly Spending</span></button>
+      </div>
+      <div class="ds-note" id="dsNote">Pick the input to back-solve &mdash; the other three stay <strong>locked</strong>. Then drag the blue line up or down.</div>
       <div class="chart-canvas-wrap" id="chartWrap">
         <canvas id="chartCanvas"></canvas>
         <canvas id="chartOverlay" style="position:absolute;top:0;left:0;pointer-events:none;"></canvas>
         <div class="chart-tooltip" id="chartTooltip"></div>
       </div>
       <div class="chart-legend">
-        <span><span class="dot" style="background:#3b82f6"></span> Portfolio Value</span>
-        <span><span class="dot" style="background:#ff2d55"></span> Cumulative Spending</span>
+        <span><span class="dot" style="background:#3b82f6"></span> Net Worth</span>
+        <span id="spendToggle" class="legend-toggle off" title="Show / hide the cumulative spending curve"><span class="dot" style="background:#ff2d55"></span> Cumulative Spending</span>
         <span><span class="dot" style="background:rgba(255,255,255,0.15)"></span> Retirement Starts</span>
+        <span><span class="dot" style="background:rgba(255,255,255,0.4)"></span> Life Expectancy</span>
       </div>
+      <div class="track-chips" id="eventTrackChips"></div>
     </div>
+
+    <div class="breakdown" id="breakdown"></div>
 
     <div id="progressSection"></div>
 
@@ -1105,16 +1636,25 @@
       <h4>Parting Wisdom</h4>
       <p id="finalRoastText"></p>
     </div>
-  </div>
-</section>
+  </main>
+
+</div>
 
 <div class="footer">
   <p>
     This is satire. This is not financial advice. If you make life decisions
     based on a website with skull emojis, you deserve what happens next.<br>
-    S&P 500 historical returns are not guarantees. Past performance is not indicative of future results.<br>
+    Historical market returns are not guarantees. Past performance is not indicative of future results.<br>
     &copy; <span id="yr"></span> CAN YOU RETIRE? &mdash; A public service announcement.
   </p>
+</div>
+
+<!-- ── LIFE EVENT MODAL ── -->
+<div class="evt-modal-backdrop" id="evtModal">
+  <div class="evt-modal">
+    <button type="button" class="evt-modal-x" id="evtModalX" title="Close">&times;</button>
+    <div id="evtModalBody"></div>
+  </div>
 </div>
 
 <div class="audio-toggle" id="audioToggle" title="Toggle sound">&#128266;</div>
@@ -1401,7 +1941,7 @@ const tickerPhrases = [
   "PAST PERFORMANCE DOES NOT GUARANTEE FUTURE RESULTS",
   "INFLATION IS EATING YOUR SAVINGS RIGHT NOW",
   "\"I'LL START INVESTING NEXT YEAR\" \u2014 YOU, EVERY YEAR SINCE 2018",
-  "THE S&P 500 DOESN'T KNOW YOUR NAME",
+  "THE MARKET DOESN'T KNOW YOUR NAME",
   "COMPOUND INTEREST: THE 8TH WONDER OF THE WORLD (THAT YOU'RE IGNORING)",
   "YOUR RETIREMENT PLAN: VIBES AND PRAYERS",
   "TIME IN THE MARKET > TIMING THE MARKET (BUT YOU KNEW THAT, RIGHT?)",
@@ -1411,32 +1951,941 @@ const tickerPhrases = [
 const tickerText = tickerPhrases.map(p => `\u00a0\u00a0\u00a0\u2022\u00a0\u00a0\u00a0${p}`).join('');
 document.getElementById('ticker').textContent = tickerText + tickerText;
 
-// ── SLIDER DISPLAYS + TICK MARKS ──
-function updateTicks(sliderId, tickContainerId) {
-  const val = parseFloat(document.getElementById(sliderId).value);
-  document.querySelectorAll('#' + tickContainerId + ' .slider-tick').forEach(tick => {
-    const tv = parseFloat(tick.dataset.val);
-    tick.classList.toggle('active', tv === val);
+// Returns are no longer global: your liquid portfolio is plain cash and does
+// not grow on its own. Every bit of growth comes from Investment events, each
+// of which carries its own growth return, stable return and allocation.
+// Savings and one-time expenses are likewise life events, not separate
+// schedules — see makeIncomeEvent / makeRetirementEvent.
+
+// ════════════════════════════════════════════════════════════════
+//  LIFE EVENTS — the "Event Track" system
+// ════════════════════════════════════════════════════════════════
+// An Event is something that happens at a trigger age (buy a home,
+// have a kid, win the lottery). Each Event owns a list of Effects —
+// the financial consequences that play out over time:
+//   • oneTime   — a signed lump sum at a single age
+//   • recurring — a signed monthly flow across an age range, with
+//                 optional inflation adjustment and annual growth
+//   • asset     — a passive holding that appreciates / depreciates
+//                 and converts to cash when sold
+// An Event + its Effects, compounded through the market, render as
+// that event's own money-over-time line: its "Event Track".
+
+let lifeEvents = [];   // [{ id, type, name, triggerAge, visible, color, effects:[] }]
+let eventSeq = 0;      // monotonic id counter
+
+// Track colours — assigned round-robin as events are created.
+const EVENT_COLORS = ['#a855f7', '#f59e0b', '#06b6d4', '#ec4899', '#22c55e', '#f43f5e', '#8b5cf6', '#eab308'];
+
+function globalInflation() {
+  return parseFloat(document.getElementById('inflation').value) || 0;
+}
+
+function globalCurrentAge() {
+  return parseInt(document.getElementById('currentAge').value) || 0;
+}
+function globalPortfolio() {
+  return parseFloat(document.getElementById('currentPortfolio').value) || 0;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+// ── Effect factories ──
+function mkOneTime(label, amount, atAge) {
+  return { id: 'fx' + (++eventSeq), kind: 'oneTime', label, amount, atAge };
+}
+function mkRecurring(label, monthlyAmount, startAge, endAge, inflationAdjust, annualGrowth) {
+  return {
+    id: 'fx' + (++eventSeq), kind: 'recurring', label, monthlyAmount,
+    startAge, endAge, inflationAdjust: !!inflationAdjust, annualGrowth: annualGrowth || 0,
+  };
+}
+function mkAsset(label, buyValue, buyAge, appreciation, sellAge) {
+  return { id: 'fx' + (++eventSeq), kind: 'asset', label, buyValue, buyAge, appreciation, sellAge };
+}
+// An investment: capital leaves the portfolio at startAge, compounds at its
+// own growth/stable blend (equityPct in growth, rest in stable), and is cashed
+// out at endAge. `capital` is dollars, or — when capitalPct is true — a % of
+// the starting portfolio, so you can say "put 25% of my cash in".
+function mkInvestment(label, capital, capitalPct, growthReturn, stableReturn, equityPct, startAge, endAge) {
+  return {
+    id: 'fx' + (++eventSeq), kind: 'investment', label,
+    capital, capitalPct: !!capitalPct,
+    growthReturn, stableReturn, equityPct, startAge, endAge,
+  };
+}
+
+// ── Event type templates ── each pre-fills a sensible starter set of effects.
+const EVENT_TYPES = {
+  property: {
+    icon: '🏠', label: 'Property Purchase', defaultName: 'Property Purchase',
+    blurb: 'Downpayment, mortgage, upkeep, appreciation, sale.',
+    build: a => [
+      mkOneTime('Downpayment', -150000, a),
+      mkRecurring('Mortgage payment', -3200, a, a + 25, false, 0),
+      mkRecurring('Property tax & upkeep', -400, a, a + 40, true, 0),
+      mkAsset('Property value', 750000, a, 3, a + 28),
+    ],
+  },
+  business: {
+    icon: '☕', label: 'Start a Business', defaultName: 'Business',
+    blurb: 'Startup capital, early losses, then growing profit.',
+    build: a => [
+      mkOneTime('Initial capital', -80000, a),
+      mkRecurring('Operating loss buffer', -2000, a, a + 2, false, 0),
+      mkRecurring('Business profit', 4000, a + 2, a + 15, false, 5),
+      mkAsset('Business valuation', 150000, a, 6, a + 15),
+    ],
+  },
+  child: {
+    icon: '👶', label: 'Have a Child', defaultName: 'Child',
+    blurb: 'Delivery, childcare, school, university, daily costs.',
+    build: a => [
+      mkOneTime('Delivery & setup', -8000, a),
+      mkRecurring('Childcare', -1500, a, a + 6, false, 0),
+      mkRecurring('School fees', -800, a + 6, a + 18, false, 0),
+      mkOneTime('University fund', -120000, a + 18),
+      mkRecurring('Daily expenses', -600, a, a + 22, true, 0),
+    ],
+  },
+  wedding: {
+    icon: '💍', label: 'Wedding', defaultName: 'Wedding',
+    blurb: 'Ceremony, honeymoon, gifts received.',
+    build: a => [
+      mkOneTime('Wedding ceremony', -50000, a),
+      mkOneTime('Honeymoon', -15000, a),
+      mkOneTime('Gifts received', 20000, a),
+    ],
+  },
+  windfall: {
+    icon: '🎰', label: 'Windfall / Jackpot', defaultName: 'Windfall',
+    blurb: 'A lump sum lands — minus the taxman.',
+    build: a => [
+      mkOneTime('Lump sum', 300000, a),
+      mkOneTime('Tax on windfall', -30000, a),
+    ],
+  },
+  career: {
+    icon: '📈', label: 'Career Change', defaultName: 'Career Change',
+    blurb: 'Salary jump, signing bonus, lost benefits.',
+    build: a => [
+      mkRecurring('Salary increase', 2000, a, a + 20, true, 0),
+      mkOneTime('Signing bonus', 30000, a),
+      mkOneTime('Lost benefits / transfer', -10000, a),
+    ],
+  },
+  accident: {
+    icon: '🏥', label: 'Accident or Illness', defaultName: 'Health Incident',
+    blurb: 'Medical bills, insurance payout, lost income.',
+    build: a => [
+      mkOneTime('Medical bills', -80000, a),
+      mkOneTime('Insurance payout', 50000, a),
+      mkRecurring('Reduced income', -3000, a, a + 2, false, 0),
+      mkRecurring('Ongoing treatment', -500, a, a + 30, true, 0),
+    ],
+  },
+  car: {
+    icon: '🚗', label: 'Buy a Car', defaultName: 'Car',
+    blurb: 'Downpayment, loan, upkeep, depreciation, resale.',
+    build: a => [
+      mkOneTime('Downpayment', -15000, a),
+      mkRecurring('Car loan', -600, a, a + 7, false, 0),
+      mkRecurring('Insurance & maintenance', -200, a, a + 12, true, 0),
+      mkAsset('Car value', 40000, a, -15, a + 7),
+    ],
+  },
+  investment: {
+    icon: '💹', label: 'Make an Investment', defaultName: 'Investment',
+    blurb: 'Move cash into a fund that compounds — then cash out.',
+    build: a => [
+      mkInvestment('Invested capital', 25, true, 8, 4, 70, a, a + 20),
+    ],
+  },
+  custom: {
+    icon: '✨', label: 'Custom Event', defaultName: 'Custom Event',
+    blurb: 'Start blank and build your own effects.',
+    build: a => [mkOneTime('One-time amount', -10000, a)],
+  },
+};
+
+function createEvent(typeKey) {
+  const t = EVENT_TYPES[typeKey] || EVENT_TYPES.custom;
+  const triggerAge = (parseInt(document.getElementById('currentAge').value) || 30) + 2;
+  return {
+    id: 'evt' + (++eventSeq), type: typeKey, name: t.defaultName,
+    triggerAge, visible: false,
+    color: EVENT_COLORS[lifeEvents.length % EVENT_COLORS.length],
+    effects: t.build(triggerAge),
+  };
+}
+
+// ── Built-in events ──
+// lifeEvents[0..2] are always the built-ins: Working Income, Retirement and
+// Investment Strategy. "Built-in" only means they can't be deleted. The
+// Retirement event's trigger age IS the retirement age; the Investment
+// Strategy event carries the return your whole portfolio compounds at.
+const RETIRE_END = 300; // recurring endAge meaning "until death" — past any lifespan
+
+function makeIncomeEvent(monthly, growth, startAge, endAge) {
+  return {
+    id: 'evt-income', type: 'income', builtin: 'income', name: 'Working Income',
+    triggerAge: startAge, visible: false, color: '#22c55e',
+    effects: [mkRecurring('Salary saved', monthly, startAge, endAge, false, growth)],
+  };
+}
+
+function makeRetirementEvent(monthly, age) {
+  return {
+    id: 'evt-retirement', type: 'spending', builtin: 'spending', name: 'Retirement',
+    triggerAge: age, visible: false, color: '#ff2d55',
+    effects: [mkRecurring('Living costs', -monthly, age, RETIRE_END, true, 0)],
+  };
+}
+
+// The Investment Strategy event is not a cash flow — it sets the rate your
+// liquid portfolio compounds at: growth & stable returns, blended by an
+// allocation glidepath (growth % by age band).
+function makeStrategyEvent(growthReturn, stableReturn, glide) {
+  return {
+    id: 'evt-strategy', type: 'strategy', builtin: 'strategy', name: 'Investment Strategy',
+    triggerAge: 0, visible: false, color: '#3b82f6',
+    growthReturn, stableReturn,
+    glide: (glide || [{ age: 0, equity: 60 }]).map(b => ({ ...b })),
+    effects: [],
+  };
+}
+
+// Retirement age = the Retirement event's trigger age.
+function retireAgeOf() {
+  const e = lifeEvents.find(ev => ev.builtin === 'spending');
+  return e ? e.triggerAge : 65;
+}
+
+// Growth % allocation at a given age, from the Strategy event's glidepath.
+function strategyEquityAt(age) {
+  const s = lifeEvents.find(ev => ev.builtin === 'strategy');
+  if (!s || !s.glide.length) return 0;
+  const g = s.glide.slice().sort((a, b) => a.age - b.age);
+  let eq = g[0].equity;
+  for (let i = 0; i < g.length; i++) if (age >= g[i].age) eq = g[i].equity;
+  return eq;
+}
+
+// Annual rate (decimal) the portfolio compounds at, at a given age.
+function strategyRateAt(age) {
+  const s = lifeEvents.find(ev => ev.builtin === 'strategy');
+  if (!s) return 0;
+  const eqShare = Math.max(0, Math.min(100, strategyEquityAt(age))) / 100;
+  return (eqShare * (s.growthReturn || 0) + (1 - eqShare) * (s.stableReturn || 0)) / 100;
+}
+
+// ── Event variant helpers (clones for the scenario table / drag-to-solve) ──
+function scaleEvent(evt, k) {
+  return { ...evt, effects: evt.effects.map(fx => {
+    const c = { ...fx };
+    if (c.monthlyAmount != null) c.monthlyAmount *= k;
+    if (c.amount != null) c.amount *= k;
+    return c;
+  }) };
+}
+function eventWithPrimaryAmount(evt, amt) {
+  return { ...evt, effects: evt.effects.map((fx, i) =>
+    i === 0 ? { ...fx, monthlyAmount: amt } : fx) };
+}
+function eventShiftedTo(evt, newTrigger) {
+  const d = newTrigger - evt.triggerAge;
+  const c = { ...evt, triggerAge: newTrigger, effects: evt.effects.map(fx => ({ ...fx })) };
+  shiftEffectAges(c, d);
+  return c;
+}
+
+// Deep clone with fresh ids — used when a profile loads its events.
+function cloneEvent(e) {
+  return {
+    ...e, id: 'evt' + (++eventSeq),
+    effects: e.effects.map(fx => ({ ...fx, id: 'fx' + (++eventSeq) })),
+  };
+}
+
+function newEffect(kind, age) {
+  if (kind === 'recurring') return mkRecurring('Recurring item', -500, age, age + 10, false, 0);
+  if (kind === 'asset') return mkAsset('Asset', 100000, age, 3, age + 10);
+  if (kind === 'investment') return mkInvestment('Invested capital', 25, true, 8, 4, 70, age, age + 20);
+  return mkOneTime('Lump sum', -10000, age);
+}
+
+// ── Effect math ──
+// Per-month dollar amount of a recurring effect at a given age.
+// `annualGrowth` is a real raise — compounds from the effect's own start.
+// `inflationAdjust` means the amount is in today's dollars — it compounds
+// from the present (currentAge), so any dollar figure you type is read as
+// today's purchasing power wherever in the timeline it lands.
+function effectMonthlyCash(fx, age) {
+  if (fx.kind !== 'recurring' || age < fx.startAge || age >= fx.endAge) return 0;
+  const grow = Math.pow(1 + (fx.annualGrowth || 0) / 100, Math.max(0, age - fx.startAge));
+  const infl = fx.inflationAdjust
+    ? Math.pow(1 + globalInflation() / 100, Math.max(0, age - globalCurrentAge()))
+    : 1;
+  return fx.monthlyAmount * grow * infl;
+}
+
+// An investment's capital in dollars (resolving the % -of-portfolio option),
+// and its annual return as a decimal (the growth/stable allocation blend).
+function invResolvedCapital(fx) {
+  return fx.capitalPct ? (fx.capital / 100) * globalPortfolio() : fx.capital;
+}
+function invRateDecimal(fx) {
+  const eqShare = Math.max(0, Math.min(100, fx.equityPct)) / 100;
+  return (eqShare * (fx.growthReturn || 0) + (1 - eqShare) * (fx.stableReturn || 0)) / 100;
+}
+
+// Live value of a held position — an asset (buyAge..sellAge) or an investment
+// (startAge..endAge); 0 outside the holding window.
+function assetHoldValue(fx, age) {
+  if (fx.kind === 'asset') {
+    if (age < fx.buyAge || age > fx.sellAge) return 0;
+    return fx.buyValue * Math.pow(1 + fx.appreciation / 100, age - fx.buyAge);
+  }
+  if (fx.kind === 'investment') {
+    if (age < fx.startAge || age > fx.endAge) return 0;
+    return invResolvedCapital(fx) * Math.pow(1 + invRateDecimal(fx), age - fx.startAge);
+  }
+  return 0;
+}
+
+// Net cash a single effect injects into the portfolio during the year at `age`.
+// Sign: + feeds the portfolio, − drains it.
+function effectAnnualCash(fx, age) {
+  if (fx.kind === 'oneTime') return age === fx.atAge ? fx.amount : 0;
+  if (fx.kind === 'asset') return age === fx.sellAge ? assetHoldValue(fx, fx.sellAge) : 0;
+  if (fx.kind === 'recurring') return effectMonthlyCash(fx, age) * 12;
+  if (fx.kind === 'investment') {
+    if (age === fx.startAge) return -invResolvedCapital(fx);
+    if (age === fx.endAge) return assetHoldValue(fx, fx.endAge);
+    return 0;
+  }
+  return 0;
+}
+
+// ── Flow index ──
+// Every effect aggregated into per-age cash maps the engine reads directly:
+//   oneTime[age]    — lump sums + asset-sale proceeds landing that year
+//   monthly[age]    — net of all recurring effects, one month's worth
+//   assetValue[age] — total live value of assets still owned that year
+let evtIndex = { oneTime: {}, monthly: {}, assetValue: {} };
+
+function buildEventIndex(events) {
+  const idx = { oneTime: {}, monthly: {}, assetValue: {} };
+  for (const evt of events) {
+    for (const fx of evt.effects) {
+      if (fx.kind === 'oneTime') {
+        idx.oneTime[fx.atAge] = (idx.oneTime[fx.atAge] || 0) + fx.amount;
+      } else if (fx.kind === 'recurring') {
+        for (let a = fx.startAge; a < fx.endAge; a++)
+          idx.monthly[a] = (idx.monthly[a] || 0) + effectMonthlyCash(fx, a);
+      } else if (fx.kind === 'asset') {
+        idx.oneTime[fx.sellAge] = (idx.oneTime[fx.sellAge] || 0) + assetHoldValue(fx, fx.sellAge);
+        for (let a = fx.buyAge; a <= fx.sellAge; a++)
+          idx.assetValue[a] = (idx.assetValue[a] || 0) + assetHoldValue(fx, a);
+      } else if (fx.kind === 'investment') {
+        idx.oneTime[fx.startAge] = (idx.oneTime[fx.startAge] || 0) - invResolvedCapital(fx);
+        idx.oneTime[fx.endAge] = (idx.oneTime[fx.endAge] || 0) + assetHoldValue(fx, fx.endAge);
+        for (let a = fx.startAge; a <= fx.endAge; a++)
+          idx.assetValue[a] = (idx.assetValue[a] || 0) + assetHoldValue(fx, a);
+      }
+    }
+  }
+  return idx;
+}
+
+// The flow index for a hypothetical — `mods` maps each event to a replacement
+// (or null to keep it). Powers the scenario table and the drag-to-solve solver.
+function indexWith(mods) {
+  return buildEventIndex(lifeEvents.map(e => (mods && mods(e)) || e));
+}
+
+function eventAssetValue(age) { return evtIndex.assetValue[age] || 0; } // live asset worth
+
+// Build each event's own "Event Track" — the running net cash it has moved
+// in or out of your portfolio, plus the live value of any assets it still
+// owns. A readable footprint of that one event across your lifetime.
+function buildEventTracks(currentAge, lifespan) {
+  return lifeEvents.map(evt => {
+    const points = [];
+    let cumCash = 0;
+    for (let a = currentAge; a < lifespan; a++) {
+      let asset = 0;
+      for (const fx of evt.effects) {
+        cumCash += effectAnnualCash(fx, a);
+        asset += assetHoldValue(fx, a + 1);
+      }
+      points.push({ age: a + 1, value: cumCash + asset });
+    }
+    return {
+      id: evt.id, name: evt.name, color: evt.color,
+      visible: evt.visible, points,
+    };
   });
 }
 
-document.getElementById('annualReturn').addEventListener('input', e => {
-  document.getElementById('returnDisplay').textContent = e.target.value + '%';
-  updateTicks('annualReturn', 'returnTicks');
+// Icon for an event — built-ins have fixed icons, user events use their type.
+function eventIcon(e) {
+  if (e.builtin === 'income') return '💼';
+  if (e.builtin === 'spending') return '🏖️';
+  if (e.builtin === 'strategy') return '📊';
+  return (EVENT_TYPES[e.type] || EVENT_TYPES.custom).icon;
+}
+
+// ── Sidebar event list ──
+// Every event is expanded by default, showing its details inline and editable:
+// cash-flow events show their effects, the Investment Strategy shows its
+// returns + glidepath. Built-in events can't be deleted. Click an event's
+// name to collapse/expand it.
+function renderEventList() {
+  const host = document.getElementById('eventList');
+  if (!host) return;
+  host.innerHTML = lifeEvents.map((e, i) => {
+    const strat = e.builtin === 'strategy';
+    const chev = e.collapsed ? '▸ ' : '▾ ';
+    const sub = chev + (strat
+      ? 'built-in &middot; portfolio growth'
+      : (e.builtin ? 'built-in &middot; ' : '') + `age ${e.triggerAge}`);
+    const eye = strat ? '' :
+      `<button type="button" class="evt-btn evt-eye${e.visible ? ' on' : ''}" data-i="${i}" data-act="vis" title="Show this track on the graph">👁</button>`;
+    return `<div class="evt-item">
+      <div class="evt-card">
+        <span class="evt-ico" style="background:${e.color}26;color:${e.color}">${eventIcon(e)}</span>
+        <div class="evt-meta" data-i="${i}" data-act="toggle">
+          <div class="evt-name">${escapeHtml(e.name)}</div>
+          <div class="evt-sub">${sub}</div>
+        </div>
+        ${eye}
+        <button type="button" class="evt-btn" data-i="${i}" data-act="edit" title="Edit event">⚙</button>
+        ${e.builtin ? '' : `<button type="button" class="evt-btn" data-i="${i}" data-act="del" title="Remove event">×</button>`}
+      </div>
+      ${e.collapsed ? '' : `<div class="evt-fx-host" data-evt="${i}"></div>`}
+    </div>`;
+  }).join('');
+  host.querySelectorAll('.evt-btn').forEach(b => b.addEventListener('click', () => {
+    const i = +b.dataset.i;
+    if (b.dataset.act === 'vis') { lifeEvents[i].visible = !lifeEvents[i].visible; refreshEvents(); }
+    else if (b.dataset.act === 'edit') openEventEditor(i);
+    else if (b.dataset.act === 'del') { lifeEvents.splice(i, 1); refreshEvents(); }
+  }));
+  host.querySelectorAll('.evt-meta[data-act="toggle"]').forEach(m => m.addEventListener('click', () => {
+    const e = lifeEvents[+m.dataset.i];
+    e.collapsed = !e.collapsed;
+    renderEventList();
+  }));
+  // Render each event's details inline, editable on the spot.
+  host.querySelectorAll('.evt-fx-host').forEach(h => {
+    const e = lifeEvents[+h.dataset.evt];
+    if (e.builtin === 'strategy') renderStrategyEditor(e, h);
+    else renderFxList(e, h);
+  });
+}
+
+// ── Track-toggle chips beneath the graph ──
+function renderEventTrackChips() {
+  const host = document.getElementById('eventTrackChips');
+  if (!host) return;
+  host.innerHTML = lifeEvents.map((e, i) => e.builtin === 'strategy' ? '' :
+    `<button type="button" class="track-chip${e.visible ? ' on' : ''}" data-i="${i}" style="--tc:${e.color}">
+      <span class="track-dot"></span>${escapeHtml(e.name)}</button>`).join('');
+  host.querySelectorAll('.track-chip').forEach(c => c.addEventListener('click', () => {
+    lifeEvents[+c.dataset.i].visible = !lifeEvents[+c.dataset.i].visible;
+    refreshEvents();
+  }));
+}
+
+// Re-render every event surface and recompute the projection (no sound/FX).
+function refreshEvents() {
+  if (typeof activeProfile !== 'undefined' && activeProfile !== -1) {
+    activeProfile = -1;
+    renderProfiles();
+  }
+  renderEventList();
+  renderEventTrackChips();
+  calculate(true);
+}
+
+// ── Modal ──
+function showEventModal() { document.getElementById('evtModal').classList.add('open'); }
+function closeEventModal() {
+  document.getElementById('evtModal').classList.remove('open');
+  refreshEvents();
+}
+
+function openEventPicker() {
+  const body = document.getElementById('evtModalBody');
+  body.innerHTML = `
+    <h3 class="evt-modal-title">Add a Life Event</h3>
+    <p class="evt-modal-sub">Pick what happens. You can fine-tune every number next.</p>
+    <div class="evt-type-grid">
+      ${Object.entries(EVENT_TYPES).map(([k, t]) => `
+        <button type="button" class="evt-type" data-type="${k}">
+          <span class="evt-type-ico">${t.icon}</span>
+          <span class="evt-type-name">${t.label}</span>
+          <span class="evt-type-blurb">${t.blurb}</span>
+        </button>`).join('')}
+    </div>`;
+  body.querySelectorAll('.evt-type').forEach(b => b.addEventListener('click', () => {
+    lifeEvents.push(createEvent(b.dataset.type));
+    openEventEditor(lifeEvents.length - 1);
+  }));
+  showEventModal();
+}
+
+// Shift every effect's ages by `d` years — keeps a template coherent when
+// the user moves the trigger age.
+function shiftEffectAges(evt, d) {
+  evt.effects.forEach(fx => {
+    if (fx.kind === 'oneTime') fx.atAge += d;
+    else if (fx.kind === 'recurring') { fx.startAge += d; fx.endAge += d; }
+    else if (fx.kind === 'asset') { fx.buyAge += d; fx.sellAge += d; }
+    else if (fx.kind === 'investment') { fx.startAge += d; fx.endAge += d; }
+  });
+}
+
+// The age-band editor for the Investment Strategy event's allocation glidepath.
+function renderStrategyBands(evt, host, onChange) {
+  if (!host) return;
+  const g = evt.glide;
+  host.innerHTML = g.map((b, i) => `
+    <div class="glide-row">
+      <span class="glide-lbl">from age</span>
+      <input type="number" class="glide-age" data-i="${i}" value="${b.age}" min="0" max="120">
+      <span class="glide-lbl">growth</span>
+      <input type="number" class="glide-eq" data-i="${i}" value="${b.equity}" min="0" max="100">
+      <span class="glide-pct">%</span>
+      <button type="button" class="glide-del" data-i="${i}" title="Remove band"${g.length <= 1 ? ' disabled' : ''}>&times;</button>
+    </div>`).join('');
+  host.querySelectorAll('.glide-age').forEach(el => el.addEventListener('input', () => {
+    g[+el.dataset.i].age = parseInt(el.value) || 0;
+    if (onChange) onChange();
+  }));
+  host.querySelectorAll('.glide-eq').forEach(el => el.addEventListener('input', () => {
+    let v = parseFloat(el.value);
+    if (isNaN(v)) v = 0;
+    g[+el.dataset.i].equity = Math.max(0, Math.min(100, v));
+    if (onChange) onChange();
+  }));
+  host.querySelectorAll('.glide-del').forEach(el => el.addEventListener('click', () => {
+    if (g.length <= 1) return;
+    g.splice(+el.dataset.i, 1);
+    renderStrategyBands(evt, host, onChange);
+    if (onChange) onChange();
+  }));
+}
+
+// The full Investment Strategy editor (growth/stable returns + glidepath) —
+// rendered into `host`, in the sidebar inline or in the modal. Edits recalc live.
+function renderStrategyEditor(evt, host) {
+  if (!host) return;
+  host.innerHTML = `
+    <div class="evt-ed-top">
+      <div class="evt-ed-field">
+        <span class="evt-ed-label">Growth return %</span>
+        <input type="number" class="st-growth" value="${evt.growthReturn}" step="0.5">
+      </div>
+      <div class="evt-ed-field">
+        <span class="evt-ed-label">Stable return %</span>
+        <input type="number" class="st-stable" value="${evt.stableReturn}" step="0.5">
+      </div>
+    </div>
+    <div class="evt-fx-title">Allocation glidepath &mdash; growth % by age</div>
+    <div class="st-bands"></div>
+    <button type="button" class="glide-add st-addband">+ add age band</button>`;
+  host.querySelector('.st-growth').addEventListener('input', e => {
+    evt.growthReturn = parseFloat(e.target.value) || 0; calculate(true);
+  });
+  host.querySelector('.st-stable').addEventListener('input', e => {
+    evt.stableReturn = parseFloat(e.target.value) || 0; calculate(true);
+  });
+  host.querySelector('.st-addband').addEventListener('click', () => {
+    const last = evt.glide[evt.glide.length - 1] || { age: 60, equity: 40 };
+    evt.glide.push({ age: Math.min(120, last.age + 10), equity: Math.max(0, last.equity - 10) });
+    renderStrategyEditor(evt, host);
+    calculate(true);
+  });
+  renderStrategyBands(evt, host.querySelector('.st-bands'), () => calculate(true));
+}
+
+function openEventEditor(idx) {
+  const evt = lifeEvents[idx];
+  if (!evt) return;
+  const body = document.getElementById('evtModalBody');
+
+  // Investment Strategy — a dedicated editor (it carries no cash-flow effects).
+  if (evt.builtin === 'strategy') {
+    body.innerHTML = `
+      <h3 class="evt-modal-title">📊 Investment Strategy</h3>
+      <p class="evt-modal-sub">How your whole portfolio is invested — growth &amp; stable returns, blended by an allocation that can glide with age.</p>
+      <div id="stEditor"></div>
+      <div class="evt-modal-actions">
+        <button type="button" class="evt-done" id="edDone">Done</button>
+      </div>`;
+    renderStrategyEditor(evt, document.getElementById('stEditor'));
+    document.getElementById('edDone').addEventListener('click', closeEventModal);
+    showEventModal();
+    return;
+  }
+
+  const ageLabel = evt.builtin === 'spending' ? 'Retirement age'
+    : evt.builtin === 'income' ? 'Income starts'
+    : 'Trigger age';
+  body.innerHTML = `
+    <h3 class="evt-modal-title">${eventIcon(evt)} Edit ${evt.builtin ? 'Built-in Track' : 'Event Track'}</h3>
+    <p class="evt-modal-sub">Costs drain your portfolio, income feeds it. Each effect plays out over time.</p>
+    <div class="evt-ed-top">
+      <div class="evt-ed-field grow">
+        <span class="evt-ed-label">Event track name</span>
+        <input type="text" id="edName" value="${escapeHtml(evt.name)}" maxlength="40">
+      </div>
+      <div class="evt-ed-field">
+        <span class="evt-ed-label">${ageLabel}</span>
+        <input type="number" id="edAge" value="${evt.triggerAge}" min="0" max="120">
+      </div>
+      <div class="evt-ed-field">
+        <span class="evt-ed-label">Colour</span>
+        <div class="evt-color-row" id="edColors">
+          ${EVENT_COLORS.map(c => `<span class="evt-swatch${c === evt.color ? ' sel' : ''}" data-c="${c}" style="background:${c}"></span>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="evt-fx-title">Effects</div>
+    <div id="fxList"></div>
+    <div class="evt-add-fx">
+      <button type="button" data-add="oneTime">+ Lump sum</button>
+      <button type="button" data-add="recurring">+ Recurring</button>
+      <button type="button" data-add="asset">+ Asset</button>
+      <button type="button" data-add="investment">+ Investment</button>
+    </div>
+    <div class="evt-modal-actions">
+      ${evt.builtin ? '' : '<button type="button" class="evt-del-event" id="edDelete">Delete event</button>'}
+      <button type="button" class="evt-done" id="edDone">Done</button>
+    </div>`;
+  document.getElementById('edName').addEventListener('input', e => { evt.name = e.target.value; });
+  document.getElementById('edAge').addEventListener('change', e => {
+    let na = parseInt(e.target.value);
+    if (isNaN(na)) na = evt.triggerAge;
+    const d = na - evt.triggerAge;
+    evt.triggerAge = na;
+    if (d) shiftEffectAges(evt, d);
+    openEventEditor(idx);
+  });
+  document.getElementById('edColors').querySelectorAll('.evt-swatch').forEach(s =>
+    s.addEventListener('click', () => {
+      evt.color = s.dataset.c;
+      document.getElementById('edColors').querySelectorAll('.evt-swatch')
+        .forEach(x => x.classList.toggle('sel', x === s));
+    }));
+  document.querySelectorAll('.evt-add-fx button').forEach(b =>
+    b.addEventListener('click', () => {
+      evt.effects.push(newEffect(b.dataset.add, evt.triggerAge));
+      renderFxList(evt);
+    }));
+  const delBtn = document.getElementById('edDelete');
+  if (delBtn) delBtn.addEventListener('click', () => {
+    lifeEvents.splice(idx, 1);
+    closeEventModal();
+  });
+  document.getElementById('edDone').addEventListener('click', closeEventModal);
+  renderFxList(evt);
+  showEventModal();
+}
+
+// One effect card's inner fields, keyed by effect kind.
+function fxCardHtml(fx, i) {
+  if (fx.kind === 'asset') {
+    return `<div class="fx-card asset">
+      <div class="fx-head">
+        <input type="text" class="fx-label" data-i="${i}" value="${escapeHtml(fx.label)}" maxlength="40">
+        <span class="fx-kind">asset</span>
+        <button type="button" class="fx-del" data-i="${i}" title="Remove effect">×</button>
+      </div>
+      <div class="fx-fields">
+        <div class="fx-field">
+          <span class="fx-field-lbl">Value $</span>
+          <input type="number" class="wide" data-i="${i}" data-field="buyValue" value="${fx.buyValue}" min="0" step="1000">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Buy age</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="buyAge" value="${fx.buyAge}" min="0" max="120">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Change %/yr</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="appreciation" value="${fx.appreciation}" step="0.5">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Sell age</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="sellAge" value="${fx.sellAge}" min="0" max="120">
+        </div>
+      </div>
+    </div>`;
+  }
+  if (fx.kind === 'investment') {
+    const pctMode = !!fx.capitalPct;
+    const rate = (invRateDecimal(fx) * 100).toFixed(1);
+    return `<div class="fx-card invest">
+      <div class="fx-head">
+        <input type="text" class="fx-label" data-i="${i}" value="${escapeHtml(fx.label)}" maxlength="40">
+        <span class="fx-kind">investment &middot; ≈${rate}%/yr</span>
+        <button type="button" class="fx-del" data-i="${i}" title="Remove effect">×</button>
+      </div>
+      <div class="fx-fields">
+        <div class="fx-field">
+          <span class="fx-field-lbl">Capital</span>
+          <div class="fx-seg">
+            <button type="button" class="fx-pct-btn${pctMode ? '' : ' sel'}" data-i="${i}" data-pct="0">$</button>
+            <button type="button" class="fx-pct-btn${pctMode ? ' sel' : ''}" data-i="${i}" data-pct="1">% of cash</button>
+          </div>
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">${pctMode ? '% of portfolio' : 'Amount $'}</span>
+          <input type="number" class="${pctMode ? 'narrow' : 'wide'}" data-i="${i}" data-field="capital" value="${fx.capital}" min="0" step="${pctMode ? '1' : '1000'}">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Growth ret %</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="growthReturn" value="${fx.growthReturn}" step="0.5">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Stable ret %</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="stableReturn" value="${fx.stableReturn}" step="0.5">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">In growth %</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="equityPct" value="${fx.equityPct}" min="0" max="100" step="5">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Invest age</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="startAge" value="${fx.startAge}" min="0" max="120">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Cash out age</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="endAge" value="${fx.endAge}" min="0" max="130">
+        </div>
+      </div>
+    </div>`;
+  }
+  const recurring = fx.kind === 'recurring';
+  const amt = recurring ? fx.monthlyAmount : fx.amount;
+  const sign = amt < 0 ? -1 : 1;
+  const seg = `<div class="fx-field">
+      <span class="fx-field-lbl">Direction</span>
+      <div class="fx-seg">
+        <button type="button" class="fx-seg-btn cost${sign < 0 ? ' sel' : ''}" data-i="${i}" data-sign="-1">− Cost</button>
+        <button type="button" class="fx-seg-btn income${sign > 0 ? ' sel' : ''}" data-i="${i}" data-sign="1">+ Income</button>
+      </div>
+    </div>`;
+  if (recurring) {
+    return `<div class="fx-card ${sign < 0 ? 'cost' : 'income'}" data-sign="${sign}">
+      <div class="fx-head">
+        <input type="text" class="fx-label" data-i="${i}" value="${escapeHtml(fx.label)}" maxlength="40">
+        <span class="fx-kind">recurring</span>
+        <button type="button" class="fx-del" data-i="${i}" title="Remove effect">×</button>
+      </div>
+      <div class="fx-fields">
+        ${seg}
+        <div class="fx-field">
+          <span class="fx-field-lbl">$ / month</span>
+          <input type="number" data-i="${i}" data-field="amtMag" value="${Math.abs(amt)}" min="0" step="50">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">From age</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="startAge" value="${fx.startAge}" min="0" max="120">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Until age</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="endAge" value="${fx.endAge}" min="0" max="130">
+        </div>
+        <div class="fx-field">
+          <span class="fx-field-lbl">Growth %/yr</span>
+          <input type="number" class="narrow" data-i="${i}" data-field="annualGrowth" value="${fx.annualGrowth}" step="0.5">
+        </div>
+        <label class="fx-check">
+          <input type="checkbox" data-i="${i}" data-check="1"${fx.inflationAdjust ? ' checked' : ''}> inflation-adjust
+        </label>
+      </div>
+    </div>`;
+  }
+  return `<div class="fx-card ${sign < 0 ? 'cost' : 'income'}" data-sign="${sign}">
+    <div class="fx-head">
+      <input type="text" class="fx-label" data-i="${i}" value="${escapeHtml(fx.label)}" maxlength="40">
+      <span class="fx-kind">lump sum</span>
+      <button type="button" class="fx-del" data-i="${i}" title="Remove effect">×</button>
+    </div>
+    <div class="fx-fields">
+      ${seg}
+      <div class="fx-field">
+        <span class="fx-field-lbl">Amount $</span>
+        <input type="number" class="wide" data-i="${i}" data-field="amtMag" value="${Math.abs(amt)}" min="0" step="1000">
+      </div>
+      <div class="fx-field">
+        <span class="fx-field-lbl">At age</span>
+        <input type="number" class="narrow" data-i="${i}" data-field="atAge" value="${fx.atAge}" min="0" max="120">
+      </div>
+    </div>
+  </div>`;
+}
+
+// Render an event's effect cards into `host` (the modal's #fxList, or an
+// inline host in the sidebar). Value edits recalculate live; structural
+// changes (add/remove/toggle) re-render this host.
+function renderFxList(evt, host) {
+  host = host || document.getElementById('fxList');
+  if (!host) return;
+  if (!evt.effects.length) {
+    host.innerHTML = '<div class="evt-empty">No effects yet — add one with the ⚙ editor.</div>';
+    return;
+  }
+  host.innerHTML = evt.effects.map((fx, i) => fxCardHtml(fx, i)).join('');
+  const rerender = () => renderFxList(evt, host);
+
+  host.querySelectorAll('.fx-del').forEach(b => b.addEventListener('click', () => {
+    evt.effects.splice(+b.dataset.i, 1);
+    rerender();
+    calculate(true);
+  }));
+  host.querySelectorAll('.fx-label').forEach(el => el.addEventListener('input', () => {
+    evt.effects[+el.dataset.i].label = el.value;
+  }));
+  host.querySelectorAll('.fx-seg-btn').forEach(b => b.addEventListener('click', () => {
+    const fx = evt.effects[+b.dataset.i];
+    const key = fx.kind === 'recurring' ? 'monthlyAmount' : 'amount';
+    fx[key] = (+b.dataset.sign) * Math.abs(fx[key] || 0);
+    rerender();
+    calculate(true);
+  }));
+  host.querySelectorAll('.fx-pct-btn').forEach(b => b.addEventListener('click', () => {
+    evt.effects[+b.dataset.i].capitalPct = b.dataset.pct === '1';
+    rerender();
+    calculate(true);
+  }));
+  host.querySelectorAll('input[data-field]').forEach(el => el.addEventListener('input', () => {
+    const fx = evt.effects[+el.dataset.i];
+    let v = parseFloat(el.value);
+    if (isNaN(v)) v = 0;
+    if (el.dataset.field === 'amtMag') {
+      const sign = +el.closest('.fx-card').dataset.sign;
+      const key = fx.kind === 'recurring' ? 'monthlyAmount' : 'amount';
+      fx[key] = sign * Math.abs(v);
+    } else {
+      fx[el.dataset.field] = v;
+    }
+    calculate(true);
+  }));
+  host.querySelectorAll('input[data-check]').forEach(el => el.addEventListener('change', () => {
+    evt.effects[+el.dataset.i].inflationAdjust = el.checked;
+    calculate(true);
+  }));
+}
+
+// Modal dismissal — X button, backdrop click, Escape key.
+document.getElementById('evtModalX').addEventListener('click', closeEventModal);
+document.getElementById('evtModal').addEventListener('click', e => {
+  if (e.target.id === 'evtModal') closeEventModal();
 });
-document.getElementById('inflation').addEventListener('input', e => {
-  document.getElementById('inflationDisplay').textContent = e.target.value + '%';
-  updateTicks('inflation', 'inflationTicks');
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('evtModal').classList.contains('open')) {
+    closeEventModal();
+  }
 });
 
-// Clickable tick marks
-document.querySelectorAll('.slider-tick[data-target]').forEach(tick => {
-  tick.addEventListener('click', () => {
-    const slider = document.getElementById(tick.dataset.target);
-    slider.value = tick.dataset.val;
-    slider.dispatchEvent(new Event('input'));
-  });
-});
+// ── PROFILES ──
+// One-click preset scenarios: parameter fields, compounding mode, the Working
+// Income / Retirement specs, and a list of user life events.
+const PROFILES = [
+  {
+    name: 'Dilemma Millionaire',
+    blurb: 'The factory default — $2M at 46, retire today, somehow live to 160.',
+    fields: {
+      currentAge: 46, lifespan: 160,
+      currentPortfolio: 2000000, inflation: 2.5,
+    },
+    compounding: 'annual',
+    income: { monthly: 0, growth: 0, startAge: 46, endAge: 46 },
+    retirement: { monthly: 5000, age: 46 },
+    strategy: { growthReturn: 8, stableReturn: 4,
+      glide: [{ age: 25, equity: 50 }, { age: 55, equity: 40 }, { age: 65, equity: 30 }, { age: 75, equity: 20 }] },
+    events: [],
+  },
+  {
+    name: 'Mortgage Martyr',
+    blurb: 'All-in on growth from 25 — then an $80K down payment at 35 and a mortgage that devours your savings.',
+    fields: {
+      currentAge: 25, lifespan: 90,
+      currentPortfolio: 5000, inflation: 2.5,
+    },
+    compounding: 'annual',
+    income: { monthly: 1500, growth: 0, startAge: 25, endAge: 65 },
+    retirement: { monthly: 5000, age: 65 },
+    strategy: { growthReturn: 8, stableReturn: 4, glide: [{ age: 16, equity: 100 }] },
+    events: [
+      { type: 'property', name: 'The Mortgage', triggerAge: 35, visible: true, color: '#a855f7', effects: [
+        mkOneTime('Down payment', -80000, 35),
+        mkRecurring('Mortgage payment', -2400, 35, 60, false, 0),
+        mkAsset('Home value', 400000, 35, 3, 75),
+      ] },
+    ],
+  },
+  {
+    name: 'Life Comes At You',
+    blurb: 'Saving steadily at 28 — then a condo, a kid and a car all land. Toggle the Event Tracks to see who the culprit is.',
+    fields: {
+      currentAge: 28, lifespan: 90,
+      currentPortfolio: 40000, inflation: 2.5,
+    },
+    compounding: 'annual',
+    income: { monthly: 2200, growth: 2, startAge: 28, endAge: 65 },
+    retirement: { monthly: 4500, age: 65 },
+    strategy: { growthReturn: 8, stableReturn: 4,
+      glide: [{ age: 25, equity: 90 }, { age: 55, equity: 55 }, { age: 70, equity: 35 }] },
+    events: [
+      { type: 'property', name: 'Condo Purchase', triggerAge: 32, visible: false, color: '#a855f7', effects: EVENT_TYPES.property.build(32) },
+      { type: 'child', name: 'Child #1', triggerAge: 30, visible: false, color: '#f59e0b', effects: EVENT_TYPES.child.build(30) },
+      { type: 'car', name: 'New Car', triggerAge: 34, visible: false, color: '#ec4899', effects: EVENT_TYPES.car.build(34) },
+    ],
+  },
+];
+
+// -1 = no profile is an exact match (the user has hand-edited an input).
+let activeProfile = 0;
+
+// Load a profile: parameter fields and the full event list (built-in Working
+// Income + Retirement + Investment Strategy, then the profile's user events).
+function applyProfile(idx, silent) {
+  const p = PROFILES[idx];
+  if (!p) return;
+  for (const [id, val] of Object.entries(p.fields)) {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  }
+  compounding = p.compounding;
+  document.querySelectorAll('#compoundToggle .seg-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === compounding));
+  lifeEvents = [
+    makeIncomeEvent(p.income.monthly, p.income.growth, p.income.startAge, p.income.endAge),
+    makeRetirementEvent(p.retirement.monthly, p.retirement.age),
+    makeStrategyEvent(p.strategy.growthReturn, p.strategy.stableReturn, p.strategy.glide),
+  ].concat((p.events || []).map(cloneEvent));
+  renderEventList();
+  renderEventTrackChips();
+  activeProfile = idx;
+  renderProfiles();
+  calculate(silent);
+}
+
+function renderProfiles() {
+  const host = document.getElementById('profileChips');
+  if (!host) return;
+  host.innerHTML = PROFILES.map((p, i) =>
+    `<button type="button" class="profile-chip${i === activeProfile ? ' active' : ''}" data-i="${i}" title="${p.blurb}">${p.name}</button>`).join('');
+  host.querySelectorAll('.profile-chip').forEach(el =>
+    el.addEventListener('click', () => applyProfile(+el.dataset.i)));
+}
 
 // ── FORMAT HELPERS ──
 function fmt(n) {
@@ -1483,86 +2932,57 @@ function confettiRain() {
 }
 
 // ── CORE CALCULATION ──
-function simulate(currentAge, retireAge, lifespan, monthlySpend, portfolio, monthlyContrib, annualReturn, inflation) {
-  const yearsToRetire = retireAge - currentAge;
-  const yearsInRetirement = lifespan - retireAge;
-  const monthsToRetire = yearsToRetire * 12;
-  const monthsInRetirement = yearsInRetirement * 12;
-  const monthlyReturn = annualReturn / 100 / 12;
-  const monthlyInflation = inflation / 100 / 12;
+// Compounding mode: 'monthly' (12 steps/yr, realistic) or 'annual' (matches the Excel model)
+let compounding = 'annual';
 
-  // Accumulation phase
+// `index` = the flow index from buildEventIndex/indexWith. The portfolio
+// compounds each year at the Investment Strategy event's rate for that age
+// (its allocation glidepath). Every dollar in or out arrives through `index`;
+// each timeline point also carries `netWorth` (liquid balance + the value of
+// assets and investments still held), which is what the graph plots.
+function simulate(currentAge, retireAge, lifespan, portfolio, index) {
+  const annual = (compounding === 'annual');
+  const years = lifespan - currentAge;
+
   let balance = portfolio;
-  const timeline = []; // { year, balance, totalSpent }
-  let totalContributed = portfolio;
-
-  for (let m = 0; m < monthsToRetire; m++) {
-    balance = balance * (1 + monthlyReturn) + monthlyContrib;
-    totalContributed += monthlyContrib;
-    if (m % 12 === 11 || m === monthsToRetire - 1) {
-      timeline.push({
-        age: currentAge + Math.floor(m / 12) + 1,
-        balance: balance,
-        totalSpent: 0,
-        phase: 'accumulation'
-      });
-    }
-  }
-
-  const portfolioAtRetirement = balance;
-
-  // Withdrawal phase - inflation-adjusted spending
-  let totalSpent = 0;
+  let portfolioAtRetirement = portfolio;
   let brokeAge = null;
-  let adjustedMonthlySpend = monthlySpend;
+  const timeline = []; // { age, balance, netWorth, totalSpent, phase }
 
-  // Adjust spending to retirement-year dollars
-  adjustedMonthlySpend = monthlySpend * Math.pow(1 + inflation / 100, yearsToRetire);
+  const push = age => timeline.push({
+    age: age + 1, balance: balance,
+    netWorth: balance + (index.assetValue[age + 1] || 0),
+    totalSpent: 0, phase: age < retireAge ? 'accumulation' : 'retirement',
+  });
 
-  let runningSpend = adjustedMonthlySpend;
-  for (let m = 0; m < monthsInRetirement; m++) {
-    // Increase spending by inflation each month
-    if (m > 0 && m % 12 === 0) {
-      runningSpend *= (1 + inflation / 100);
+  if (annual) {
+    for (let y = 0; y < years; y++) {
+      const age = currentAge + y;
+      const rate = strategyRateAt(age);
+      const flow = (index.oneTime[age] || 0) + (index.monthly[age] || 0) * 12;
+      // Accumulation grows then takes flows; retirement takes flows up front.
+      balance = (age < retireAge) ? balance * (1 + rate) + flow
+                                  : (balance + flow) * (1 + rate);
+      if (age >= retireAge && balance <= 0 && brokeAge === null) brokeAge = age;
+      balance = Math.max(0, balance);
+      if (age + 1 === retireAge) portfolioAtRetirement = balance;
+      push(age);
     }
-    balance = balance * (1 + monthlyReturn) - runningSpend;
-    totalSpent += runningSpend;
-
-    if (balance <= 0 && brokeAge === null) {
-      brokeAge = retireAge + Math.floor(m / 12);
-      balance = 0;
-    }
-
-    if (m % 12 === 11 || m === monthsInRetirement - 1) {
-      timeline.push({
-        age: retireAge + Math.floor(m / 12) + 1,
-        balance: Math.max(0, balance),
-        totalSpent: totalSpent,
-        phase: 'retirement'
-      });
+  } else {
+    for (let m = 0; m < years * 12; m++) {
+      const age = currentAge + Math.floor(m / 12);
+      balance = balance * (1 + strategyRateAt(age) / 12) + (index.monthly[age] || 0);
+      if (m % 12 === 0) balance += (index.oneTime[age] || 0);
+      if (age >= retireAge && balance <= 0 && brokeAge === null) brokeAge = age;
+      balance = Math.max(0, balance);
+      if (m % 12 === 11) {
+        if (age + 1 === retireAge) portfolioAtRetirement = balance;
+        push(age);
+      }
     }
   }
 
-  // Total needed (simple: inflation-adjusted spending over retirement)
-  let totalNeeded = 0;
-  let tempSpend = adjustedMonthlySpend;
-  for (let y = 0; y < yearsInRetirement; y++) {
-    totalNeeded += tempSpend * 12;
-    tempSpend *= (1 + inflation / 100);
-  }
-
-  return {
-    yearsToRetire,
-    yearsInRetirement,
-    portfolioAtRetirement,
-    totalContributed,
-    totalNeeded,
-    finalBalance: Math.max(0, balance),
-    brokeAge,
-    timeline,
-    adjustedMonthlySpend,
-    totalSpent
-  };
+  return { timeline, portfolioAtRetirement, finalBalance: balance, brokeAge };
 }
 
 // ── QUIPS (one-liners shown under the verdict) ──
@@ -1599,7 +3019,7 @@ const quipsNo = [
   "Your retirement plan is basically a GoFundMe at this point.",
   "Hope you like the taste of cat food, because that's the premium tier in your future.",
   "Have you considered a career that doesn't end?",
-  "The S&P giveth, and your spending habits taketh away.",
+  "The market giveth, and your spending habits taketh away.",
   "At this rate, retirement is a concept, not a plan.",
   "Your future self just filed a restraining order against your current self.",
   "Plot twist: you're going to die at your desk. But at least it's in the metaverse.",
@@ -1767,7 +3187,7 @@ const quipsAbsolutely = [
   "You could light money on fire every week and still be fine. (Don't.)",
   "If financial security were a fortress, yours would have a moat and dragons.",
   "Your retirement plan is so solid it makes other retirement plans insecure.",
-  "The S&P 500 should be thanking YOU at this point.",
+  "The market should be thanking YOU at this point.",
   "You're not retiring. You're ascending.",
   "This is what happens when discipline meets time meets math. It's boring and it's beautiful.",
   "Your biggest retirement risk is dying of boredom, not poverty.",
@@ -1897,7 +3317,7 @@ const partingWisdom = [
   "The best time to start investing was 10 years ago. The second best time is now. The worst time is 'after I buy this one thing.' It's always 'one thing.'",
   "Nobody on their deathbed wished they'd spent more time optimizing their portfolio. But also, nobody on their deathbed wished they'd run out of money at 72. Balance, people.",
   "If this calculator ruined your day: good. Discomfort is the first step to change. If this calculator made your day: don't let it make you complacent.",
-  "This entire exercise assumes the S&P 500 continues to exist and perform roughly as it has. That's not guaranteed. Nothing is. Sleep tight.",
+  "This entire exercise assumes the market continues to exist and perform roughly as it has. That's not guaranteed. Nothing is. Sleep tight.",
   "The stock market is a device for transferring money from the impatient to the patient. Figure out which one you are.",
   "Inflation is the silent tax that no one voted for. It's always there, always eating. Plan accordingly.",
   "Your spending habits today are your retirement's biggest threat or biggest ally. There is no neutral.",
@@ -1940,27 +3360,49 @@ function randomFrom(arr) {
 }
 
 // ── MAIN CALCULATE ──
-function calculate() {
+function calculate(silent) {
   const currentAge = parseInt(document.getElementById('currentAge').value);
-  const retireAge = parseInt(document.getElementById('retireAge').value);
   const lifespan = parseInt(document.getElementById('lifespan').value);
-  const monthlySpend = parseFloat(document.getElementById('monthlySpend').value);
   const portfolio = parseFloat(document.getElementById('currentPortfolio').value);
-  const monthlyContrib = parseFloat(document.getElementById('monthlyContrib').value);
-  const annualReturn = parseFloat(document.getElementById('annualReturn').value);
-  const inflation = parseFloat(document.getElementById('inflation').value);
 
   // Validation
-  if (retireAge <= currentAge) {
-    alert("Your retirement age needs to be after your current age. Time travel isn't a financial strategy.");
-    return;
-  }
-  if (lifespan <= retireAge) {
-    alert("If you die before you retire, congratulations \u2014 you never need to worry about retirement funding. Problem solved, I guess.");
+  if (lifespan <= currentAge) {
+    alert("Your life expectancy needs to be older than your current age. Otherwise this is less a retirement plan and more an obituary.");
     return;
   }
 
-  const r = simulate(currentAge, retireAge, lifespan, monthlySpend, portfolio, monthlyContrib, annualReturn, inflation);
+  // Retirement age = the Retirement event's trigger, clamped into the timeline.
+  const retEvt = lifeEvents.find(e => e.builtin === 'spending');
+  const retireAge = Math.max(currentAge, Math.min(lifespan - 1, retEvt ? retEvt.triggerAge : lifespan - 1));
+
+  // Fold every event into the unified flow index, run the projection — the
+  // portfolio compounds at the Investment Strategy event's rate.
+  evtIndex = buildEventIndex(lifeEvents);
+  const sim = simulate(currentAge, retireAge, lifespan, portfolio, evtIndex);
+
+  // Derive the headline numbers from the events.
+  const yearsToRetire = retireAge - currentAge;
+  const yearsInRetirement = lifespan - retireAge;
+  const sumRecurring = (evt, fn) => evt
+    ? evt.effects.reduce((s, fx) => s + (fx.kind === 'recurring' ? fn(fx) : 0), 0) : 0;
+  const monthlySpend = Math.abs(sumRecurring(retEvt, fx => fx.monthlyAmount));
+  const adjustedMonthlySpend = Math.abs(sumRecurring(retEvt, fx => effectMonthlyCash(fx, retireAge)));
+  const r = Object.assign(sim, { yearsToRetire, yearsInRetirement, adjustedMonthlySpend });
+
+  // Cumulative retirement spending \u2014 drives the optional spending curve.
+  let cumSpent = 0;
+  for (const pt of r.timeline) {
+    if (pt.phase === 'retirement' && retEvt) {
+      let yr = 0;
+      for (const fx of retEvt.effects) yr += effectMonthlyCash(fx, pt.age - 1) * 12;
+      cumSpent += Math.abs(yr);
+      pt.totalSpent = cumSpent;
+    }
+  }
+
+  // Per-event tracks (the net-worth line is the main graph series now).
+  eventTrackData = buildEventTracks(currentAge, lifespan);
+  renderEventTrackChips();
 
   // Determine verdict purely from the simulation -- 5 tiers
   let verdict, verdictClass, verdictTier;
@@ -2014,11 +3456,16 @@ function calculate() {
 
   // ── Breakdown Cards ──
   const breakdownEl = document.getElementById('breakdown');
-  const realReturn = ((1 + annualReturn / 100) / (1 + inflation / 100) - 1) * 100;
 
-  // How much the market earned on top of contributions
-  const marketGains = r.portfolioAtRetirement - r.totalContributed;
-  const marketGainsPct = r.totalContributed > 0 ? ((marketGains / r.totalContributed) * 100).toFixed(0) : 0;
+  // What every investment turned its capital into.
+  let investCapital = 0, investPayout = 0;
+  for (const ev of lifeEvents) for (const fx of ev.effects) {
+    if (fx.kind === 'investment') {
+      investCapital += invResolvedCapital(fx);
+      investPayout += assetHoldValue(fx, fx.endAge);
+    }
+  }
+  const investGain = investPayout - investCapital;
 
   const yearsMoneyLasts = r.brokeAge ? (r.brokeAge - retireAge) : r.yearsInRetirement;
   const yearsShort = r.brokeAge ? (lifespan - r.brokeAge) : 0;
@@ -2027,7 +3474,7 @@ function calculate() {
     <div class="stat-card">
       <div class="label">Your Savings by Age ${retireAge}</div>
       <div class="value ${moneyLasts ? 'green' : 'red'}">${fmt(r.portfolioAtRetirement)}</div>
-      <div class="sub">What your investments grow to when you stop working</div>
+      <div class="sub">What your portfolio has grown to when you stop working</div>
     </div>
     <div class="stat-card">
       <div class="label">Monthly Spending (in Future Dollars)</div>
@@ -2038,7 +3485,7 @@ function calculate() {
       <div class="label">${moneyLasts ? 'Your Money Lasts' : 'Your Money Runs Out At'}</div>
       <div class="value ${moneyLasts ? 'green' : 'red'}">${moneyLasts ? 'All ' + r.yearsInRetirement + ' Years' : 'Age ' + r.brokeAge}</div>
       <div class="sub">${moneyLasts
-        ? 'Your savings keep earning returns while you spend, so the money outlives you'
+        ? 'Your portfolio keeps growing while you spend, so the money outlives you'
         : `Covers ${yearsMoneyLasts} of the ${r.yearsInRetirement} years you need. You\u2019re broke for the last ${yearsShort}.`
       }</div>
     </div>
@@ -2051,16 +3498,26 @@ function calculate() {
       }</div>
     </div>
     <div class="stat-card">
-      <div class="label">The Market Did This for You</div>
-      <div class="value blue">${fmt(marketGains)}</div>
-      <div class="sub">You put in ${fmt(r.totalContributed)} of your own money. The market grew it by an extra ${marketGainsPct}%.</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">What ${annualReturn}% Growth Really Means</div>
-      <div class="value ${realReturn > 4 ? 'green' : realReturn > 2 ? 'yellow' : 'red'}">${realReturn.toFixed(1)}%</div>
-      <div class="sub">Market grows ${annualReturn}%/yr, but ${inflation}% inflation eats into it. Your buying power only grows ${realReturn.toFixed(1)}%/yr.</div>
+      <div class="label">${investCapital > 0 ? 'What Your Investments Earned' : 'Your Investment Strategy'}</div>
+      <div class="value ${investCapital > 0 ? (investGain > 0 ? 'green' : investGain < 0 ? 'red' : 'blue') : 'blue'}">${investCapital > 0 ? fmt(investGain) : (strategyRateAt(currentAge) * 100).toFixed(1) + '%'}</div>
+      <div class="sub">${investCapital > 0
+        ? fmt(investCapital) + ' of capital compounded into ' + fmt(investPayout) + '.'
+        : 'Your portfolio compounds at ' + (strategyRateAt(currentAge) * 100).toFixed(1) + '% now, gliding to ' + (strategyRateAt(lifespan) * 100).toFixed(1) + '% by age ' + lifespan + '.'}</div>
     </div>
   `;
+
+  // Extra card once life events are in play — net worth includes assets owned.
+  const userEventCount = lifeEvents.filter(e => !e.builtin).length;
+  if (userEventCount) {
+    const nwEnd = r.timeline[r.timeline.length - 1].netWorth;
+    const assetEnd = eventAssetValue(lifespan);
+    breakdownEl.innerHTML += `
+    <div class="stat-card">
+      <div class="label">Net Worth at Age ${lifespan}</div>
+      <div class="value ${nwEnd >= r.portfolioAtRetirement ? 'green' : nwEnd > 0 ? 'yellow' : 'red'}">${fmt(nwEnd)}</div>
+      <div class="sub">${fmt(r.finalBalance)} liquid${assetEnd > 0 ? ' plus ' + fmt(assetEnd) + ' in assets you still own' : ''}. ${userEventCount} life event${userEventCount === 1 ? '' : 's'} folded into the projection.</div>
+    </div>`;
+  }
 
   // ── Progress Bar ── based on how many retirement years the money covers
   const progressSection = document.getElementById('progressSection');
@@ -2097,10 +3554,9 @@ function calculate() {
 
   // ── Scenario Table ──
   const scenarios = [0.5, 0.75, 1, 1.25, 1.5, 2].map(mult => {
-    const spend = monthlySpend * mult;
-    const s = simulate(currentAge, retireAge, lifespan, spend, portfolio, monthlyContrib, annualReturn, inflation);
-    const sMoneyLasts = !s.brokeAge;
-    return { spend, s, sMoneyLasts };
+    const idx = indexWith(e => e.builtin === 'spending' ? scaleEvent(e, mult) : null);
+    const s = simulate(currentAge, retireAge, lifespan, portfolio, idx);
+    return { spend: monthlySpend * mult, s, sMoneyLasts: !s.brokeAge };
   });
 
   const tbody = document.getElementById('scenarioBody');
@@ -2145,34 +3601,36 @@ function calculate() {
   // ── Chart (must render after results are visible so canvas has dimensions) ──
   requestAnimationFrame(() => renderChart(r.timeline, retireAge));
 
-  // Effects
-  Audio.playVerdict(verdict);
-  if (verdict === 'HELL NO') {
-    skullRain();
-    skullRain(); // double dose
-    verdictBox.classList.add('shake');
-    setTimeout(() => verdictBox.classList.remove('shake'), 600);
-  } else if (verdict === 'NO') {
-    skullRain();
-    verdictBox.classList.add('shake');
-    setTimeout(() => verdictBox.classList.remove('shake'), 600);
-  } else if (verdict === 'OH YEAH') {
-    confettiRain();
-    confettiRain(); // double dose
-  } else if (verdict === 'YES') {
-    confettiRain();
+  // Effects — skipped on the silent initial dashboard render
+  if (!silent) {
+    Audio.playVerdict(verdict);
+    if (verdict === 'HELL NO') {
+      skullRain();
+      skullRain(); // double dose
+      verdictBox.classList.add('shake');
+      setTimeout(() => verdictBox.classList.remove('shake'), 600);
+    } else if (verdict === 'NO') {
+      skullRain();
+      verdictBox.classList.add('shake');
+      setTimeout(() => verdictBox.classList.remove('shake'), 600);
+    } else if (verdict === 'OH YEAH') {
+      confettiRain();
+      confettiRain(); // double dose
+    } else if (verdict === 'YES') {
+      confettiRain();
+    }
   }
-
-  // Scroll to results
-  setTimeout(() => {
-    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
 }
 
 // ── CANVAS CHART RENDERER ──
 let chartData = null; // stored for hover
+let chartYMax = null; // persistent Y-axis max — grows to fit, never shrinks on its own
+let chartYMin = 0;    // persistent Y-axis min — drops below 0 only for negative event tracks
+let showSpending = false; // cumulative-spending curve hidden by default
+let eventTrackData = []; // per-event "Event Track" lines, built each calculate()
 
-function renderChart(timeline, retireAge) {
+function renderChart(timeline, retireAge, opts) {
+  opts = opts || {};
   const wrap = document.getElementById('chartWrap');
   const canvas = document.getElementById('chartCanvas');
   const tooltip = document.getElementById('chartTooltip');
@@ -2190,22 +3648,33 @@ function renderChart(timeline, retireAge) {
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
 
-  // Store for hover
-  chartData = { timeline, retireAge, pad, plotW, plotH, W, H };
-
-  const maxVal = Math.max(
-    ...timeline.map(t => t.balance),
-    ...timeline.map(t => t.totalSpent),
-    1
-  );
+  // ── Y-axis range — spans every visible series (event tracks can go negative) ──
+  const visTracks = eventTrackData.filter(tr => tr.visible);
+  const allVals = timeline.map(t => t.netWorth);
+  if (showSpending) timeline.forEach(t => allVals.push(t.totalSpent));
+  visTracks.forEach(tr => tr.points.forEach(p => allVals.push(p.value)));
+  const dataMax = Math.max(...allVals, 1);
+  const dataMin = Math.min(...allVals, 0);
+  // Grow-only Y-axis: stays put as values change, only expands to avoid clipping.
+  if (opts.rescale || chartYMax === null || dataMax > chartYMax) chartYMax = dataMax * 1.12;
+  if (opts.rescale) chartYMin = dataMin < 0 ? dataMin * 1.12 : 0;
+  else if (dataMin < chartYMin) chartYMin = dataMin * 1.12;
+  const maxVal = chartYMax;
+  const minVal = chartYMin;
 
   const ages = timeline.map(t => t.age);
   const minAge = ages[0];
-  const maxAge = ages[ages.length - 1];
+  // The last timeline age is the user's life expectancy.
+  const deathAge = ages[ages.length - 1];
+  // X-axis runs 20 years past life expectancy — breathing room past the death marker.
+  const maxAge = deathAge + 20;
   const ageRange = maxAge - minAge || 1;
 
   function xFor(age) { return pad.left + ((age - minAge) / ageRange) * plotW; }
-  function yFor(val) { return pad.top + plotH - (val / maxVal) * plotH; }
+  function yFor(val) { return pad.top + plotH - ((val - minVal) / (maxVal - minVal)) * plotH; }
+
+  // Store for hover + drag
+  chartData = { timeline, retireAge, deathAge, pad, plotW, plotH, W, H, maxVal, minVal, minAge, maxAge, ageRange };
 
   // ── Gridlines ──
   ctx.strokeStyle = 'rgba(255,255,255,0.06)';
@@ -2219,12 +3688,23 @@ function renderChart(timeline, retireAge) {
     ctx.stroke();
 
     // Y-axis labels
-    const val = maxVal - (maxVal / gridLines) * i;
+    const val = maxVal - ((maxVal - minVal) / gridLines) * i;
     ctx.fillStyle = '#555';
     ctx.font = '10px "Space Mono", monospace';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
     ctx.fillText(fmt(val), pad.left - 8, y);
+  }
+
+  // ── Zero baseline — drawn only when an event track dips below zero ──
+  if (minVal < 0) {
+    const zy = yFor(0);
+    ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, zy);
+    ctx.lineTo(pad.left + plotW, zy);
+    ctx.stroke();
   }
 
   // ── Retirement divider ──
@@ -2239,11 +3719,21 @@ function renderChart(timeline, retireAge) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Label
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.font = '600 10px "Space Mono", monospace';
+    // Label pill — also the grab handle for moving the retirement line
+    ctx.font = '700 10px "Space Mono", monospace';
+    const retLabel = 'RETIRE · ' + retireAge;
+    const retPillW = ctx.measureText(retLabel).width + 16;
+    const retPillH = 16;
+    let retPillX = retireX - retPillW / 2;
+    retPillX = Math.max(pad.left, Math.min(pad.left + plotW - retPillW, retPillX));
+    ctx.fillStyle = 'rgba(255,255,255,0.16)';
+    roundRectPath(ctx, retPillX, pad.top - retPillH - 3, retPillW, retPillH, 5);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
     ctx.textAlign = 'center';
-    ctx.fillText('RETIRE', retireX, pad.top - 6);
+    ctx.textBaseline = 'middle';
+    ctx.fillText(retLabel, retPillX + retPillW / 2, pad.top - retPillH / 2 - 3);
+    ctx.textBaseline = 'alphabetic';
 
     // Shade accumulation phase
     ctx.fillStyle = 'rgba(59, 130, 246, 0.03)';
@@ -2254,22 +3744,51 @@ function renderChart(timeline, retireAge) {
     ctx.fillRect(retireX, pad.top, pad.left + plotW - retireX, plotH);
   }
 
+  // ── Death / life-expectancy divider ──
+  if (deathAge >= minAge && deathAge <= maxAge) {
+    const deathX = xFor(deathAge);
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([2, 5]);
+    ctx.beginPath();
+    ctx.moveTo(deathX, pad.top);
+    ctx.lineTo(deathX, pad.top + plotH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Label pill
+    ctx.font = '700 10px "Space Mono", monospace';
+    const deathLabel = '💀 DEATH · ' + deathAge;
+    const dPillW = ctx.measureText(deathLabel).width + 16;
+    const dPillH = 16;
+    let dPillX = deathX - dPillW / 2;
+    dPillX = Math.max(pad.left, Math.min(pad.left + plotW - dPillW, dPillX));
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    roundRectPath(ctx, dPillX, pad.top - dPillH - 3, dPillW, dPillH, 5);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(deathLabel, dPillX + dPillW / 2, pad.top - dPillH / 2 - 3);
+    ctx.textBaseline = 'alphabetic';
+  }
+
   // ── X-axis labels ──
+  // Stepped across the whole age range — including the margin past life
+  // expectancy — so the extended axis stays labelled to its right edge.
   ctx.fillStyle = '#555';
   ctx.font = '10px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
-  const labelStep = Math.max(1, Math.ceil(timeline.length / 15));
-  timeline.forEach((t, i) => {
-    if (i % labelStep === 0 || i === timeline.length - 1) {
-      ctx.fillText(t.age, xFor(t.age), pad.top + plotH + 8);
-    }
-  });
+  const xStep = [5, 10, 20, 25, 50].find(s => ageRange / s <= 13) || 100;
+  for (let a = Math.ceil(minAge / xStep) * xStep; a <= maxAge; a += xStep) {
+    ctx.fillText(a, xFor(a), pad.top + plotH + 8);
+  }
 
-  // ── Area fill: Portfolio ──
+  // ── Area fill: Net Worth ──
   ctx.beginPath();
   ctx.moveTo(xFor(timeline[0].age), yFor(0));
-  timeline.forEach(t => ctx.lineTo(xFor(t.age), yFor(t.balance)));
+  timeline.forEach(t => ctx.lineTo(xFor(t.age), yFor(t.netWorth)));
   ctx.lineTo(xFor(timeline[timeline.length - 1].age), yFor(0));
   ctx.closePath();
   const gradBlue = ctx.createLinearGradient(0, pad.top, 0, pad.top + plotH);
@@ -2280,7 +3799,7 @@ function renderChart(timeline, retireAge) {
 
   // ── Area fill: Cumulative Spending ──
   const spendPoints = timeline.filter(t => t.totalSpent > 0);
-  if (spendPoints.length > 1) {
+  if (showSpending && spendPoints.length > 1) {
     ctx.beginPath();
     ctx.moveTo(xFor(spendPoints[0].age), yFor(0));
     spendPoints.forEach(t => ctx.lineTo(xFor(t.age), yFor(t.totalSpent)));
@@ -2293,13 +3812,31 @@ function renderChart(timeline, retireAge) {
     ctx.fill();
   }
 
-  // ── Line: Portfolio (with glow) ──
+  // ── Event tracks + net-worth line (drawn under the portfolio line) ──
+  function drawSeries(pts, color, width, dash) {
+    if (!pts || pts.length < 2) return;
+    ctx.save();
+    ctx.beginPath();
+    pts.forEach((p, i) => {
+      const x = xFor(p.age), y = yFor(p.value);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineJoin = 'round';
+    if (dash) ctx.setLineDash(dash);
+    ctx.stroke();
+    ctx.restore();
+  }
+  visTracks.forEach(tr => drawSeries(tr.points, tr.color, 2, [5, 3]));
+
+  // ── Line: Net Worth (with glow) ──
   ctx.save();
   ctx.shadowColor = 'rgba(59, 130, 246, 0.4)';
   ctx.shadowBlur = 8;
   ctx.beginPath();
   timeline.forEach((t, i) => {
-    const x = xFor(t.age), y = yFor(t.balance);
+    const x = xFor(t.age), y = yFor(t.netWorth);
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
   ctx.strokeStyle = '#3b82f6';
@@ -2309,7 +3846,7 @@ function renderChart(timeline, retireAge) {
   ctx.restore();
 
   // ── Line: Cumulative Spending (with glow) ──
-  if (spendPoints.length > 1) {
+  if (showSpending && spendPoints.length > 1) {
     ctx.save();
     ctx.shadowColor = 'rgba(255, 45, 85, 0.4)';
     ctx.shadowBlur = 8;
@@ -2325,6 +3862,72 @@ function renderChart(timeline, retireAge) {
     ctx.restore();
   }
 
+  // ── Draggable point markers on the net-worth line ──
+  timeline.forEach(t => {
+    ctx.beginPath();
+    ctx.arc(xFor(t.age), yFor(t.netWorth), 2.2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(59,130,246,0.9)';
+    ctx.fill();
+  });
+
+  // ── Ghost line: net worth before the in-progress drag ──
+  if (opts.ghost && opts.ghost.length > 1) {
+    ctx.save();
+    ctx.beginPath();
+    opts.ghost.forEach((t, i) => {
+      const x = xFor(t.age), y = yFor(t.netWorth);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5, 4]);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── Drag handle + back-solved value badge ──
+  if (opts.dragInfo) {
+    const di = opts.dragInfo;
+    const hx = xFor(di.age), hy = yFor(di.balance);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(59,130,246,0.35)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(pad.left, hy); ctx.lineTo(pad.left + plotW, hy);
+    ctx.moveTo(hx, pad.top); ctx.lineTo(hx, pad.top + plotH);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(59,130,246,0.7)';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.arc(hx, hy, 8, 0, Math.PI * 2);
+    ctx.fillStyle = di.clamped ? '#fbbf24' : '#3b82f6';
+    ctx.fill();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.font = '700 12px "Space Mono", monospace';
+    const tw = ctx.measureText(di.label).width;
+    const bw = tw + 18, bh = 24;
+    let bx = hx + 16, by = hy - bh / 2;
+    if (bx + bw > pad.left + plotW) bx = hx - 16 - bw;
+    if (bx < pad.left) bx = pad.left;
+    if (by < pad.top) by = pad.top;
+    if (by + bh > pad.top + plotH) by = pad.top + plotH - bh;
+    ctx.fillStyle = di.clamped ? 'rgba(251,191,36,0.96)' : 'rgba(59,130,246,0.96)';
+    roundRectPath(ctx, bx, by, bw, bh, 6);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(di.label, bx + 9, by + bh / 2 + 1);
+  }
+
   // ── Overlay canvas for hover effects ──
   const overlay = document.getElementById('chartOverlay');
   overlay.width = canvas.width;
@@ -2335,6 +3938,7 @@ function renderChart(timeline, retireAge) {
   octx.scale(dpr, dpr);
 
   function onMove(e) {
+    if (dsDrag.active || retDrag.active) return;
     const bounds = canvas.getBoundingClientRect();
     const mx = e.clientX - bounds.left;
     const my = e.clientY - bounds.top;
@@ -2355,7 +3959,7 @@ function renderChart(timeline, retireAge) {
     }
 
     const cx = xFor(closest.age);
-    const cy = yFor(closest.balance);
+    const cy = yFor(closest.netWorth);
 
     // Draw vertical crosshair line
     octx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
@@ -2376,7 +3980,7 @@ function renderChart(timeline, retireAge) {
     octx.lineWidth = 2;
     octx.stroke();
 
-    if (closest.totalSpent > 0) {
+    if (showSpending && closest.totalSpent > 0) {
       const sy = yFor(closest.totalSpent);
       octx.beginPath();
       octx.arc(cx, sy, 5, 0, Math.PI * 2);
@@ -2390,10 +3994,14 @@ function renderChart(timeline, retireAge) {
     // Tooltip content
     const phase = closest.phase === 'accumulation' ? 'Saving' : 'Retired';
     let html = `<div class="tt-age">Age ${closest.age} &middot; ${phase}</div>`;
-    html += `<div class="tt-row"><span class="tt-dot" style="background:#3b82f6"></span> Portfolio: ${fmtFull(closest.balance)}</div>`;
-    if (closest.totalSpent > 0) {
+    html += `<div class="tt-row"><span class="tt-dot" style="background:#3b82f6"></span> Net Worth: ${fmtFull(closest.netWorth)}</div>`;
+    if (showSpending && closest.totalSpent > 0) {
       html += `<div class="tt-row"><span class="tt-dot" style="background:#ff2d55"></span> Total Spent: ${fmtFull(closest.totalSpent)}</div>`;
     }
+    visTracks.forEach(tr => {
+      const p = tr.points.find(pt => pt.age === closest.age);
+      if (p) html += `<div class="tt-row"><span class="tt-dot" style="background:${tr.color}"></span> ${escapeHtml(tr.name)}: ${fmtFull(p.value)}</div>`;
+    });
     tooltip.innerHTML = html;
     tooltip.classList.add('visible');
 
@@ -2416,10 +4024,310 @@ function renderChart(timeline, retireAge) {
   };
 }
 
+// ── DRAG-TO-SOLVE: drag the portfolio line to back-solve a chosen input ──
+let solveTarget = 'monthlyContrib';
+let dsDrag = { active: false };
+let retDrag = { active: false };
+
+// `input` = a sidebar field id; `event` = a built-in event the value writes into.
+const SOLVE_CFG = {
+  monthlyContrib:   { event: 'income',           min: 0,   max: 100000,    step: 50,   label: 'Monthly Savings',      money: true, suffix: '/mo' },
+  currentPortfolio: { input: 'currentPortfolio', min: 0,   max: 100000000, step: 1000, label: 'Starting Portfolio',   money: true, suffix: '' },
+  monthlySpend:     { event: 'spending',         min: 500, max: 100000,    step: 100,  label: 'Monthly Spending',     money: true, suffix: '/mo' },
+};
+
+function roundRectPath(c, x, y, w, h, r) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+
+function dsReadInputs() {
+  return {
+    currentAge: parseInt(document.getElementById('currentAge').value),
+    retireAge: retireAgeOf(),
+    lifespan: parseInt(document.getElementById('lifespan').value),
+    portfolio: parseFloat(document.getElementById('currentPortfolio').value),
+  };
+}
+
+function dsSimulate(base, target, val) {
+  const i = Object.assign({}, base);
+  if (target === 'currentPortfolio') i.portfolio = val;
+  // monthlyContrib / monthlySpend back-solve by overriding the built-in event.
+  const idx = indexWith(e => {
+    if (target === 'monthlyContrib' && e.builtin === 'income') return eventWithPrimaryAmount(e, val);
+    if (target === 'monthlySpend' && e.builtin === 'spending') return eventWithPrimaryAmount(e, -val);
+    return null;
+  });
+  return simulate(i.currentAge, i.retireAge, i.lifespan, i.portfolio, idx);
+}
+
+function dsBalanceAt(sim, age) {
+  const pt = sim.timeline.find(t => t.age === age);
+  return pt ? pt.netWorth : sim.timeline[sim.timeline.length - 1].netWorth;
+}
+
+// Binary-search the chosen input so the portfolio at `age` ≈ targetBalance.
+function dsBackSolve(target, age, targetBalance) {
+  const cfg = SOLVE_CFG[target];
+  const base = dsReadInputs();
+  const balAt = v => dsBalanceAt(dsSimulate(base, target, v), age);
+  let lo = cfg.min, hi = cfg.max;
+  const bLo = balAt(lo), bHi = balAt(hi);
+  if (Math.abs(bHi - bLo) < 1) return { ok: false };       // input can't move this point
+  const increasing = bHi > bLo;
+  const clamped = targetBalance <= Math.min(bLo, bHi) || targetBalance >= Math.max(bLo, bHi);
+  for (let k = 0; k < 50; k++) {
+    const mid = (lo + hi) / 2;
+    if ((balAt(mid) < targetBalance) === increasing) lo = mid; else hi = mid;
+  }
+  return { ok: true, value: (lo + hi) / 2, clamped: clamped };
+}
+
+function dsSnap(target, v) {
+  const cfg = SOLVE_CFG[target];
+  const s = Math.round(v / cfg.step) * cfg.step;
+  return Math.max(cfg.min, Math.min(cfg.max, s));
+}
+
+function dsFormat(target, v) {
+  const cfg = SOLVE_CFG[target];
+  const s = dsSnap(target, v);
+  if (cfg.money) return '$' + Math.round(s).toLocaleString() + (cfg.suffix || '');
+  return s.toFixed(cfg.decimals) + '%';
+}
+
+// Chip selector: pick the free (back-solved) input; the others stay locked.
+document.querySelectorAll('#dragSolver .ds-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    solveTarget = chip.dataset.solve;
+    document.querySelectorAll('#dragSolver .ds-chip').forEach(c => {
+      const on = c === chip;
+      c.classList.toggle('active', on);
+      c.querySelector('.ds-ico').innerHTML = on ? '&#127919;' : '&#128274;';
+    });
+    const note = document.getElementById('dsNote');
+    note.className = 'ds-note';
+    note.innerHTML = 'Drag the blue line &mdash; it back-solves <strong>' +
+      SOLVE_CFG[solveTarget].label + '</strong>. The other three inputs stay locked.';
+  });
+});
+
+// Pointer drag on the chart canvas.
+(function setupChartDrag() {
+  const canvas = document.getElementById('chartCanvas');
+  const note = () => document.getElementById('dsNote');
+
+  function xy(e) {
+    const r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+
+  function nearestPoint(x, y) {
+    if (!chartData) return null;
+    const c = chartData;
+    let best = null, bd = Infinity;
+    c.timeline.forEach(t => {
+      const px = c.pad.left + ((t.age - c.minAge) / c.ageRange) * c.plotW;
+      const py = c.pad.top + c.plotH - ((t.netWorth - c.minVal) / (c.maxVal - c.minVal)) * c.plotH;
+      const d = Math.hypot(px - x, py - y);
+      if (d < bd) { bd = d; best = t; }
+    });
+    return (best && bd < 22) ? best : null;
+  }
+
+  function retireLineX() {
+    const c = chartData;
+    return c.pad.left + ((c.retireAge - c.minAge) / c.ageRange) * c.plotW;
+  }
+
+  function nearRetireLine(x, y) {
+    if (!chartData) return false;
+    const c = chartData;
+    return Math.abs(x - retireLineX()) < 11 && y >= c.pad.top - 20 && y <= c.pad.top + c.plotH;
+  }
+
+  canvas.addEventListener('pointermove', e => {
+    if (dsDrag.active || retDrag.active || !chartData) return;
+    const p = xy(e);
+    if (nearRetireLine(p.x, p.y)) { canvas.style.cursor = 'ew-resize'; return; }
+    canvas.style.cursor = nearestPoint(p.x, p.y) ? 'grab' : 'crosshair';
+  });
+
+  canvas.addEventListener('pointerdown', e => {
+    if (!chartData) return;
+    const p = xy(e);
+    if (nearRetireLine(p.x, p.y)) {
+      retDrag = { active: true, age: chartData.retireAge, moved: false, lastE: e };
+      try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+      canvas.style.cursor = 'ew-resize';
+      document.getElementById('chartTooltip').classList.remove('visible');
+      e.preventDefault();
+      return;
+    }
+    const pt = nearestPoint(p.x, p.y);
+    if (!pt) return;
+    const probe = dsBackSolve(solveTarget, pt.age, pt.netWorth);
+    if (!probe.ok) {
+      note().className = 'ds-note warn';
+      note().innerHTML = '&#9888;&#65039; <strong>' + SOLVE_CFG[solveTarget].label +
+        '</strong> can’t move the line at age ' + pt.age +
+        '. Pick another input, or grab a point in a phase it affects.';
+      return;
+    }
+    dsDrag = {
+      active: true, age: pt.age,
+      ghost: chartData.timeline, retireAge: chartData.retireAge,
+      moved: false, value: null, lastE: e,
+    };
+    try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+    canvas.style.cursor = 'grabbing';
+    document.getElementById('chartTooltip').classList.remove('visible');
+    e.preventDefault();
+  });
+
+  let raf = null;
+  window.addEventListener('pointermove', e => {
+    if (dsDrag.active) dsDrag.lastE = e;
+    else if (retDrag.active) retDrag.lastE = e;
+    else return;
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = null;
+      if (dsDrag.active) update();
+      else if (retDrag.active) updateRet();
+    });
+  });
+
+  function update() {
+    if (!dsDrag.active || !chartData) return;
+    const c = chartData;
+    const y = xy(dsDrag.lastE).y;
+    let tb = c.minVal + (c.pad.top + c.plotH - y) / c.plotH * (c.maxVal - c.minVal);
+    tb = Math.max(0, Math.min(c.maxVal, tb));
+    const sol = dsBackSolve(solveTarget, dsDrag.age, tb);
+    if (!sol.ok) return;
+    dsDrag.moved = true;
+    dsDrag.value = sol.value;
+    const cfg = SOLVE_CFG[solveTarget];
+    const sim = dsSimulate(dsReadInputs(), solveTarget, sol.value);
+    renderChart(sim.timeline, dsDrag.retireAge, {
+      ghost: dsDrag.ghost,
+      dragInfo: {
+        age: dsDrag.age,
+        balance: dsBalanceAt(sim, dsDrag.age),
+        label: cfg.label + ': ' + dsFormat(solveTarget, sol.value) + (sol.clamped ? ' (limit)' : ''),
+        clamped: sol.clamped,
+      },
+    });
+  }
+
+  function updateRet() {
+    if (!retDrag.active || !chartData) return;
+    const c = chartData;
+    const b = dsReadInputs();
+    const mx = xy(retDrag.lastE).x;
+    let age = Math.round(c.minAge + ((mx - c.pad.left) / c.plotW) * c.ageRange);
+    age = Math.max(b.currentAge + 1, Math.min(b.lifespan - 1, age));
+    retDrag.age = age;
+    retDrag.moved = true;
+    // Preview: the Retirement event shifted so it starts at the dragged age.
+    const idx = indexWith(e => e.builtin === 'spending' ? eventShiftedTo(e, age) : null);
+    const sim = simulate(b.currentAge, age, b.lifespan, b.portfolio, idx);
+    renderChart(sim.timeline, age, {});
+  }
+
+  function retEnd(e) {
+    retDrag.active = false;
+    canvas.style.cursor = 'crosshair';
+    try { canvas.releasePointerCapture(e.pointerId); } catch (_) {}
+    if (!retDrag.moved || retDrag.age == null) return;
+    // Move the Retirement event's trigger — that IS the retirement age.
+    const retEvt = lifeEvents.find(ev => ev.builtin === 'spending');
+    if (retEvt) {
+      shiftEffectAges(retEvt, retDrag.age - retEvt.triggerAge);
+      retEvt.triggerAge = retDrag.age;
+    }
+    if (activeProfile !== -1) { activeProfile = -1; renderProfiles(); }
+    renderEventList();
+    note().className = 'ds-note ok';
+    note().innerHTML = '&#10003; <strong>Retirement age</strong> moved to <strong>' + retDrag.age + '</strong>. Verdict updated below.';
+    calculate();
+  }
+
+  function end(e) {
+    if (retDrag.active) { retEnd(e); return; }
+    if (!dsDrag.active) return;
+    dsDrag.active = false;
+    canvas.style.cursor = 'crosshair';
+    try { canvas.releasePointerCapture(e.pointerId); } catch (_) {}
+    if (!dsDrag.moved || dsDrag.value == null) return;
+    const cfg = SOLVE_CFG[solveTarget];
+    const finalVal = dsSnap(solveTarget, dsDrag.value);
+    if (cfg.event) {
+      // Write the back-solved amount into the built-in event's primary effect.
+      const evt = lifeEvents.find(ev => ev.builtin === cfg.event);
+      if (evt && evt.effects[0]) {
+        evt.effects[0].monthlyAmount = (cfg.event === 'spending' ? -1 : 1) * finalVal;
+      }
+      if (activeProfile !== -1) { activeProfile = -1; renderProfiles(); }
+      renderEventList();
+    } else {
+      const el = document.getElementById(cfg.input);
+      el.value = finalVal;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      const grp = el.closest('.field');
+      if (grp) { grp.classList.remove('input-flash'); void grp.offsetWidth; grp.classList.add('input-flash'); }
+    }
+    note().className = 'ds-note ok';
+    note().innerHTML = '&#10003; <strong>' + cfg.label + '</strong> back-solved to <strong>' +
+      dsFormat(solveTarget, finalVal) + '</strong>. Verdict updated below.';
+    calculate();
+  }
+
+  window.addEventListener('pointerup', end);
+  window.addEventListener('pointercancel', end);
+})();
+
+// Rescale button — refit the Y-axis to the current curve on demand
+document.getElementById('rescaleBtn').addEventListener('click', () => {
+  if (chartData) renderChart(chartData.timeline, chartData.retireAge, { rescale: true });
+});
+
+// Cumulative-spending curve toggle (hidden by default; click the legend entry)
+document.getElementById('spendToggle').addEventListener('click', () => {
+  showSpending = !showSpending;
+  document.getElementById('spendToggle').classList.toggle('off', !showSpending);
+  if (chartData) renderChart(chartData.timeline, chartData.retireAge);
+});
+
+// Compounding mode toggle (monthly = realistic, annual = matches the Excel model)
+document.querySelectorAll('#compoundToggle .seg-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (compounding === btn.dataset.mode) return;
+    compounding = btn.dataset.mode;
+    document.querySelectorAll('#compoundToggle .seg-btn').forEach(b => b.classList.toggle('active', b === btn));
+    calculate();
+  });
+});
+
 // Handle resize
 window.addEventListener('resize', () => {
   if (chartData) renderChart(chartData.timeline, chartData.retireAge);
 });
+
+// Hand-editing any input means the inputs no longer match a saved profile.
+document.querySelector('.side-fields').addEventListener('input', () => {
+  if (activeProfile !== -1) { activeProfile = -1; renderProfiles(); }
+});
+
+// ── Initial dashboard render (silent: no audio / confetti / skulls) ──
+applyProfile(0, true);
 </script>
 </body>
 </html>
