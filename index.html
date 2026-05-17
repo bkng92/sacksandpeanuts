@@ -1533,15 +1533,15 @@
         <div class="section-title">About You</div>
         <div class="field">
           <label for="currentAge" title="How many years you've spent not saving enough.">Current age</label>
-          <div class="field-control"><input type="number" id="currentAge" value="46" min="16" max="90"></div>
+          <div class="field-control"><input type="number" id="currentAge" value="42" min="16" max="90"></div>
         </div>
         <div class="field">
           <label for="lifespan" title="How long you expect to live. Optimistic or realistic? Your call.">Life expectancy</label>
-          <div class="field-control"><input type="number" id="lifespan" value="160" min="50" max="250"></div>
+          <div class="field-control"><input type="number" id="lifespan" value="90" min="50" max="250"></div>
         </div>
         <div class="field">
           <label for="currentPortfolio" title="Everything you've got invested right now.">Current portfolio</label>
-          <div class="field-control"><span class="affix">$</span><input type="number" id="currentPortfolio" value="2000000" min="0" max="100000000" step="1000"></div>
+          <div class="field-control"><span class="affix">$</span><input type="number" id="currentPortfolio" value="1100000" min="0" max="100000000" step="1000"></div>
         </div>
       </div>
 
@@ -2163,6 +2163,24 @@ function retireAgeOf() {
   return e ? e.triggerAge : 65;
 }
 
+// Keep the built-in events' ages consistent so nothing goes stale:
+//  • Working Income always starts at the current age.
+//  • The Retirement event's trigger age tracks its "living costs" from-age
+//    (they're the same thing — the age your retirement spending begins).
+// Run before every projection.
+function reconcileBuiltins() {
+  const ca = parseInt(document.getElementById('currentAge').value) || 0;
+  const ret = lifeEvents.find(e => e.builtin === 'spending');
+  if (ret && ret.effects[0] && ret.effects[0].startAge != null) {
+    ret.triggerAge = ret.effects[0].startAge;
+  }
+  const inc = lifeEvents.find(e => e.builtin === 'income');
+  if (inc) {
+    inc.triggerAge = ca;
+    if (inc.effects[0] && inc.effects[0].kind === 'recurring') inc.effects[0].startAge = ca;
+  }
+}
+
 // Growth % allocation at a given age, from the Strategy event's glidepath.
 function strategyEquityAt(age) {
   const s = lifeEvents.find(ev => ev.builtin === 'strategy');
@@ -2351,7 +2369,9 @@ function renderEventList() {
     const chev = e.collapsed ? '▸ ' : '▾ ';
     const sub = chev + (strat
       ? 'built-in &middot; portfolio growth'
-      : (e.builtin ? 'built-in &middot; ' : '') + `age ${e.triggerAge}`);
+      : e.builtin
+        ? 'built-in'
+        : `age ${e.triggerAge}`);
     const eye = strat ? '' :
       `<button type="button" class="evt-btn evt-eye${e.visible ? ' on' : ''}" data-i="${i}" data-act="vis" title="Show this track on the graph">👁</button>`;
     return `<div class="evt-item">
@@ -2800,16 +2820,16 @@ document.addEventListener('keydown', e => {
 const PROFILES = [
   {
     name: 'Dilemma Millionaire',
-    blurb: 'The factory default — $2M at 46, retire today, somehow live to 160.',
+    blurb: 'The factory default — retire at 42 on $1.1M, draw $3K a month, and hope it stretches to 90.',
     fields: {
-      currentAge: 46, lifespan: 160,
-      currentPortfolio: 2000000, inflation: 2.5,
+      currentAge: 42, lifespan: 90,
+      currentPortfolio: 1100000, inflation: 2.5,
     },
     compounding: 'annual',
-    income: { monthly: 0, growth: 0, startAge: 46, endAge: 46 },
-    retirement: { monthly: 5000, age: 46 },
+    income: { monthly: 0, growth: 0, startAge: 42, endAge: 42 },
+    retirement: { monthly: 3000, age: 42 },
     strategy: { growthReturn: 8, stableReturn: 4,
-      glide: [{ age: 25, equity: 50 }, { age: 55, equity: 40 }, { age: 65, equity: 30 }, { age: 75, equity: 20 }] },
+      glide: [{ age: 42, equity: 30 }, { age: 51, equity: 20 }, { age: 61, equity: 10 }] },
     events: [],
   },
   {
@@ -3370,6 +3390,9 @@ function calculate(silent) {
     alert("Your life expectancy needs to be older than your current age. Otherwise this is less a retirement plan and more an obituary.");
     return;
   }
+
+  // Keep the built-in events' ages consistent before projecting.
+  reconcileBuiltins();
 
   // Retirement age = the Retirement event's trigger, clamped into the timeline.
   const retEvt = lifeEvents.find(e => e.builtin === 'spending');
@@ -4324,6 +4347,13 @@ window.addEventListener('resize', () => {
 // Hand-editing any input means the inputs no longer match a saved profile.
 document.querySelector('.side-fields').addEventListener('input', () => {
   if (activeProfile !== -1) { activeProfile = -1; renderProfiles(); }
+});
+
+// Changing the current age snaps the built-in events to it and re-projects.
+document.getElementById('currentAge').addEventListener('input', () => {
+  reconcileBuiltins();
+  renderEventList();
+  calculate(true);
 });
 
 // ── Initial dashboard render (silent: no audio / confetti / skulls) ──
