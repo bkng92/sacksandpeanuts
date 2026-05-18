@@ -220,7 +220,13 @@
     border-color: var(--blue);
   }
 
-  /* ── FIELD SECTIONS ── */
+  /* ── FIELD SECTIONS (collapsible cards) ── */
+  .field-section {
+    background: var(--card-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.5rem 0.85rem 0.7rem;
+  }
   .section-title {
     font-family: 'Space Mono', monospace;
     font-size: 0.6rem;
@@ -228,9 +234,29 @@
     text-transform: uppercase;
     color: var(--accent);
     padding-bottom: 0.4rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.45rem;
     border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    user-select: none;
   }
+  .section-title::-webkit-details-marker { display: none; }
+  .section-title::before {
+    content: '\25BE';
+    font-size: 0.65rem;
+    color: var(--muted);
+    transition: transform .15s ease;
+  }
+  .section-title:hover { color: #ff5d7a; }
+  .field-section:not([open]) > .section-title {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .field-section:not([open]) > .section-title::before { transform: rotate(-90deg); }
 
   .field {
     display: flex;
@@ -743,6 +769,12 @@
     flex-shrink: 0;
   }
 
+  .chart-tooltip .tt-mk {
+    font-size: 0.64rem;
+    color: var(--muted);
+    padding-left: 0.05rem;
+  }
+
   .chart-legend {
     display: flex;
     gap: 1.5rem;
@@ -773,7 +805,7 @@
   .chart-legend .legend-toggle.off { opacity: 0.45; }
   .chart-legend .legend-toggle.off .dot {
     background: transparent !important;
-    border: 2px solid #ff2d55;
+    border: 2px solid var(--lc, #ff2d55);
   }
 
   .chart-head {
@@ -1466,6 +1498,30 @@
   }
   .evt-add-fx button:hover { border-color: var(--accent); color: var(--fg); }
 
+  /* Advanced (raw effects) disclosure inside a typed event's friendly form */
+  .tf-adv { margin-top: 0.7rem; }
+  .tf-adv summary {
+    cursor: pointer;
+    list-style: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.35rem 0;
+  }
+  .tf-adv summary::-webkit-details-marker { display: none; }
+  .tf-adv summary::before { content: '\25B8  '; }
+  .tf-adv[open] summary::before { content: '\25BE  '; }
+  .tf-adv summary:hover { color: var(--fg); }
+  .tf-adv-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    line-height: 1.5;
+    color: var(--muted-dim);
+    margin: 0.1rem 0 0.55rem;
+  }
+
   .evt-modal-actions {
     display: flex;
     gap: 0.6rem;
@@ -1529,8 +1585,8 @@
 
     <div class="side-fields">
 
-      <div class="field-section">
-        <div class="section-title">About You</div>
+      <details class="field-section" open>
+        <summary class="section-title">About You</summary>
         <div class="field">
           <label for="currentAge" title="How many years you've spent not saving enough.">Current age</label>
           <div class="field-control"><input type="number" id="currentAge" value="42" min="16" max="90"></div>
@@ -1543,17 +1599,17 @@
           <label for="currentPortfolio" title="Everything you've got invested right now.">Current portfolio</label>
           <div class="field-control"><span class="affix">$</span><input type="number" id="currentPortfolio" value="1100000" min="0" max="100000000" step="1000"></div>
         </div>
-      </div>
+      </details>
 
-      <div class="field-section">
-        <div class="section-title">Life Events</div>
+      <details class="field-section" open>
+        <summary class="section-title">Life Events</summary>
         <div class="glide-title">Your money timeline <span>income, retirement &amp; one-off events &mdash; each is a track</span></div>
         <div id="eventList"></div>
         <button type="button" class="glide-add" onclick="openEventPicker()">+ add life event</button>
-      </div>
+      </details>
 
-      <div class="field-section">
-        <div class="section-title">Assumptions</div>
+      <details class="field-section" open>
+        <summary class="section-title">Assumptions</summary>
         <div class="field">
           <label for="inflation" title="Long-run average is about 3%. Your grocery bill may disagree.">Inflation</label>
           <div class="field-control"><input type="number" id="inflation" value="2.5" min="1" max="10" step="0.5"><span class="affix">%</span></div>
@@ -1565,7 +1621,7 @@
             <button type="button" class="seg-btn active" data-mode="annual">Annual</button>
           </div>
         </div>
-      </div>
+      </details>
 
     </div>
 
@@ -1588,7 +1644,7 @@
       <div class="chart-sub">Hover to inspect. Drag the blue line to back-solve an input, or drag the RETIRE marker to move your retirement age.</div>
       <div class="drag-solver" id="dragSolver">
         <span class="ds-label">Drag solves for</span>
-        <button type="button" class="ds-chip active" data-solve="monthlyContrib"><span class="ds-ico">&#127919;</span><span>Monthly Savings</span></button>
+        <button type="button" class="ds-chip active" data-solve="monthlyContrib"><span class="ds-ico">&#127919;</span><span>Monthly Salary</span></button>
         <button type="button" class="ds-chip" data-solve="currentPortfolio"><span class="ds-ico">&#128274;</span><span>Starting Portfolio</span></button>
         <button type="button" class="ds-chip" data-solve="monthlySpend"><span class="ds-ico">&#128274;</span><span>Monthly Spending</span></button>
       </div>
@@ -1599,8 +1655,9 @@
         <div class="chart-tooltip" id="chartTooltip"></div>
       </div>
       <div class="chart-legend">
-        <span><span class="dot" style="background:#3b82f6"></span> Net Worth</span>
-        <span id="spendToggle" class="legend-toggle off" title="Show / hide the cumulative spending curve"><span class="dot" style="background:#ff2d55"></span> Cumulative Spending</span>
+        <span id="nwToggle" class="legend-toggle" title="Show / hide the net-worth curve"><span class="dot" style="background:#3b82f6;--lc:#3b82f6"></span> Net Worth</span>
+        <span id="cashToggle" class="legend-toggle off" title="Show / hide the liquid cash (portfolio balance) curve"><span class="dot" style="background:#22d3ee;--lc:#22d3ee"></span> Cash</span>
+        <span id="spendToggle" class="legend-toggle off" title="Show / hide the cumulative spending curve"><span class="dot" style="background:#ff2d55;--lc:#ff2d55"></span> Cumulative Spending</span>
         <span><span class="dot" style="background:rgba(255,255,255,0.15)"></span> Retirement Starts</span>
         <span><span class="dot" style="background:rgba(255,255,255,0.4)"></span> Life Expectancy</span>
       </div>
@@ -2021,91 +2078,216 @@ function mkInvestment(label, capital, capitalPct, growthReturn, stableReturn, eq
 const EVENT_TYPES = {
   property: {
     icon: '🏠', label: 'Property Purchase', defaultName: 'Property Purchase',
-    blurb: 'Downpayment, mortgage, upkeep, appreciation, sale.',
-    build: a => [
-      mkOneTime('Downpayment', -150000, a),
-      mkRecurring('Mortgage payment', -3200, a, a + 25, false, 0),
-      mkRecurring('Property tax & upkeep', -400, a, a + 40, true, 0),
-      mkAsset('Property value', 750000, a, 3, a + 28),
+    blurb: 'Buy a home — and the mortgage that owns you back.',
+    // Friendly inputs the user edits; `compile` translates them into the raw
+    // effects the engine reads. `a` = the event's trigger age.
+    fields: [
+      { key: 'price',         label: 'Home price $',          step: 10000 },
+      { key: 'downPayment',   label: 'Down payment $',        step: 5000 },
+      { key: 'mortgage',      label: 'Mortgage $/mo',         step: 100 },
+      { key: 'mortgageYears', label: 'Mortgage length (yrs)', step: 1 },
+      { key: 'upkeep',        label: 'Tax & upkeep $/mo',     step: 50 },
+      { key: 'appreciation',  label: 'Appreciation %/yr',     step: 0.5, min: -50 },
+      { key: 'sellAfter',     label: 'Sell after (yrs)',      step: 1 },
     ],
+    defaults: a => ({
+      price: 750000, downPayment: 150000, mortgage: 3200, mortgageYears: 25,
+      upkeep: 400, appreciation: 3, sellAfter: 28,
+    }),
+    compile: (p, a) => {
+      const sellAge = a + Math.max(1, Math.round(p.sellAfter || 0));
+      const fx = [];
+      if (p.downPayment) fx.push(mkOneTime('Down payment', -p.downPayment, a));
+      if (p.mortgage && p.mortgageYears > 0)
+        // mortgage ends when it's paid off OR when the property sells — whichever first
+        fx.push(mkRecurring('Mortgage payment', -p.mortgage, a, Math.min(a + Math.round(p.mortgageYears), sellAge), false, 0));
+      if (p.upkeep) fx.push(mkRecurring('Property tax & upkeep', -p.upkeep, a, sellAge, true, 0));
+      fx.push(mkAsset('Property value', p.price || 0, a, p.appreciation || 0, sellAge));
+      return fx;
+    },
   },
   business: {
     icon: '☕', label: 'Start a Business', defaultName: 'Business',
-    blurb: 'Startup capital, early losses, then growing profit.',
-    build: a => [
-      mkOneTime('Initial capital', -80000, a),
-      mkRecurring('Operating loss buffer', -2000, a, a + 2, false, 0),
-      mkRecurring('Business profit', 4000, a + 2, a + 15, false, 5),
-      mkAsset('Business valuation', 150000, a, 6, a + 15),
+    blurb: 'Bet on yourself: bleed cash early, then (maybe) print it.',
+    fields: [
+      { key: 'capital',         label: 'Startup capital $',     step: 5000 },
+      { key: 'lossMonthly',     label: 'Early loss $/mo',       step: 250 },
+      { key: 'lossYears',       label: 'Loss period (yrs)',     step: 1 },
+      { key: 'profitMonthly',   label: 'Profit $/mo',           step: 250 },
+      { key: 'profitGrowth',    label: 'Profit growth %/yr',    step: 0.5, min: -100 },
+      { key: 'runYears',        label: 'Years running (yrs)',   step: 1 },
+      { key: 'valuation',       label: 'Sale valuation $',      step: 10000 },
+      { key: 'valuationGrowth', label: 'Valuation growth %/yr', step: 0.5, min: -100 },
     ],
+    defaults: a => ({
+      capital: 80000, lossMonthly: 2000, lossYears: 2, profitMonthly: 4000,
+      profitGrowth: 5, runYears: 15, valuation: 150000, valuationGrowth: 6,
+    }),
+    compile: (p, a) => {
+      const end = a + Math.max(1, Math.round(p.runYears || 0));
+      const lossEnd = a + Math.max(0, Math.round(p.lossYears || 0));
+      const fx = [];
+      if (p.capital) fx.push(mkOneTime('Initial capital', -p.capital, a));
+      if (p.lossMonthly && lossEnd > a) fx.push(mkRecurring('Operating loss', -p.lossMonthly, a, lossEnd, false, 0));
+      if (p.profitMonthly && end > lossEnd) fx.push(mkRecurring('Business profit', p.profitMonthly, lossEnd, end, false, p.profitGrowth || 0));
+      if (p.valuation) fx.push(mkAsset('Business valuation', p.valuation, a, p.valuationGrowth || 0, end));
+      return fx;
+    },
   },
   child: {
     icon: '👶', label: 'Have a Child', defaultName: 'Child',
-    blurb: 'Delivery, childcare, school, university, daily costs.',
-    build: a => [
-      mkOneTime('Delivery & setup', -8000, a),
-      mkRecurring('Childcare', -1500, a, a + 6, false, 0),
-      mkRecurring('School fees', -800, a + 6, a + 18, false, 0),
-      mkOneTime('University fund', -120000, a + 18),
-      mkRecurring('Daily expenses', -600, a, a + 22, true, 0),
+    blurb: 'A tiny human with a lifelong taste for your money.',
+    fields: [
+      { key: 'delivery',       label: 'Delivery & setup $',    step: 1000 },
+      { key: 'childcare',      label: 'Childcare $/mo',        step: 100 },
+      { key: 'childcareYears', label: 'Childcare (yrs)',       step: 1 },
+      { key: 'school',         label: 'School fees $/mo',      step: 100 },
+      { key: 'schoolUntil',    label: 'School until (yrs)',    step: 1 },
+      { key: 'university',     label: 'University fund $',     step: 10000 },
+      { key: 'daily',          label: 'Daily expenses $/mo',   step: 100 },
+      { key: 'supportUntil',   label: 'Supported until (yrs)', step: 1 },
     ],
+    defaults: a => ({
+      delivery: 8000, childcare: 1500, childcareYears: 6, school: 800,
+      schoolUntil: 18, university: 120000, daily: 600, supportUntil: 22,
+    }),
+    compile: (p, a) => {
+      const ccEnd = a + Math.max(0, Math.round(p.childcareYears || 0));
+      const schoolEnd = a + Math.max(0, Math.round(p.schoolUntil || 0));
+      const supportEnd = a + Math.max(0, Math.round(p.supportUntil || 0));
+      const fx = [];
+      if (p.delivery) fx.push(mkOneTime('Delivery & setup', -p.delivery, a));
+      if (p.childcare && ccEnd > a) fx.push(mkRecurring('Childcare', -p.childcare, a, ccEnd, false, 0));
+      if (p.school && schoolEnd > ccEnd) fx.push(mkRecurring('School fees', -p.school, ccEnd, schoolEnd, false, 0));
+      if (p.university) fx.push(mkOneTime('University fund', -p.university, schoolEnd));
+      if (p.daily && supportEnd > a) fx.push(mkRecurring('Daily expenses', -p.daily, a, supportEnd, true, 0));
+      return fx;
+    },
   },
   wedding: {
     icon: '💍', label: 'Wedding', defaultName: 'Wedding',
-    blurb: 'Ceremony, honeymoon, gifts received.',
-    build: a => [
-      mkOneTime('Wedding ceremony', -50000, a),
-      mkOneTime('Honeymoon', -15000, a),
-      mkOneTime('Gifts received', 20000, a),
+    blurb: 'One big day, one big bill — minus the gift haul.',
+    fields: [
+      { key: 'ceremony',  label: 'Ceremony $',       step: 5000 },
+      { key: 'honeymoon', label: 'Honeymoon $',      step: 2500 },
+      { key: 'gifts',     label: 'Gifts received $', step: 2500 },
     ],
+    defaults: a => ({ ceremony: 50000, honeymoon: 15000, gifts: 20000 }),
+    compile: (p, a) => {
+      const fx = [];
+      if (p.ceremony) fx.push(mkOneTime('Wedding ceremony', -p.ceremony, a));
+      if (p.honeymoon) fx.push(mkOneTime('Honeymoon', -p.honeymoon, a));
+      if (p.gifts) fx.push(mkOneTime('Gifts received', p.gifts, a));
+      return fx;
+    },
   },
   windfall: {
     icon: '🎰', label: 'Windfall / Jackpot', defaultName: 'Windfall',
-    blurb: 'A lump sum lands — minus the taxman.',
-    build: a => [
-      mkOneTime('Lump sum', 300000, a),
-      mkOneTime('Tax on windfall', -30000, a),
+    blurb: 'Money falls from the sky. The taxman grabs his cut.',
+    fields: [
+      { key: 'amount', label: 'Windfall amount $', step: 10000 },
+      { key: 'tax',    label: 'Tax paid $',        step: 5000 },
     ],
+    defaults: a => ({ amount: 300000, tax: 30000 }),
+    compile: (p, a) => {
+      const fx = [];
+      if (p.amount) fx.push(mkOneTime('Lump sum', p.amount, a));
+      if (p.tax) fx.push(mkOneTime('Tax on windfall', -p.tax, a));
+      return fx;
+    },
   },
   career: {
     icon: '📈', label: 'Career Change', defaultName: 'Career Change',
-    blurb: 'Salary jump, signing bonus, lost benefits.',
-    build: a => [
-      mkRecurring('Salary increase', 2000, a, a + 20, true, 0),
-      mkOneTime('Signing bonus', 30000, a),
-      mkOneTime('Lost benefits / transfer', -10000, a),
+    blurb: 'New job, bigger paycheck, a bonus, some switching costs.',
+    fields: [
+      { key: 'raise',        label: 'Extra income $/mo',  step: 250 },
+      { key: 'raiseYears',   label: 'For how long (yrs)', step: 1 },
+      { key: 'bonus',        label: 'Signing bonus $',    step: 5000 },
+      { key: 'lostBenefits', label: 'Lost benefits $',    step: 2500 },
     ],
+    defaults: a => ({ raise: 2000, raiseYears: 20, bonus: 30000, lostBenefits: 10000 }),
+    compile: (p, a) => {
+      const end = a + Math.max(0, Math.round(p.raiseYears || 0));
+      const fx = [];
+      if (p.raise && end > a) fx.push(mkRecurring('Salary increase', p.raise, a, end, true, 0));
+      if (p.bonus) fx.push(mkOneTime('Signing bonus', p.bonus, a));
+      if (p.lostBenefits) fx.push(mkOneTime('Lost benefits / transfer', -p.lostBenefits, a));
+      return fx;
+    },
   },
   accident: {
     icon: '🏥', label: 'Accident or Illness', defaultName: 'Health Incident',
-    blurb: 'Medical bills, insurance payout, lost income.',
-    build: a => [
-      mkOneTime('Medical bills', -80000, a),
-      mkOneTime('Insurance payout', 50000, a),
-      mkRecurring('Reduced income', -3000, a, a + 2, false, 0),
-      mkRecurring('Ongoing treatment', -500, a, a + 30, true, 0),
+    blurb: 'Life hits back — bills, a payout, and time off work.',
+    fields: [
+      { key: 'medical',         label: 'Medical bills $',        step: 5000 },
+      { key: 'insurance',       label: 'Insurance payout $',     step: 5000 },
+      { key: 'lostIncome',      label: 'Lost income $/mo',       step: 250 },
+      { key: 'lostIncomeYears', label: 'Lost income (yrs)',      step: 1 },
+      { key: 'treatment',       label: 'Ongoing treatment $/mo', step: 100 },
+      { key: 'treatmentYears',  label: 'Treatment (yrs)',        step: 1 },
     ],
+    defaults: a => ({
+      medical: 80000, insurance: 50000, lostIncome: 3000,
+      lostIncomeYears: 2, treatment: 500, treatmentYears: 30,
+    }),
+    compile: (p, a) => {
+      const incEnd = a + Math.max(0, Math.round(p.lostIncomeYears || 0));
+      const trEnd = a + Math.max(0, Math.round(p.treatmentYears || 0));
+      const fx = [];
+      if (p.medical) fx.push(mkOneTime('Medical bills', -p.medical, a));
+      if (p.insurance) fx.push(mkOneTime('Insurance payout', p.insurance, a));
+      if (p.lostIncome && incEnd > a) fx.push(mkRecurring('Reduced income', -p.lostIncome, a, incEnd, false, 0));
+      if (p.treatment && trEnd > a) fx.push(mkRecurring('Ongoing treatment', -p.treatment, a, trEnd, true, 0));
+      return fx;
+    },
   },
   car: {
     icon: '🚗', label: 'Buy a Car', defaultName: 'Car',
-    blurb: 'Downpayment, loan, upkeep, depreciation, resale.',
-    build: a => [
-      mkOneTime('Downpayment', -15000, a),
-      mkRecurring('Car loan', -600, a, a + 7, false, 0),
-      mkRecurring('Insurance & maintenance', -200, a, a + 12, true, 0),
-      mkAsset('Car value', 40000, a, -15, a + 7),
+    blurb: 'Four wheels that shed value the moment you drive off.',
+    fields: [
+      { key: 'price',        label: 'Car price $',             step: 2500 },
+      { key: 'downPayment',  label: 'Down payment $',          step: 1000 },
+      { key: 'loan',         label: 'Loan $/mo',               step: 50 },
+      { key: 'loanYears',    label: 'Loan length (yrs)',       step: 1 },
+      { key: 'upkeep',       label: 'Insurance & upkeep $/mo', step: 25 },
+      { key: 'depreciation', label: 'Value change %/yr',       step: 1, min: -100 },
+      { key: 'sellAfter',    label: 'Sell after (yrs)',        step: 1 },
     ],
+    defaults: a => ({
+      price: 40000, downPayment: 15000, loan: 600, loanYears: 7,
+      upkeep: 200, depreciation: -15, sellAfter: 7,
+    }),
+    compile: (p, a) => {
+      const sellAge = a + Math.max(1, Math.round(p.sellAfter || 0));
+      const fx = [];
+      if (p.downPayment) fx.push(mkOneTime('Down payment', -p.downPayment, a));
+      if (p.loan && p.loanYears > 0)
+        // loan ends when paid off OR when the car is sold — whichever first
+        fx.push(mkRecurring('Car loan', -p.loan, a, Math.min(a + Math.round(p.loanYears), sellAge), false, 0));
+      if (p.upkeep) fx.push(mkRecurring('Insurance & upkeep', -p.upkeep, a, sellAge, true, 0));
+      fx.push(mkAsset('Car value', p.price || 0, a, p.depreciation || 0, sellAge));
+      return fx;
+    },
   },
   investment: {
     icon: '💹', label: 'Make an Investment', defaultName: 'Investment',
-    blurb: 'Move cash into a fund that compounds — then cash out.',
-    build: a => [
-      mkInvestment('Invested capital', 25, true, 8, 4, 70, a, a + 20),
+    blurb: 'Park cash somewhere it compounds, then cash out.',
+    fields: [
+      { key: 'amount',       label: 'Capital invested $',   step: 5000 },
+      { key: 'years',        label: 'Years invested (yrs)', step: 1 },
+      { key: 'growthReturn', label: 'Growth return %/yr',   step: 0.5, min: -100 },
+      { key: 'stableReturn', label: 'Stable return %/yr',   step: 0.5, min: -100 },
+      { key: 'equityPct',    label: '% in growth assets',   step: 5 },
+    ],
+    defaults: a => ({ amount: 50000, years: 20, growthReturn: 8, stableReturn: 4, equityPct: 70 }),
+    compile: (p, a) => [
+      mkInvestment('Invested capital', p.amount || 0, false, p.growthReturn || 0,
+        p.stableReturn || 0, p.equityPct || 0, a, a + Math.max(1, Math.round(p.years || 0))),
     ],
   },
   custom: {
     icon: '✨', label: 'Custom Event', defaultName: 'Custom Event',
-    blurb: 'Start blank and build your own effects.',
+    blurb: 'A blank slate — wire up any cash flow yourself.',
     build: a => [mkOneTime('One-time amount', -10000, a)],
   },
 };
@@ -2113,26 +2295,42 @@ const EVENT_TYPES = {
 function createEvent(typeKey) {
   const t = EVENT_TYPES[typeKey] || EVENT_TYPES.custom;
   const triggerAge = (parseInt(document.getElementById('currentAge').value) || 30) + 2;
-  return {
+  const evt = {
     id: 'evt' + (++eventSeq), type: typeKey, name: t.defaultName,
     triggerAge, visible: false,
     color: EVENT_COLORS[lifeEvents.length % EVENT_COLORS.length],
-    effects: t.build(triggerAge),
+    effects: [],
   };
+  // Typed events carry friendly `params`; the engine still reads `effects`,
+  // which we compile from those params. Older types build effects directly.
+  if (t.compile) {
+    evt.params = t.defaults(triggerAge);
+    evt.effects = t.compile(evt.params, triggerAge);
+  } else {
+    evt.effects = t.build(triggerAge);
+  }
+  return evt;
 }
 
 // ── Built-in events ──
-// lifeEvents[0..2] are always the built-ins: Working Income, Retirement and
+// lifeEvents[0..2] are always the built-ins: Net Saving, Retirement and
 // Investment Strategy. "Built-in" only means they can't be deleted. The
 // Retirement event's trigger age IS the retirement age; the Investment
 // Strategy event carries the return your whole portfolio compounds at.
 const RETIRE_END = 300; // recurring endAge meaning "until death" — past any lifespan
 
-function makeIncomeEvent(monthly, growth, startAge, endAge) {
+// The Net Saving event holds two recurring effects — Salary (+) and Living
+// expenses (−); its event track shows the net of the two. Both grow at
+// `growth`, so the net behaves like a single "salary minus spending" figure
+// compounding at that rate. Expand the event to see/edit the breakdown.
+function makeIncomeEvent(salary, expenses, growth, startAge, endAge) {
   return {
-    id: 'evt-income', type: 'income', builtin: 'income', name: 'Working Income',
+    id: 'evt-income', type: 'income', builtin: 'income', name: 'Net Saving',
     triggerAge: startAge, visible: false, color: '#22c55e',
-    effects: [mkRecurring('Salary saved', monthly, startAge, endAge, false, growth)],
+    effects: [
+      mkRecurring('Salary', salary, startAge, endAge, false, growth),
+      mkRecurring('Living expenses', -expenses, startAge, endAge, false, growth),
+    ],
   };
 }
 
@@ -2164,7 +2362,7 @@ function retireAgeOf() {
 }
 
 // Keep the built-in events' ages consistent so nothing goes stale:
-//  • Working Income always starts at the current age.
+//  • Net Saving always starts at the current age.
 //  • The Retirement event's trigger age tracks its "living costs" from-age
 //    (they're the same thing — the age your retirement spending begins).
 // Run before every projection.
@@ -2177,7 +2375,7 @@ function reconcileBuiltins() {
   const inc = lifeEvents.find(e => e.builtin === 'income');
   if (inc) {
     inc.triggerAge = ca;
-    if (inc.effects[0] && inc.effects[0].kind === 'recurring') inc.effects[0].startAge = ca;
+    inc.effects.forEach(fx => { if (fx.kind === 'recurring') fx.startAge = ca; });
   }
 }
 
@@ -2221,10 +2419,16 @@ function eventShiftedTo(evt, newTrigger) {
 
 // Deep clone with fresh ids — used when a profile loads its events.
 function cloneEvent(e) {
-  return {
-    ...e, id: 'evt' + (++eventSeq),
-    effects: e.effects.map(fx => ({ ...fx, id: 'fx' + (++eventSeq) })),
-  };
+  const out = { ...e, id: 'evt' + (++eventSeq) };
+  const t = EVENT_TYPES[e.type];
+  if (e.params && t && t.compile) {
+    // Typed event: carry the friendly params, recompile its effects fresh.
+    out.params = { ...e.params };
+    out.effects = t.compile(out.params, e.triggerAge);
+  } else {
+    out.effects = (e.effects || []).map(fx => ({ ...fx, id: 'fx' + (++eventSeq) }));
+  }
+  return out;
 }
 
 function newEffect(kind, age) {
@@ -2326,24 +2530,28 @@ function indexWith(mods) {
 
 function eventAssetValue(age) { return evtIndex.assetValue[age] || 0; } // live asset worth
 
-// Build each event's own "Event Track" — the running net cash it has moved
-// in or out of your portfolio, plus the live value of any assets it still
-// owns. A readable footprint of that one event across your lifetime.
+// Build each event's own "Event Track" — the net cash it moves in or out of
+// your portfolio in each individual year (NOT cumulative). Rendered as bars,
+// so a year in which this event does nothing simply has no bar.
+// Tracks stack on the chart in toggle order — the most recently shown sits
+// nearest the x-axis. `visSeq` records that order.
+let trackToggleSeq = 0;
+function toggleTrackVisible(evt) {
+  evt.visible = !evt.visible;
+  if (evt.visible) evt.visSeq = ++trackToggleSeq;
+}
+
 function buildEventTracks(currentAge, lifespan) {
   return lifeEvents.map(evt => {
     const points = [];
-    let cumCash = 0;
     for (let a = currentAge; a < lifespan; a++) {
-      let asset = 0;
-      for (const fx of evt.effects) {
-        cumCash += effectAnnualCash(fx, a);
-        asset += assetHoldValue(fx, a + 1);
-      }
-      points.push({ age: a + 1, value: cumCash + asset });
+      let flow = 0;
+      for (const fx of evt.effects) flow += effectAnnualCash(fx, a);
+      points.push({ age: a + 1, value: flow });
     }
     return {
       id: evt.id, name: evt.name, color: evt.color,
-      visible: evt.visible, points,
+      visible: evt.visible, visSeq: evt.visSeq || 0, points,
     };
   });
 }
@@ -2364,20 +2572,18 @@ function eventIcon(e) {
 function renderEventList() {
   const host = document.getElementById('eventList');
   if (!host) return;
+  // Compact list — one tidy card per event. Editing happens in the modal.
   host.innerHTML = lifeEvents.map((e, i) => {
     const strat = e.builtin === 'strategy';
-    const chev = e.collapsed ? '▸ ' : '▾ ';
-    const sub = chev + (strat
-      ? 'built-in &middot; portfolio growth'
-      : e.builtin
-        ? 'built-in'
-        : `age ${e.triggerAge}`);
+    const sub = strat ? 'built-in &middot; portfolio growth'
+      : e.builtin ? 'built-in'
+      : `age ${e.triggerAge}`;
     const eye = strat ? '' :
       `<button type="button" class="evt-btn evt-eye${e.visible ? ' on' : ''}" data-i="${i}" data-act="vis" title="Show this track on the graph">👁</button>`;
     return `<div class="evt-item">
       <div class="evt-card">
         <span class="evt-ico" style="background:${e.color}26;color:${e.color}">${eventIcon(e)}</span>
-        <div class="evt-meta" data-i="${i}" data-act="toggle">
+        <div class="evt-meta" data-i="${i}" data-act="edit" title="Edit this event">
           <div class="evt-name">${escapeHtml(e.name)}</div>
           <div class="evt-sub">${sub}</div>
         </div>
@@ -2385,26 +2591,16 @@ function renderEventList() {
         <button type="button" class="evt-btn" data-i="${i}" data-act="edit" title="Edit event">⚙</button>
         ${e.builtin ? '' : `<button type="button" class="evt-btn" data-i="${i}" data-act="del" title="Remove event">×</button>`}
       </div>
-      ${e.collapsed ? '' : `<div class="evt-fx-host" data-evt="${i}"></div>`}
     </div>`;
   }).join('');
   host.querySelectorAll('.evt-btn').forEach(b => b.addEventListener('click', () => {
     const i = +b.dataset.i;
-    if (b.dataset.act === 'vis') { lifeEvents[i].visible = !lifeEvents[i].visible; refreshEvents(); }
+    if (b.dataset.act === 'vis') { toggleTrackVisible(lifeEvents[i]); refreshEvents(); }
     else if (b.dataset.act === 'edit') openEventEditor(i);
     else if (b.dataset.act === 'del') { lifeEvents.splice(i, 1); refreshEvents(); }
   }));
-  host.querySelectorAll('.evt-meta[data-act="toggle"]').forEach(m => m.addEventListener('click', () => {
-    const e = lifeEvents[+m.dataset.i];
-    e.collapsed = !e.collapsed;
-    renderEventList();
-  }));
-  // Render each event's details inline, editable on the spot.
-  host.querySelectorAll('.evt-fx-host').forEach(h => {
-    const e = lifeEvents[+h.dataset.evt];
-    if (e.builtin === 'strategy') renderStrategyEditor(e, h);
-    else renderFxList(e, h);
-  });
+  host.querySelectorAll('.evt-meta[data-act="edit"]').forEach(m =>
+    m.addEventListener('click', () => openEventEditor(+m.dataset.i)));
 }
 
 // ── Track-toggle chips beneath the graph ──
@@ -2415,7 +2611,7 @@ function renderEventTrackChips() {
     `<button type="button" class="track-chip${e.visible ? ' on' : ''}" data-i="${i}" style="--tc:${e.color}">
       <span class="track-dot"></span>${escapeHtml(e.name)}</button>`).join('');
   host.querySelectorAll('.track-chip').forEach(c => c.addEventListener('click', () => {
-    lifeEvents[+c.dataset.i].visible = !lifeEvents[+c.dataset.i].visible;
+    toggleTrackVisible(lifeEvents[+c.dataset.i]);
     refreshEvents();
   }));
 }
@@ -2461,12 +2657,42 @@ function openEventPicker() {
 // Shift every effect's ages by `d` years — keeps a template coherent when
 // the user moves the trigger age.
 function shiftEffectAges(evt, d) {
-  evt.effects.forEach(fx => {
-    if (fx.kind === 'oneTime') fx.atAge += d;
-    else if (fx.kind === 'recurring') { fx.startAge += d; fx.endAge += d; }
-    else if (fx.kind === 'asset') { fx.buyAge += d; fx.sellAge += d; }
-    else if (fx.kind === 'investment') { fx.startAge += d; fx.endAge += d; }
-  });
+  evt.effects.forEach(fx => shiftOneEffect(fx, d));
+}
+
+// Shift a single effect by `d` years (start + end move together).
+function shiftOneEffect(fx, d) {
+  if (fx.kind === 'oneTime') fx.atAge += d;
+  else if (fx.kind === 'recurring') { fx.startAge += d; fx.endAge += d; }
+  else if (fx.kind === 'asset') { fx.buyAge += d; fx.sellAge += d; }
+  else if (fx.kind === 'investment') { fx.startAge += d; fx.endAge += d; }
+}
+
+// The meaningful moments of an effect — each becomes its own graph marker so
+// e.g. an asset is flagged both when bought AND when sold (its cash event).
+//   role  — short verb shown on the drag badge
+//   field — the age property this marker drags
+//   bound — 'lo' a start-type age, 'hi' an end-type age, 'pt' a lone point
+//   pair  — the partner age field, so a start can't cross past its end
+function effectMoments(fx) {
+  if (fx.kind === 'oneTime')
+    return [{ role: 'at', field: 'atAge', age: fx.atAge, bound: 'pt' }];
+  if (fx.kind === 'recurring')
+    return [
+      { role: 'starts', field: 'startAge', age: fx.startAge, bound: 'lo', pair: 'endAge' },
+      { role: 'ends',   field: 'endAge',   age: fx.endAge,   bound: 'hi', pair: 'startAge' },
+    ];
+  if (fx.kind === 'asset')
+    return [
+      { role: 'bought', field: 'buyAge',  age: fx.buyAge,  bound: 'lo', pair: 'sellAge' },
+      { role: 'sold',   field: 'sellAge', age: fx.sellAge, bound: 'hi', pair: 'buyAge' },
+    ];
+  if (fx.kind === 'investment')
+    return [
+      { role: 'invested',   field: 'startAge', age: fx.startAge, bound: 'lo', pair: 'endAge' },
+      { role: 'cashed out', field: 'endAge',   age: fx.endAge,   bound: 'hi', pair: 'startAge' },
+    ];
+  return [];
 }
 
 // The age-band editor for the Investment Strategy event's allocation glidepath.
@@ -2554,7 +2780,7 @@ function openEventEditor(idx) {
   }
 
   const ageLabel = evt.builtin === 'spending' ? 'Retirement age'
-    : evt.builtin === 'income' ? 'Income starts'
+    : evt.builtin === 'income' ? 'Saving starts'
     : 'Trigger age';
   body.innerHTML = `
     <h3 class="evt-modal-title">${eventIcon(evt)} Edit ${evt.builtin ? 'Built-in Track' : 'Event Track'}</h3>
@@ -2575,14 +2801,7 @@ function openEventEditor(idx) {
         </div>
       </div>
     </div>
-    <div class="evt-fx-title">Effects</div>
-    <div id="fxList"></div>
-    <div class="evt-add-fx">
-      <button type="button" data-add="oneTime">+ Lump sum</button>
-      <button type="button" data-add="recurring">+ Recurring</button>
-      <button type="button" data-add="asset">+ Asset</button>
-      <button type="button" data-add="investment">+ Investment</button>
-    </div>
+    <div id="evtBody"></div>
     <div class="evt-modal-actions">
       ${evt.builtin ? '' : '<button type="button" class="evt-del-event" id="edDelete">Delete event</button>'}
       <button type="button" class="evt-done" id="edDone">Done</button>
@@ -2602,18 +2821,13 @@ function openEventEditor(idx) {
       document.getElementById('edColors').querySelectorAll('.evt-swatch')
         .forEach(x => x.classList.toggle('sel', x === s));
     }));
-  document.querySelectorAll('.evt-add-fx button').forEach(b =>
-    b.addEventListener('click', () => {
-      evt.effects.push(newEffect(b.dataset.add, evt.triggerAge));
-      renderFxList(evt);
-    }));
   const delBtn = document.getElementById('edDelete');
   if (delBtn) delBtn.addEventListener('click', () => {
     lifeEvents.splice(idx, 1);
     closeEventModal();
   });
   document.getElementById('edDone').addEventListener('click', closeEventModal);
-  renderFxList(evt);
+  renderEventBody(evt, document.getElementById('evtBody'));
   showEventModal();
 }
 
@@ -2803,6 +3017,116 @@ function renderFxList(evt, host) {
   }));
 }
 
+// ── Event-body editors ──
+// Dispatch for an event's editable body (used by the modal and the inline
+// sidebar): strategy → its dedicated editor; a typed event (Property, …) →
+// its friendly form; everything else → the raw effects editor.
+function renderEventBody(evt, host) {
+  if (!host) return;
+  if (evt.builtin === 'strategy') { renderStrategyEditor(evt, host); return; }
+  if (evt.builtin === 'income' || evt.builtin === 'spending') { renderBuiltinForm(evt, host); return; }
+  const t = EVENT_TYPES[evt.type];
+  if (evt.params && t && t.compile && t.fields) renderTypedForm(evt, host);
+  else renderEffectsEditor(evt, host);
+}
+
+// Raw effects editor — the effect cards plus the add-effect buttons. Used for
+// Custom events, built-ins, and inside a typed event's Advanced panel.
+function renderEffectsEditor(evt, host) {
+  if (!host) return;
+  host.innerHTML = `
+    <div class="evt-fx-title">Effects</div>
+    <div class="ee-list"></div>
+    <div class="evt-add-fx">
+      <button type="button" data-add="oneTime">+ Lump sum</button>
+      <button type="button" data-add="recurring">+ Recurring</button>
+      <button type="button" data-add="asset">+ Asset</button>
+      <button type="button" data-add="investment">+ Investment</button>
+    </div>`;
+  const list = host.querySelector('.ee-list');
+  renderFxList(evt, list);
+  host.querySelectorAll('.evt-add-fx button').forEach(b =>
+    b.addEventListener('click', () => {
+      evt.effects.push(newEffect(b.dataset.add, evt.triggerAge));
+      renderFxList(evt, list);
+      calculate(true);
+    }));
+}
+
+// Shared friendly-form shell — labelled number fields plus an Advanced panel
+// exposing the raw effects. `fields` are { label, step, min, get(), set(v) }.
+function renderFormShell(evt, host, opts) {
+  if (!host) return;
+  const fieldsHtml = opts.fields.map((f, i) =>
+    `<div class="fx-field">
+      <span class="fx-field-lbl">${f.label}</span>
+      <input type="number" class="wide" data-fi="${i}" value="${f.get()}"
+        step="${f.step || 1}" min="${f.min != null ? f.min : 0}">
+    </div>`).join('');
+  host.innerHTML = `
+    <div class="evt-fx-title">${opts.title || 'Details'}</div>
+    <div class="fx-fields">${fieldsHtml}</div>
+    <details class="tf-adv">
+      <summary>Advanced — raw effects</summary>
+      <div class="tf-adv-note">${opts.note || ''}</div>
+      <div class="tf-adv-body"></div>
+    </details>`;
+  const advBody = host.querySelector('.tf-adv-body');
+  renderEffectsEditor(evt, advBody);
+  host.querySelectorAll('.fx-fields input[data-fi]').forEach(el =>
+    el.addEventListener('input', () => {
+      let v = parseFloat(el.value);
+      if (isNaN(v)) v = 0;
+      opts.fields[+el.dataset.fi].set(v);
+      renderEffectsEditor(evt, advBody);
+      calculate(true);
+    }));
+}
+
+// Friendly form for a typed event — plain fields the engine never sees;
+// each edit rewrites evt.params and recompiles evt.effects.
+function renderTypedForm(evt, host) {
+  const t = EVENT_TYPES[evt.type];
+  renderFormShell(evt, host, {
+    title: 'Details',
+    note: 'These effects are generated from the fields above. Tweak them directly for fine control — but editing a field above regenerates them.',
+    fields: t.fields.map(f => ({
+      label: f.label, step: f.step, min: f.min,
+      get: () => evt.params[f.key],
+      set: v => { evt.params[f.key] = v; evt.effects = t.compile(evt.params, evt.triggerAge); },
+    })),
+  });
+}
+
+// Friendly form for the built-in Net Saving / Retirement events. These have a
+// fixed recurring-effect structure, so the fields edit the effects directly.
+function renderBuiltinForm(evt, host) {
+  const defs = [];
+  if (evt.builtin === 'income') {
+    const sal = evt.effects[0], exp = evt.effects[1];
+    if (sal && sal.kind === 'recurring')
+      defs.push({ label: 'Salary $/mo', step: 100, get: () => sal.monthlyAmount, set: v => { sal.monthlyAmount = v; } });
+    if (exp && exp.kind === 'recurring')
+      defs.push({ label: 'Living expenses $/mo', step: 100, get: () => Math.abs(exp.monthlyAmount), set: v => { exp.monthlyAmount = -v; } });
+    const g = (sal && sal.kind === 'recurring') ? sal : ((exp && exp.kind === 'recurring') ? exp : null);
+    if (g) {
+      defs.push({ label: 'Annual growth %', step: 0.5, min: -100, get: () => g.annualGrowth,
+        set: v => evt.effects.forEach(fx => { if (fx.kind === 'recurring') fx.annualGrowth = v; }) });
+      defs.push({ label: 'Work until age', step: 1, get: () => g.endAge,
+        set: v => evt.effects.forEach(fx => { if (fx.kind === 'recurring') fx.endAge = v; }) });
+    }
+  } else {
+    const cost = evt.effects[0];
+    if (cost && cost.kind === 'recurring')
+      defs.push({ label: 'Monthly spending $', step: 100, get: () => Math.abs(cost.monthlyAmount), set: v => { cost.monthlyAmount = -v; } });
+  }
+  renderFormShell(evt, host, {
+    title: 'Details',
+    note: 'The fields above and these raw effects are two views of the same numbers — edit whichever you prefer.',
+    fields: defs,
+  });
+}
+
 // Modal dismissal — X button, backdrop click, Escape key.
 document.getElementById('evtModalX').addEventListener('click', closeEventModal);
 document.getElementById('evtModal').addEventListener('click', e => {
@@ -2826,7 +3150,7 @@ const PROFILES = [
       currentPortfolio: 1100000, inflation: 2.5,
     },
     compounding: 'annual',
-    income: { monthly: 0, growth: 0, startAge: 42, endAge: 42 },
+    income: { salary: 0, expenses: 0, growth: 0, startAge: 42, endAge: 42 },
     retirement: { monthly: 3000, age: 42 },
     strategy: { growthReturn: 8, stableReturn: 4,
       glide: [{ age: 42, equity: 30 }, { age: 51, equity: 20 }, { age: 61, equity: 10 }] },
@@ -2840,15 +3164,12 @@ const PROFILES = [
       currentPortfolio: 5000, inflation: 2.5,
     },
     compounding: 'annual',
-    income: { monthly: 1500, growth: 0, startAge: 25, endAge: 65 },
+    income: { salary: 4500, expenses: 3000, growth: 0, startAge: 25, endAge: 65 },
     retirement: { monthly: 5000, age: 65 },
     strategy: { growthReturn: 8, stableReturn: 4, glide: [{ age: 16, equity: 100 }] },
     events: [
-      { type: 'property', name: 'The Mortgage', triggerAge: 35, visible: true, color: '#a855f7', effects: [
-        mkOneTime('Down payment', -80000, 35),
-        mkRecurring('Mortgage payment', -2400, 35, 60, false, 0),
-        mkAsset('Home value', 400000, 35, 3, 75),
-      ] },
+      { type: 'property', name: 'The Mortgage', triggerAge: 35, visible: true, color: '#a855f7',
+        params: { price: 400000, downPayment: 80000, mortgage: 2400, mortgageYears: 25, upkeep: 0, appreciation: 3, sellAfter: 40 } },
     ],
   },
   {
@@ -2859,14 +3180,14 @@ const PROFILES = [
       currentPortfolio: 40000, inflation: 2.5,
     },
     compounding: 'annual',
-    income: { monthly: 2200, growth: 2, startAge: 28, endAge: 65 },
+    income: { salary: 5200, expenses: 3000, growth: 2, startAge: 28, endAge: 65 },
     retirement: { monthly: 4500, age: 65 },
     strategy: { growthReturn: 8, stableReturn: 4,
       glide: [{ age: 25, equity: 90 }, { age: 55, equity: 55 }, { age: 70, equity: 35 }] },
     events: [
-      { type: 'property', name: 'Condo Purchase', triggerAge: 32, visible: false, color: '#a855f7', effects: EVENT_TYPES.property.build(32) },
-      { type: 'child', name: 'Child #1', triggerAge: 30, visible: false, color: '#f59e0b', effects: EVENT_TYPES.child.build(30) },
-      { type: 'car', name: 'New Car', triggerAge: 34, visible: false, color: '#ec4899', effects: EVENT_TYPES.car.build(34) },
+      { type: 'property', name: 'Condo Purchase', triggerAge: 32, visible: false, color: '#a855f7', params: EVENT_TYPES.property.defaults(32) },
+      { type: 'child', name: 'Child #1', triggerAge: 30, visible: false, color: '#f59e0b', params: EVENT_TYPES.child.defaults(30) },
+      { type: 'car', name: 'New Car', triggerAge: 34, visible: false, color: '#ec4899', params: EVENT_TYPES.car.defaults(34) },
     ],
   },
 ];
@@ -2887,7 +3208,7 @@ function applyProfile(idx, silent) {
   document.querySelectorAll('#compoundToggle .seg-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.mode === compounding));
   lifeEvents = [
-    makeIncomeEvent(p.income.monthly, p.income.growth, p.income.startAge, p.income.endAge),
+    makeIncomeEvent(p.income.salary, p.income.expenses, p.income.growth, p.income.startAge, p.income.endAge),
     makeRetirementEvent(p.retirement.monthly, p.retirement.age),
     makeStrategyEvent(p.strategy.growthReturn, p.strategy.stableReturn, p.strategy.glide),
   ].concat((p.events || []).map(cloneEvent));
@@ -2955,6 +3276,9 @@ function confettiRain() {
 // Compounding mode: 'monthly' (12 steps/yr, realistic) or 'annual' (matches the Excel model)
 let compounding = 'annual';
 
+// Years the projection runs past life expectancy — drawn as a faint tail.
+const POST_DEATH_YEARS = 20;
+
 // `index` = the flow index from buildEventIndex/indexWith. The portfolio
 // compounds each year at the Investment Strategy event's rate for that age
 // (its allocation glidepath). Every dollar in or out arrives through `index`;
@@ -2962,17 +3286,21 @@ let compounding = 'annual';
 // assets and investments still held), which is what the graph plots.
 function simulate(currentAge, retireAge, lifespan, portfolio, index) {
   const annual = (compounding === 'annual');
-  const years = lifespan - currentAge;
+  // Project POST_DEATH_YEARS beyond life expectancy — a faint "if you lived
+  // longer" tail. Timeline points past `lifespan` are flagged `beyond`.
+  const years = lifespan - currentAge + POST_DEATH_YEARS;
 
   let balance = portfolio;
   let portfolioAtRetirement = portfolio;
+  let finalBalance = portfolio; // liquid balance AT life expectancy, not the tail's end
   let brokeAge = null;
-  const timeline = []; // { age, balance, netWorth, totalSpent, phase }
+  const timeline = []; // { age, balance, netWorth, totalSpent, phase, beyond }
 
   const push = age => timeline.push({
     age: age + 1, balance: balance,
     netWorth: balance + (index.assetValue[age + 1] || 0),
     totalSpent: 0, phase: age < retireAge ? 'accumulation' : 'retirement',
+    beyond: age + 1 > lifespan,
   });
 
   if (annual) {
@@ -2983,9 +3311,10 @@ function simulate(currentAge, retireAge, lifespan, portfolio, index) {
       // Accumulation grows then takes flows; retirement takes flows up front.
       balance = (age < retireAge) ? balance * (1 + rate) + flow
                                   : (balance + flow) * (1 + rate);
-      if (age >= retireAge && balance <= 0 && brokeAge === null) brokeAge = age;
+      if (age >= retireAge && age < lifespan && balance <= 0 && brokeAge === null) brokeAge = age;
       balance = Math.max(0, balance);
       if (age + 1 === retireAge) portfolioAtRetirement = balance;
+      if (age + 1 === lifespan) finalBalance = balance;
       push(age);
     }
   } else {
@@ -2993,16 +3322,17 @@ function simulate(currentAge, retireAge, lifespan, portfolio, index) {
       const age = currentAge + Math.floor(m / 12);
       balance = balance * (1 + strategyRateAt(age) / 12) + (index.monthly[age] || 0);
       if (m % 12 === 0) balance += (index.oneTime[age] || 0);
-      if (age >= retireAge && balance <= 0 && brokeAge === null) brokeAge = age;
+      if (age >= retireAge && age < lifespan && balance <= 0 && brokeAge === null) brokeAge = age;
       balance = Math.max(0, balance);
       if (m % 12 === 11) {
         if (age + 1 === retireAge) portfolioAtRetirement = balance;
+        if (age + 1 === lifespan) finalBalance = balance;
         push(age);
       }
     }
   }
 
-  return { timeline, portfolioAtRetirement, finalBalance: balance, brokeAge };
+  return { timeline, portfolioAtRetirement, finalBalance, brokeAge };
 }
 
 // ── QUIPS (one-liners shown under the verdict) ──
@@ -3647,10 +3977,13 @@ function calculate(silent) {
 
 // ── CANVAS CHART RENDERER ──
 let chartData = null; // stored for hover
+let chartMarkers = []; // event/effect start markers drawn on the chart, for hit-testing
 let chartYMax = null; // persistent Y-axis max — grows to fit, never shrinks on its own
 let chartYMin = 0;    // persistent Y-axis min — drops below 0 only for negative event tracks
 let showSpending = false; // cumulative-spending curve hidden by default
-let eventTrackData = []; // per-event "Event Track" lines, built each calculate()
+let showCash = false; // liquid-cash (portfolio balance) curve hidden by default
+let showNetWorth = true; // net-worth curve shown by default
+let eventTrackData = []; // per-event "Event Track" bars, built each calculate()
 
 function renderChart(timeline, retireAge, opts) {
   opts = opts || {};
@@ -3672,10 +4005,25 @@ function renderChart(timeline, retireAge, opts) {
   const plotH = H - pad.top - pad.bottom;
 
   // ── Y-axis range — spans every visible series (event tracks can go negative) ──
-  const visTracks = eventTrackData.filter(tr => tr.visible);
-  const allVals = timeline.map(t => t.netWorth);
+  // Visible tracks, latest-toggled first — that one stacks nearest the x-axis.
+  const visTracks = eventTrackData.filter(tr => tr.visible)
+    .sort((a, b) => (b.visSeq || 0) - (a.visSeq || 0));
+  const allVals = [];
+  if (showNetWorth) timeline.forEach(t => allVals.push(t.netWorth));
+  if (showCash) timeline.forEach(t => allVals.push(t.balance));
   if (showSpending) timeline.forEach(t => allVals.push(t.totalSpent));
-  visTracks.forEach(tr => tr.points.forEach(p => allVals.push(p.value)));
+  // Stacked bars — the Y-axis must fit the tallest +/− stack at any age.
+  if (visTracks.length) {
+    const np = visTracks[0].points.length;
+    for (let i = 0; i < np; i++) {
+      let pos = 0, neg = 0;
+      visTracks.forEach(tr => {
+        const v = tr.points[i] ? tr.points[i].value : 0;
+        if (v > 0) pos += v; else neg += v;
+      });
+      allVals.push(pos, neg);
+    }
+  }
   const dataMax = Math.max(...allVals, 1);
   const dataMin = Math.min(...allVals, 0);
   // Grow-only Y-axis: stays put as values change, only expands to avoid clipping.
@@ -3687,10 +4035,12 @@ function renderChart(timeline, retireAge, opts) {
 
   const ages = timeline.map(t => t.age);
   const minAge = ages[0];
-  // The last timeline age is the user's life expectancy.
-  const deathAge = ages[ages.length - 1];
-  // X-axis runs 20 years past life expectancy — breathing room past the death marker.
-  const maxAge = deathAge + 20;
+  // Life expectancy = the last age still within life; the timeline carries a
+  // faint projection tail past it.
+  const deathAge = timeline.reduce((d, t) => t.beyond ? d : t.age, ages[0]);
+  // X-axis runs 20 years past life expectancy. During a death-age drag the
+  // extent is frozen (opts.axisMaxAge) so the divider tracks the cursor.
+  const maxAge = opts.axisMaxAge || (deathAge + 20);
   const ageRange = maxAge - minAge || 1;
 
   function xFor(age) { return pad.left + ((age - minAge) / ageRange) * plotW; }
@@ -3767,35 +4117,6 @@ function renderChart(timeline, retireAge, opts) {
     ctx.fillRect(retireX, pad.top, pad.left + plotW - retireX, plotH);
   }
 
-  // ── Death / life-expectancy divider ──
-  if (deathAge >= minAge && deathAge <= maxAge) {
-    const deathX = xFor(deathAge);
-    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([2, 5]);
-    ctx.beginPath();
-    ctx.moveTo(deathX, pad.top);
-    ctx.lineTo(deathX, pad.top + plotH);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Label pill
-    ctx.font = '700 10px "Space Mono", monospace';
-    const deathLabel = '💀 DEATH · ' + deathAge;
-    const dPillW = ctx.measureText(deathLabel).width + 16;
-    const dPillH = 16;
-    let dPillX = deathX - dPillW / 2;
-    dPillX = Math.max(pad.left, Math.min(pad.left + plotW - dPillW, dPillX));
-    ctx.fillStyle = 'rgba(255,255,255,0.22)';
-    roundRectPath(ctx, dPillX, pad.top - dPillH - 3, dPillW, dPillH, 5);
-    ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(deathLabel, dPillX + dPillW / 2, pad.top - dPillH / 2 - 3);
-    ctx.textBaseline = 'alphabetic';
-  }
-
   // ── X-axis labels ──
   // Stepped across the whole age range — including the margin past life
   // expectancy — so the extended axis stays labelled to its right edge.
@@ -3808,17 +4129,33 @@ function renderChart(timeline, retireAge, opts) {
     ctx.fillText(a, xFor(a), pad.top + plotH + 8);
   }
 
+  // ── Area fill: Cash / liquid balance ──
+  if (showCash) {
+    ctx.beginPath();
+    ctx.moveTo(xFor(timeline[0].age), yFor(0));
+    timeline.forEach(t => ctx.lineTo(xFor(t.age), yFor(t.balance)));
+    ctx.lineTo(xFor(timeline[timeline.length - 1].age), yFor(0));
+    ctx.closePath();
+    const gradCyan = ctx.createLinearGradient(0, pad.top, 0, pad.top + plotH);
+    gradCyan.addColorStop(0, 'rgba(34, 211, 238, 0.25)');
+    gradCyan.addColorStop(1, 'rgba(34, 211, 238, 0.02)');
+    ctx.fillStyle = gradCyan;
+    ctx.fill();
+  }
+
   // ── Area fill: Net Worth ──
-  ctx.beginPath();
-  ctx.moveTo(xFor(timeline[0].age), yFor(0));
-  timeline.forEach(t => ctx.lineTo(xFor(t.age), yFor(t.netWorth)));
-  ctx.lineTo(xFor(timeline[timeline.length - 1].age), yFor(0));
-  ctx.closePath();
-  const gradBlue = ctx.createLinearGradient(0, pad.top, 0, pad.top + plotH);
-  gradBlue.addColorStop(0, 'rgba(59, 130, 246, 0.25)');
-  gradBlue.addColorStop(1, 'rgba(59, 130, 246, 0.02)');
-  ctx.fillStyle = gradBlue;
-  ctx.fill();
+  if (showNetWorth) {
+    ctx.beginPath();
+    ctx.moveTo(xFor(timeline[0].age), yFor(0));
+    timeline.forEach(t => ctx.lineTo(xFor(t.age), yFor(t.netWorth)));
+    ctx.lineTo(xFor(timeline[timeline.length - 1].age), yFor(0));
+    ctx.closePath();
+    const gradBlue = ctx.createLinearGradient(0, pad.top, 0, pad.top + plotH);
+    gradBlue.addColorStop(0, 'rgba(59, 130, 246, 0.25)');
+    gradBlue.addColorStop(1, 'rgba(59, 130, 246, 0.02)');
+    ctx.fillStyle = gradBlue;
+    ctx.fill();
+  }
 
   // ── Area fill: Cumulative Spending ──
   const spendPoints = timeline.filter(t => t.totalSpent > 0);
@@ -3835,38 +4172,64 @@ function renderChart(timeline, retireAge, opts) {
     ctx.fill();
   }
 
-  // ── Event tracks + net-worth line (drawn under the portfolio line) ──
-  function drawSeries(pts, color, width, dash) {
-    if (!pts || pts.length < 2) return;
+  // ── Event tracks — stacked per-year cash bars (not cumulative) ──
+  // One column per year; tracks stack in toggle order, the most recently
+  // shown sitting nearest the zero line.
+  if (visTracks.length) {
+    const slot = plotW / ageRange;
+    const barW = Math.min(slot * 0.7, 16);
+    const np = visTracks[0].points.length;
     ctx.save();
+    ctx.globalAlpha = 0.85;
+    for (let i = 0; i < np; i++) {
+      const x0 = xFor(visTracks[0].points[i].age) - barW / 2;
+      let posCum = 0, negCum = 0;
+      visTracks.forEach(tr => {
+        const v = tr.points[i] ? tr.points[i].value : 0;
+        if (!v) return;
+        const base = v > 0 ? posCum : negCum;
+        const yA = yFor(base), yB = yFor(base + v);
+        ctx.fillStyle = tr.color;
+        ctx.fillRect(x0, Math.min(yA, yB), barW, Math.abs(yB - yA));
+        if (v > 0) posCum += v; else negCum += v;
+      });
+    }
+    ctx.restore();
+  }
+
+  // ── Line: Cash / liquid balance (with glow) ──
+  if (showCash) {
+    ctx.save();
+    ctx.shadowColor = 'rgba(34, 211, 238, 0.4)';
+    ctx.shadowBlur = 8;
     ctx.beginPath();
-    pts.forEach((p, i) => {
-      const x = xFor(p.age), y = yFor(p.value);
+    timeline.forEach((t, i) => {
+      const x = xFor(t.age), y = yFor(t.balance);
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     });
-    ctx.strokeStyle = color;
-    ctx.lineWidth = width;
+    ctx.strokeStyle = '#22d3ee';
+    ctx.lineWidth = 2.5;
     ctx.lineJoin = 'round';
-    if (dash) ctx.setLineDash(dash);
     ctx.stroke();
     ctx.restore();
   }
-  visTracks.forEach(tr => drawSeries(tr.points, tr.color, 2, [5, 3]));
 
   // ── Line: Net Worth (with glow) ──
-  ctx.save();
-  ctx.shadowColor = 'rgba(59, 130, 246, 0.4)';
-  ctx.shadowBlur = 8;
-  ctx.beginPath();
-  timeline.forEach((t, i) => {
-    const x = xFor(t.age), y = yFor(t.netWorth);
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  });
-  ctx.strokeStyle = '#3b82f6';
-  ctx.lineWidth = 2.5;
-  ctx.lineJoin = 'round';
-  ctx.stroke();
-  ctx.restore();
+  if (showNetWorth) {
+    ctx.save();
+    ctx.shadowColor = 'rgba(59, 130, 246, 0.4)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    timeline.forEach((t, i) => {
+      const x = xFor(t.age), y = yFor(t.netWorth);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = '#3b82f6';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    ctx.restore();
+  }
 
   // ── Line: Cumulative Spending (with glow) ──
   if (showSpending && spendPoints.length > 1) {
@@ -3885,13 +4248,23 @@ function renderChart(timeline, retireAge, opts) {
     ctx.restore();
   }
 
-  // ── Draggable point markers on the net-worth line ──
-  timeline.forEach(t => {
-    ctx.beginPath();
-    ctx.arc(xFor(t.age), yFor(t.netWorth), 2.2, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(59,130,246,0.9)';
-    ctx.fill();
-  });
+  // ── Point markers — cash, then net worth (net-worth points are drag-to-solve) ──
+  if (showCash) {
+    timeline.forEach(t => {
+      ctx.beginPath();
+      ctx.arc(xFor(t.age), yFor(t.balance), 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(34,211,238,0.9)';
+      ctx.fill();
+    });
+  }
+  if (showNetWorth) {
+    timeline.forEach(t => {
+      ctx.beginPath();
+      ctx.arc(xFor(t.age), yFor(t.netWorth), 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(59,130,246,0.9)';
+      ctx.fill();
+    });
+  }
 
   // ── Ghost line: net worth before the in-progress drag ──
   if (opts.ghost && opts.ghost.length > 1) {
@@ -3906,6 +4279,44 @@ function renderChart(timeline, retireAge, opts) {
     ctx.setLineDash([5, 4]);
     ctx.stroke();
     ctx.restore();
+  }
+
+  // ── Faint veil over the post-death projection ──
+  // Everything right of the death line is an "if you lived longer" tail —
+  // knock it back so the within-life plan stays the focus.
+  if (deathAge >= minAge && deathAge < maxAge) {
+    const veilX = xFor(deathAge);
+    ctx.fillStyle = 'rgba(6, 6, 8, 0.6)';
+    ctx.fillRect(veilX, pad.top, pad.left + plotW - veilX, plotH);
+  }
+
+  // ── Death / life-expectancy divider (drawn over the veil — draggable) ──
+  if (deathAge >= minAge && deathAge <= maxAge) {
+    const deathX = xFor(deathAge);
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([2, 5]);
+    ctx.beginPath();
+    ctx.moveTo(deathX, pad.top);
+    ctx.lineTo(deathX, pad.top + plotH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Label pill — also the grab handle for moving the death line
+    ctx.font = '700 10px "Space Mono", monospace';
+    const deathLabel = '💀 DEATH · ' + deathAge;
+    const dPillW = ctx.measureText(deathLabel).width + 16;
+    const dPillH = 16;
+    let dPillX = deathX - dPillW / 2;
+    dPillX = Math.max(pad.left, Math.min(pad.left + plotW - dPillW, dPillX));
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    roundRectPath(ctx, dPillX, pad.top - dPillH - 3, dPillW, dPillH, 5);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(deathLabel, dPillX + dPillW / 2, pad.top - dPillH / 2 - 3);
+    ctx.textBaseline = 'alphabetic';
   }
 
   // ── Drag handle + back-solved value badge ──
@@ -3951,6 +4362,86 @@ function renderChart(timeline, retireAge, opts) {
     ctx.fillText(di.label, bx + 9, by + bh / 2 + 1);
   }
 
+  // ── Life-event & effect start markers (draggable) ──
+  // Event markers: every user event, at its trigger age — a colored guide line
+  // with an icon handle at the top. Effect markers: each effect of an expanded
+  // event, as a triangle on the bottom axis at the effect's start age.
+  // Effects that start the same year stack upward so each stays grabbable.
+  chartMarkers = [];
+  {
+    const topY = pad.top, botY = pad.top + plotH;
+    const effSlots = {}; // age -> effect markers already placed there
+    lifeEvents.forEach((evt, ei) => {
+      if (evt.builtin) return; // built-ins: income pinned to now, retirement has its own line
+      // Event marker — guide line + icon handle
+      if (evt.triggerAge >= minAge && evt.triggerAge <= maxAge) {
+        const x = xFor(evt.triggerAge);
+        ctx.save();
+        ctx.globalAlpha = 0.4;
+        ctx.strokeStyle = evt.color;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x, topY + 16);
+        ctx.lineTo(x, botY);
+        ctx.stroke();
+        ctx.restore();
+        const pw = 20, ph = 15;
+        let px = Math.max(pad.left, Math.min(pad.left + plotW - pw, x - pw / 2));
+        ctx.fillStyle = evt.color;
+        roundRectPath(ctx, px, topY + 1, pw, ph, 4);
+        ctx.fill();
+        ctx.font = '9px "Space Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(eventIcon(evt), px + pw / 2, topY + ph / 2 + 1.5);
+        chartMarkers.push({ type: 'event', evtIdx: ei, age: evt.triggerAge, x: x });
+      }
+      // Effect markers — only for events whose track is shown on the chart
+      if (!evt.visible) return;
+      // Gather this event's effect moments and merge any that share an age
+      // into one indicator (e.g. sale + mortgage-end + upkeep-end → one).
+      const byAge = {};
+      evt.effects.forEach((fx, fi) => {
+        effectMoments(fx).forEach(m => {
+          if (m.age == null || m.age < minAge || m.age > maxAge) return;
+          (byAge[m.age] || (byAge[m.age] = [])).push(
+            { fxIdx: fi, role: m.role, field: m.field, pair: m.pair, bound: m.bound });
+        });
+      });
+      Object.keys(byAge).map(Number).sort((p, q) => p - q).forEach(a => {
+        const moments = byAge[a];
+        const x = xFor(a);
+        const slot = effSlots[a] || 0;
+        effSlots[a] = slot + 1;
+        const tipY = botY - 7 - slot * 12;
+        const allEnd = moments.every(mo => mo.bound === 'hi');
+        ctx.save();
+        ctx.globalAlpha = 0.92;
+        ctx.fillStyle = evt.color;
+        ctx.beginPath();
+        if (allEnd) {
+          // all ends / sale / cash-out — triangle points down
+          ctx.moveTo(x, tipY + 9);
+          ctx.lineTo(x - 5, tipY);
+          ctx.lineTo(x + 5, tipY);
+        } else {
+          // a start / buy / lump sum — triangle points up
+          ctx.moveTo(x, tipY);
+          ctx.lineTo(x - 5, tipY + 9);
+          ctx.lineTo(x + 5, tipY + 9);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+        ctx.lineWidth = 0.75;
+        ctx.stroke();
+        ctx.restore();
+        chartMarkers.push({ type: 'effect', evtIdx: ei, age: a, x: x, tipY: tipY, moments: moments });
+      });
+    });
+    ctx.textBaseline = 'alphabetic';
+  }
+
   // ── Overlay canvas for hover effects ──
   const overlay = document.getElementById('chartOverlay');
   overlay.width = canvas.width;
@@ -3961,13 +4452,33 @@ function renderChart(timeline, retireAge, opts) {
   octx.scale(dpr, dpr);
 
   function onMove(e) {
-    if (dsDrag.active || retDrag.active) return;
+    if (dsDrag.active || retDrag.active || deDrag.active || mkDrag.active) return;
     const bounds = canvas.getBoundingClientRect();
     const mx = e.clientX - bounds.left;
     const my = e.clientY - bounds.top;
 
     // Clear overlay
     octx.clearRect(0, 0, W, H);
+
+    // Hovering an event/effect indicator — show what it means, skip the curve tooltip.
+    const hov = markerAt(mx, my);
+    if (hov) {
+      const hevt = lifeEvents[hov.evtIdx];
+      if (hevt) {
+        tooltip.innerHTML = markerTooltipHtml(hov, hevt);
+        tooltip.classList.add('visible');
+        const ttW = tooltip.offsetWidth, ttH = tooltip.offsetHeight;
+        const anchorY = hov.type === 'event' ? pad.top + 9 : hov.tipY + 4;
+        let tx = hov.x + 14, ty = anchorY - ttH / 2;
+        if (tx + ttW > W - 8) tx = hov.x - ttW - 14;
+        if (tx < 6) tx = 6;
+        if (ty < 6) ty = 6;
+        if (ty + ttH > H - 6) ty = H - ttH - 6;
+        tooltip.style.left = tx + 'px';
+        tooltip.style.top = ty + 'px';
+        return;
+      }
+    }
 
     // Find closest data point
     let closest = null, closestDist = Infinity;
@@ -3995,13 +4506,24 @@ function renderChart(timeline, retireAge, opts) {
     octx.setLineDash([]);
 
     // Draw dots on data points
-    octx.beginPath();
-    octx.arc(cx, cy, 5, 0, Math.PI * 2);
-    octx.fillStyle = '#3b82f6';
-    octx.fill();
-    octx.strokeStyle = '#fff';
-    octx.lineWidth = 2;
-    octx.stroke();
+    if (showCash) {
+      octx.beginPath();
+      octx.arc(cx, yFor(closest.balance), 5, 0, Math.PI * 2);
+      octx.fillStyle = '#22d3ee';
+      octx.fill();
+      octx.strokeStyle = '#fff';
+      octx.lineWidth = 2;
+      octx.stroke();
+    }
+    if (showNetWorth) {
+      octx.beginPath();
+      octx.arc(cx, cy, 5, 0, Math.PI * 2);
+      octx.fillStyle = '#3b82f6';
+      octx.fill();
+      octx.strokeStyle = '#fff';
+      octx.lineWidth = 2;
+      octx.stroke();
+    }
 
     if (showSpending && closest.totalSpent > 0) {
       const sy = yFor(closest.totalSpent);
@@ -4017,13 +4539,18 @@ function renderChart(timeline, retireAge, opts) {
     // Tooltip content
     const phase = closest.phase === 'accumulation' ? 'Saving' : 'Retired';
     let html = `<div class="tt-age">Age ${closest.age} &middot; ${phase}</div>`;
-    html += `<div class="tt-row"><span class="tt-dot" style="background:#3b82f6"></span> Net Worth: ${fmtFull(closest.netWorth)}</div>`;
+    if (showNetWorth) {
+      html += `<div class="tt-row"><span class="tt-dot" style="background:#3b82f6"></span> Net Worth: ${fmtFull(closest.netWorth)}</div>`;
+    }
+    if (showCash) {
+      html += `<div class="tt-row"><span class="tt-dot" style="background:#22d3ee"></span> Cash: ${fmtFull(closest.balance)}</div>`;
+    }
     if (showSpending && closest.totalSpent > 0) {
       html += `<div class="tt-row"><span class="tt-dot" style="background:#ff2d55"></span> Total Spent: ${fmtFull(closest.totalSpent)}</div>`;
     }
     visTracks.forEach(tr => {
       const p = tr.points.find(pt => pt.age === closest.age);
-      if (p) html += `<div class="tt-row"><span class="tt-dot" style="background:${tr.color}"></span> ${escapeHtml(tr.name)}: ${fmtFull(p.value)}</div>`;
+      if (p && p.value) html += `<div class="tt-row"><span class="tt-dot" style="background:${tr.color}"></span> ${escapeHtml(tr.name)}: ${fmtFull(p.value)}</div>`;
     });
     tooltip.innerHTML = html;
     tooltip.classList.add('visible');
@@ -4051,10 +4578,12 @@ function renderChart(timeline, retireAge, opts) {
 let solveTarget = 'monthlyContrib';
 let dsDrag = { active: false };
 let retDrag = { active: false };
+let deDrag = { active: false }; // dragging the death / life-expectancy line
+let mkDrag = { active: false }; // dragging a life-event / effect start marker
 
 // `input` = a sidebar field id; `event` = a built-in event the value writes into.
 const SOLVE_CFG = {
-  monthlyContrib:   { event: 'income',           min: 0,   max: 100000,    step: 50,   label: 'Monthly Savings',      money: true, suffix: '/mo' },
+  monthlyContrib:   { event: 'income',           min: 0,   max: 100000,    step: 50,   label: 'Monthly Salary',       money: true, suffix: '/mo' },
   currentPortfolio: { input: 'currentPortfolio', min: 0,   max: 100000000, step: 1000, label: 'Starting Portfolio',   money: true, suffix: '' },
   monthlySpend:     { event: 'spending',         min: 500, max: 100000,    step: 100,  label: 'Monthly Spending',     money: true, suffix: '/mo' },
 };
@@ -4141,6 +4670,60 @@ document.querySelectorAll('#dragSolver .ds-chip').forEach(chip => {
   });
 });
 
+// The event/effect indicator under the pointer, if any. Effect triangles
+// (bottom axis) win over event guide lines where the two overlap.
+function markerAt(x, y) {
+  if (!chartData || !chartMarkers.length) return null;
+  const c = chartData, top = c.pad.top, bot = c.pad.top + c.plotH;
+  let best = null, bd = Infinity;
+  chartMarkers.forEach(m => {
+    if (m.type !== 'effect') return;
+    const d = Math.abs(x - m.x);
+    if (d < 7 && y >= m.tipY - 2 && y <= m.tipY + 10 && d < bd) { bd = d; best = m; }
+  });
+  if (best) return best;
+  chartMarkers.forEach(m => {
+    if (m.type !== 'event') return;
+    const d = Math.abs(x - m.x);
+    if (d < 6 && y >= top && y <= bot && d < bd) { bd = d; best = m; }
+  });
+  return best;
+}
+
+// Short label for a marker's drag badge / confirmation note.
+function mergedLabel(evt, moments) {
+  if (moments.length === 1) {
+    const fx = evt.effects[moments[0].fxIdx];
+    const r = moments[0].role;
+    return (fx ? fx.label : 'Effect') + (r && r !== 'at' ? ' · ' + r : '');
+  }
+  return moments.length + ' effects · ' + (moments.every(m => m.bound === 'hi') ? 'end' : 'start');
+}
+
+// Hover-tooltip HTML explaining what an indicator means — a merged marker
+// lists every effect moment that lands on that age.
+function markerTooltipHtml(m, evt) {
+  const head = `<div class="tt-age">Age ${m.age}</div>`;
+  const evtRow = `<div class="tt-row"><span class="tt-dot" style="background:${evt.color}"></span> ${eventIcon(evt)} ${escapeHtml(evt.name)}</div>`;
+  if (m.type === 'event') {
+    return head + evtRow + `<div class="tt-mk">this life event starts here</div>`;
+  }
+  const PHRASE = {
+    at: 'one-off amount',
+    starts: 'recurring flow starts',
+    ends: 'recurring flow ends',
+    bought: 'asset acquired',
+    sold: 'sold — its value becomes cash',
+    invested: 'capital invested',
+    'cashed out': 'investment cashed out',
+  };
+  const lines = m.moments.map(mo => {
+    const fx = evt.effects[mo.fxIdx];
+    return `<div class="tt-mk">${fx ? escapeHtml(fx.label) : 'Effect'} &mdash; ${PHRASE[mo.role] || mo.role}</div>`;
+  }).join('');
+  return head + evtRow + lines;
+}
+
 // Pointer drag on the chart canvas.
 (function setupChartDrag() {
   const canvas = document.getElementById('chartCanvas');
@@ -4152,10 +4735,11 @@ document.querySelectorAll('#dragSolver .ds-chip').forEach(chip => {
   }
 
   function nearestPoint(x, y) {
-    if (!chartData) return null;
+    if (!chartData || !showNetWorth) return null; // drag-to-solve grabs the net-worth line
     const c = chartData;
     let best = null, bd = Infinity;
     c.timeline.forEach(t => {
+      if (t.beyond) return; // drag-to-solve only acts within life expectancy
       const px = c.pad.left + ((t.age - c.minAge) / c.ageRange) * c.plotW;
       const py = c.pad.top + c.plotH - ((t.netWorth - c.minVal) / (c.maxVal - c.minVal)) * c.plotH;
       const d = Math.hypot(px - x, py - y);
@@ -4175,10 +4759,23 @@ document.querySelectorAll('#dragSolver .ds-chip').forEach(chip => {
     return Math.abs(x - retireLineX()) < 11 && y >= c.pad.top - 20 && y <= c.pad.top + c.plotH;
   }
 
+  function deathLineX() {
+    const c = chartData;
+    return c.pad.left + ((c.deathAge - c.minAge) / c.ageRange) * c.plotW;
+  }
+
+  function nearDeathLine(x, y) {
+    if (!chartData) return false;
+    const c = chartData;
+    return Math.abs(x - deathLineX()) < 11 && y >= c.pad.top - 20 && y <= c.pad.top + c.plotH;
+  }
+
   canvas.addEventListener('pointermove', e => {
-    if (dsDrag.active || retDrag.active || !chartData) return;
+    if (dsDrag.active || retDrag.active || deDrag.active || mkDrag.active || !chartData) return;
     const p = xy(e);
     if (nearRetireLine(p.x, p.y)) { canvas.style.cursor = 'ew-resize'; return; }
+    if (nearDeathLine(p.x, p.y)) { canvas.style.cursor = 'ew-resize'; return; }
+    if (markerAt(p.x, p.y)) { canvas.style.cursor = 'ew-resize'; return; }
     canvas.style.cursor = nearestPoint(p.x, p.y) ? 'grab' : 'crosshair';
   });
 
@@ -4187,6 +4784,27 @@ document.querySelectorAll('#dragSolver .ds-chip').forEach(chip => {
     const p = xy(e);
     if (nearRetireLine(p.x, p.y)) {
       retDrag = { active: true, age: chartData.retireAge, moved: false, lastE: e };
+      try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+      canvas.style.cursor = 'ew-resize';
+      document.getElementById('chartTooltip').classList.remove('visible');
+      e.preventDefault();
+      return;
+    }
+    if (nearDeathLine(p.x, p.y)) {
+      deDrag = { active: true, age: chartData.deathAge, startMaxAge: chartData.maxAge, moved: false, lastE: e };
+      try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+      canvas.style.cursor = 'ew-resize';
+      document.getElementById('chartTooltip').classList.remove('visible');
+      e.preventDefault();
+      return;
+    }
+    const mk = markerAt(p.x, p.y);
+    if (mk) {
+      mkDrag = {
+        active: true, type: mk.type, evtIdx: mk.evtIdx, moments: mk.moments,
+        origAge: mk.age, age: mk.age, ghost: chartData.timeline,
+        moved: false, lastE: e,
+      };
       try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
       canvas.style.cursor = 'ew-resize';
       document.getElementById('chartTooltip').classList.remove('visible');
@@ -4218,12 +4836,16 @@ document.querySelectorAll('#dragSolver .ds-chip').forEach(chip => {
   window.addEventListener('pointermove', e => {
     if (dsDrag.active) dsDrag.lastE = e;
     else if (retDrag.active) retDrag.lastE = e;
+    else if (deDrag.active) deDrag.lastE = e;
+    else if (mkDrag.active) mkDrag.lastE = e;
     else return;
     if (raf) return;
     raf = requestAnimationFrame(() => {
       raf = null;
       if (dsDrag.active) update();
       else if (retDrag.active) updateRet();
+      else if (deDrag.active) updateDeath();
+      else if (mkDrag.active) updateMarker();
     });
   });
 
@@ -4283,8 +4905,109 @@ document.querySelectorAll('#dragSolver .ds-chip').forEach(chip => {
     calculate();
   }
 
+  // Live preview while dragging the death / life-expectancy line. The X-axis
+  // extent is frozen at the drag-start value so the line tracks the cursor;
+  // the projection re-runs each frame with the new life expectancy.
+  function updateDeath() {
+    if (!deDrag.active || !chartData) return;
+    const c = chartData;
+    const b = dsReadInputs();
+    const mx = xy(deDrag.lastE).x;
+    let age = Math.round(c.minAge + ((mx - c.pad.left) / c.plotW) * c.ageRange);
+    age = Math.max(b.retireAge + 1, Math.min(deDrag.startMaxAge - 2, age));
+    deDrag.age = age;
+    deDrag.moved = true;
+    eventTrackData = buildEventTracks(b.currentAge, age);
+    const sim = simulate(b.currentAge, b.retireAge, age, b.portfolio, evtIndex);
+    renderChart(sim.timeline, b.retireAge, { axisMaxAge: deDrag.startMaxAge });
+  }
+
+  function deEnd(e) {
+    deDrag.active = false;
+    canvas.style.cursor = 'crosshair';
+    try { canvas.releasePointerCapture(e.pointerId); } catch (_) {}
+    if (!deDrag.moved || deDrag.age == null) return;
+    const el = document.getElementById('lifespan');
+    el.value = deDrag.age;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    note().className = 'ds-note ok';
+    note().innerHTML = '&#10003; <strong>Life expectancy</strong> moved to <strong>' +
+      deDrag.age + '</strong>. Verdict updated below.';
+    calculate();
+  }
+
+  // Live preview while dragging an event / effect start marker — the event or
+  // effect is retimed in place and the whole projection re-runs each frame,
+  // with a ghost of the pre-drag curve and an age badge.
+  function updateMarker() {
+    if (!mkDrag.active || !chartData) return;
+    const c = chartData;
+    const currentAge = parseInt(document.getElementById('currentAge').value) || 0;
+    const lifespan = parseInt(document.getElementById('lifespan').value) || 0;
+    const portfolio = parseFloat(document.getElementById('currentPortfolio').value) || 0;
+    const evt = lifeEvents[mkDrag.evtIdx];
+    if (!evt) return;
+    const mx = xy(mkDrag.lastE).x;
+    let age = Math.round(c.minAge + ((mx - c.pad.left) / c.plotW) * c.ageRange);
+
+    let label;
+    if (mkDrag.type === 'event') {
+      age = Math.max(currentAge, Math.min(lifespan - 1, age));
+      const d = age - evt.triggerAge;
+      if (d) { shiftEffectAges(evt, d); evt.triggerAge = age; }
+      label = evt.name;
+    } else {
+      const moments = mkDrag.moments || [];
+      // Drag every merged moment to the new age, each kept on the valid side
+      // of its own partner age (a start can't pass its end, and vice versa).
+      age = Math.max(currentAge, Math.min(c.maxAge, age));
+      moments.forEach(mo => {
+        const fx = evt.effects[mo.fxIdx];
+        if (!fx || mo.pair == null) return;
+        if (mo.bound === 'lo') age = Math.min(age, fx[mo.pair]);
+        else age = Math.max(age, fx[mo.pair]);
+      });
+      moments.forEach(mo => {
+        const fx = evt.effects[mo.fxIdx];
+        if (fx) fx[mo.field] = age;
+      });
+      label = mergedLabel(evt, moments);
+    }
+    mkDrag.age = age;
+    mkDrag.moved = true;
+
+    const retireAge = Math.max(currentAge, Math.min(lifespan - 1, retireAgeOf()));
+    evtIndex = buildEventIndex(lifeEvents);
+    eventTrackData = buildEventTracks(currentAge, lifespan);
+    const sim = simulate(currentAge, retireAge, lifespan, portfolio, evtIndex);
+    const pt = sim.timeline.find(t => t.age === age) || sim.timeline[sim.timeline.length - 1];
+    renderChart(sim.timeline, retireAge, {
+      ghost: mkDrag.ghost,
+      dragInfo: { age: age, balance: pt ? pt.netWorth : 0, label: label + ' · age ' + age, clamped: false },
+    });
+  }
+
+  function mkEnd(e) {
+    mkDrag.active = false;
+    canvas.style.cursor = 'crosshair';
+    try { canvas.releasePointerCapture(e.pointerId); } catch (_) {}
+    if (!mkDrag.moved) return;
+    const evt = lifeEvents[mkDrag.evtIdx];
+    let label = 'Marker';
+    if (evt && mkDrag.type === 'event') label = evt.name;
+    else if (evt) label = mergedLabel(evt, mkDrag.moments || []);
+    if (activeProfile !== -1) { activeProfile = -1; renderProfiles(); }
+    renderEventList();
+    note().className = 'ds-note ok';
+    note().innerHTML = '&#10003; <strong>' + escapeHtml(label) + '</strong> moved to age <strong>' +
+      mkDrag.age + '</strong>. Verdict updated below.';
+    calculate();
+  }
+
   function end(e) {
     if (retDrag.active) { retEnd(e); return; }
+    if (deDrag.active) { deEnd(e); return; }
+    if (mkDrag.active) { mkEnd(e); return; }
     if (!dsDrag.active) return;
     dsDrag.active = false;
     canvas.style.cursor = 'crosshair';
@@ -4326,6 +5049,20 @@ document.getElementById('rescaleBtn').addEventListener('click', () => {
 document.getElementById('spendToggle').addEventListener('click', () => {
   showSpending = !showSpending;
   document.getElementById('spendToggle').classList.toggle('off', !showSpending);
+  if (chartData) renderChart(chartData.timeline, chartData.retireAge);
+});
+
+// Cash (liquid portfolio balance) curve toggle (hidden by default)
+document.getElementById('cashToggle').addEventListener('click', () => {
+  showCash = !showCash;
+  document.getElementById('cashToggle').classList.toggle('off', !showCash);
+  if (chartData) renderChart(chartData.timeline, chartData.retireAge);
+});
+
+// Net-worth curve toggle (shown by default). Drag-to-solve needs this line.
+document.getElementById('nwToggle').addEventListener('click', () => {
+  showNetWorth = !showNetWorth;
+  document.getElementById('nwToggle').classList.toggle('off', !showNetWorth);
   if (chartData) renderChart(chartData.timeline, chartData.retireAge);
 });
 
